@@ -11,7 +11,7 @@
     .forgotPasswordDiv{
         width: 100% !important;
         text-align: center !important;
-        padding-left: 24% !important;
+        padding-left: 30% !important;
     }
     .banner{
         margin-top: 15% !important;
@@ -97,6 +97,9 @@
                 {{ __('Forgot Your Password?') }}
             </a>
             @endif
+            <a class="btn btn-link text-white" href="{{ route('register') }}">
+                {{ __('Register') }}
+            </a>
         </div>
 
         <div class="card-body float-right forgotPasswordDiv" style="display:none;">
