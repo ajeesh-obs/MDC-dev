@@ -80,7 +80,7 @@ class RoleController extends Controller {
                 return redirect()->route('userslist')->withErrors($validation)->withInput();
             }
             // check user have same role already exists
-            $roleExists = DB::table('user_role_relations')->where([['user_id', '=', $formData['user_id']], ['role_id', '=', $formData['role_id']], ['deleted_at', '=', NULL ]])->first();
+            $roleExists = DB::table('user_role_relations')->where([['user_id', '=', $formData['user_id']], ['role_id', '=', $formData['role_id']], ['deleted_at', '=', NULL]])->first();
             if ($roleExists) {
                 return response()->json(array('status' => 'error', 'message' => 'User already role exists'));
             }
@@ -108,6 +108,35 @@ class RoleController extends Controller {
             } else {
                 return response()->json(array('status' => 'error', 'message' => 'User role not removed, Please try again later'));
             }
+        }
+    }
+
+    /*
+     * create new roles
+     * 
+     */
+
+    public function roleNew(Request $request) {
+
+        $formData = $request->all();
+        $validation = Validator::make($formData, [
+                    'roleName' => ['required', 'string', 'max:255']
+        ]);
+        if ($validation->fails()) {
+            return redirect()->route('userslist')->withErrors($validation)->withInput();
+        }
+        // check same role name already exists
+        $roleExists = DB::table('roles')->where([['name', '=', $formData['roleName']], ['deleted_at', '=', NULL]])->first();
+        if ($roleExists) {
+            return response()->json(array('status' => 'error', 'message' => 'Role name already exists'));
+        }
+        $save = Role::create([
+                    'name' => $formData['roleName']
+        ]);
+        if ($save) {
+            return response()->json(array('status' => 'success', 'message' => 'Role saved successfully'));
+        } else {
+            return response()->json(array('status' => 'error', 'message' => 'Role not saved, Please try again later'));
         }
     }
 

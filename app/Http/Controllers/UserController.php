@@ -58,16 +58,16 @@ class UserController extends Controller {
         $userActivityFilter = request('userActivityFilter');
         if (!empty($userActivityFilter)) {
             if ($userActivityFilter == 1) {
-                $users = User::sortable()->where('is_active', $userActivityFilter)->whereNull('deleted_at')->paginate(25);
+                $users = User::sortable()->where('is_active', $userActivityFilter)->whereNull('deleted_at')->paginate(10);
             } else if ($userActivityFilter == 2) {
-                $users = User::sortable()->where('is_active', 0)->whereNull('deleted_at')->sortable()->paginate(25);
+                $users = User::sortable()->where('is_active', 0)->whereNull('deleted_at')->sortable()->paginate(10);
             } else {
-                $users = User::sortable()->whereNull('deleted_at')->paginate(25);
+                $users = User::sortable()->whereNull('deleted_at')->paginate(10);
             }
             return view('user.usersfilter', compact('users'))->render();
         }
 
-        $users = User::sortable()->whereNull('deleted_at')->paginate(25);
+        $users = User::sortable()->whereNull('deleted_at')->paginate(10);
         $roles = DB::table('roles')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoleRelations = DB::table('user_role_relations')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
 
@@ -80,8 +80,10 @@ class UserController extends Controller {
             $pc['role_name'] = $role->name;
             $userRoles[] = $pc;
         }
+        $modules = DB::table('modules')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
+        $modulePermissions = DB::table('permissions')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
 
-        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles'));
+        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles', 'modules', 'modulePermissions'));
     }
 
     /*

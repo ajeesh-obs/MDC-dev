@@ -41,6 +41,8 @@ Route::match(array('get', 'post'), '/users/edit/{id}', 'UserController@usersEdit
 
 Route::match(array('get', 'post'), '/role/create', 'RoleController@create')->name('role.create');
 Route::post('/rolemodify', 'RoleController@roleModify')->name('role.modify');
+Route::post('/rolesave', 'RoleController@roleNew')->name('role.save');
 
 Route::match(array('get', 'post'), '/module/create', 'ModuleController@create')->name('module.create');
+Route::post('/permissionmodify', 'ModuleController@permissionModify')->name('permission.modify');
 

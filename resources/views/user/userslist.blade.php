@@ -132,9 +132,9 @@
                                     @endforeach
                                     @endif
 
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input userRoleSetting" id="{{$role->id}}" value="{{$role->id}}" data-userid="{{$user->id}}" @if($roleExists == 1)) checked @endif>
-                                               <label class="custom-control-label font-weight-light" for="{{$role->id}}">{{$role->name}}</label>
+                                    <div class="">
+                                        <input type="checkbox" class="userRoleSetting" id="{{$role->id}}" value="{{$role->id}}" data-userid="{{$user->id}}" @if($roleExists == 1)) checked @endif>
+                                               <label class="custom-control-label1 font-weight-light" for="{{$role->id}}">{{$role->name}}</label>
                                     </div>
                                     @endforeach
                                     @endif
@@ -146,7 +146,7 @@
                                 @endif 
                             </td>
                             <td>
-                                <a href="{{ route('users.edit', array($user->id)) }}"><img src="img/grey-pencil.png"></a>                                        
+                                <a href=""><img src="img/grey-pencil.png"></a>                                        
                                 <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="img/grey-trash.jpg"></a>
                             </td>
                         </tr>
@@ -156,7 +156,7 @@
                             <td colspan="6" class="text-center">No Records Found!</td>
                         </tr>
                         @endif
-                        <tr class="form collapse" id="collapseAddUser">
+                        <tr class="form collapse" id="collapseAddUser"> 
                             <td colspan="6">
                                 <div class="px-2 py-3">
                                     <a data-toggle="collapse" href="#collapseAddUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddUser">&times;</a>
@@ -165,36 +165,36 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="text-uppercase" for="inputEmail4">First Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="inputEmail4" placeholder="">
+                                                <input type="text" class="form-control form-control-sm" id="inputEmail4" placeholder="First Name" name="firstName" id="firstName">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="text-uppercase" for="inputPassword4">Last Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="inputPassword4" placeholder="">
+                                                <input type="text" class="form-control form-control-sm" id="inputPassword4" placeholder="Last Name" name="lastName" id="lastName">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="text-uppercase" for="inputEmail4">Email</label>
-                                                <input type="email" class="form-control form-control-sm" id="inputEmail4" placeholder="">
+                                                <input type="email" class="form-control form-control-sm" id="inputEmail4" placeholder="Email" name="email" id="email">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="text-uppercase" for="inputPassword4">Confirm Email</label>
-                                                <input type="email" class="form-control form-control-sm" id="inputPassword4" placeholder="">
+                                                <input type="email" class="form-control form-control-sm" id="inputPassword4" placeholder="Confirm Email" name="confirmEmail" id="confirmEmail">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="text-uppercase" for="inputEmail4">Role</label>
-                                                <select class="custom-select custom-select-sm" id="inputGroupSelect01">
-                                                    <option selected>MEMBER</option>
-                                                    <option value="1">ADMIN</option>
-                                                    <option value="2">COACH</option>
-                                                    <option value="3">STORE ADMIN</option>
-                                                    <option value="3">VIDEOGRAPHER</option>
+                                                <select class="custom-select custom-select-sm" id="userRole" name="userRole">
+                                                    @if($roles->count() > 0)
+                                                    @foreach($roles as $role)
+                                                    <option value="{{$role->id}}">{{$role->name}}</option>
+                                                    @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
+                                        <button type="button" id="saveMemberBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
                                     </form>
                                 </div>
                             </td>
@@ -228,52 +228,50 @@
                         @foreach($roles as $role)
                         <tr>
                             <td> {{ $role->name }} </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light"
-                                           for="customCheck1">Leaderboard</label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light" for="customCheck1">Users</label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light"
-                                           for="customCheck1">Enrollment</label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light"
-                                           for="customCheck1">Financial</label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light" for="customCheck1">System</label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label font-weight-light" for="customCheck1">Store</label>
-                                </div>
-                            </td>
-                        <tr>
+                            @if($modules->count() > 0)
+                            @foreach($modules as $module)
+
+                            <?php $permissionExists = 0; ?>
+                            @if($modulePermissions->count() > 0)
+                            @foreach($modulePermissions as $modlePermsion)
+                            @if($modlePermsion->module_id == $module->id and  $modlePermsion->role_id == $role->id)
+                            <?php $permissionExists = 1; ?>   
+                            @endif
                             @endforeach
                             @endif
+
+                            <td>
+                                <div class="">
+                                    <input type="checkbox" class="roleModulePermissionSetting" id="{{$module->id}}" value="{{$module->id}}" data-roleid="{{$role->id}}" @if($permissionExists == 1)) checked @endif>
+                                           <label class="custom-control-label1 font-weight-light" for="{{$module->id}}">{{$module->module_name}}</label>
+                                </div>
+                            </td>
+                            @endforeach
+                            @endif
+                        </tr>
+                        @endforeach
+                        @endif
+                        <tr class="form collapse" id="collapseAddRole"> 
+                            <td colspan="6">
+                                <div class="px-2 py-3">
+                                    <a data-toggle="collapse" href="#collapseAddRole" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddRole">&times;</a>
+                                    <h2 class="mb-3 font-weight-normal">Add Role</h2>
+                                    <form class="w-50">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="text-uppercase" for="inputEmail4">Role Name</label>
+                                                <input type="text" class="form-control form-control-sm" placeholder="Role Name" name="roleName" id="roleName">
+                                            </div>
+                                        </div>
+                                        <button type="button" id="saveRoleBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            <a class="btn btn-outline-warning rounded-pill smaller px-5" data-toggle="collapse" href="#collapseAddUser" role="button" aria-expanded="false" aria-controls="collapseAddUser">
+            <a class="btn btn-outline-warning rounded-pill smaller px-5" data-toggle="collapse" href="#collapseAddRole" role="button" aria-expanded="false" aria-controls="collapseAddRole">
                 + Add New</a>
         </section>
         <section class="users mb-5">

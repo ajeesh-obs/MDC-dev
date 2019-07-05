@@ -431,7 +431,7 @@
             $("input:checkbox.userRoleSetting").change(function() {
                 var ischecked = $(this).is(':checked');
                 var role_id = $(this).val(); 
-                var user_id = $(this).attr("data-userid");
+                var user_id = $(this).attr("data-userid"); 
                 
                 if(role_id && user_id){
                      $.ajax({
@@ -459,6 +459,68 @@
                     })
                 }
             });
+            
+            $("input:checkbox.roleModulePermissionSetting").change(function() {
+                var ischecked = $(this).is(':checked');
+                var module_id = $(this).val(); 
+                var role_id = $(this).attr("data-roleid"); 
+                
+                if(role_id && module_id){
+                     $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '{{ route('permission.modify') }}',
+                        data: {'ischecked': ischecked,'role_id': role_id, 'module_id': module_id},
+                        success: function (data) {
+                            swal({
+                                text: data.message,
+                                title: 'Success!',
+                                type: data.status,
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            })
+                            if (data.status == 'success') {
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },1000);
+                            }
+                        }
+                    })
+                }
+            });
+            
+            $("#saveRoleBtn").click(function() {   
+                var roleName = $("#roleName").val();  
+                if(roleName){
+                     $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '{{ route('role.save') }}',
+                        data: {'roleName': roleName},
+                        success: function (data) {
+                            swal({
+                                text: data.message,
+                                title: 'Success!',
+                                type: data.status,
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            })
+                            if (data.status == 'success') {
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },1000);
+                            }
+                        }
+                    })
+                }
+            });
+            
             
             
 
