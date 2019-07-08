@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Role;
+use App\UserRoleRelation;
+use App\Mail\MemberCredentialsMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller {
 
@@ -54,23 +57,8 @@ class UserController extends Controller {
 
     public function userslist(Request $request) {
 
-        // filter apply if exists
-        $userActivityFilter = request('userActivityFilter');
-        if (!empty($userActivityFilter)) {
-            if ($userActivityFilter == 1) {
-                $users = User::sortable()->where('is_active', $userActivityFilter)->whereNull('deleted_at')->paginate(10);
-            } else if ($userActivityFilter == 2) {
-                $users = User::sortable()->where('is_active', 0)->whereNull('deleted_at')->sortable()->paginate(10);
-            } else {
-                $users = User::sortable()->whereNull('deleted_at')->paginate(10);
-            }
-            return view('user.usersfilter', compact('users'))->render();
-        }
-
-        $users = User::sortable()->whereNull('deleted_at')->paginate(10);
         $roles = DB::table('roles')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoleRelations = DB::table('user_role_relations')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
-
         $userRoles = array();
         foreach ($userRoleRelations as $usrole) {
             $pc['id'] = $usrole->id;
@@ -80,10 +68,63 @@ class UserController extends Controller {
             $pc['role_name'] = $role->name;
             $userRoles[] = $pc;
         }
+
+        // filter apply if exists
+        $userActivityFilter = request('userActivityFilter');
+        $userRoleFilter = request('userRoleFilter');
+
+        if ((!empty($userRoleFilter)) || (!empty($userActivityFilter))) {
+
+            $users = User::select('users.id', 'users.first_name', 'users.last_name', 'users.is_active')
+                    ->leftjoin('user_role_relations', 'users.id', '=', 'user_role_relations.user_id')
+                    ->leftjoin('roles', 'roles.id', '=', 'user_role_relations.role_id')
+                    ->where('user_role_relations.deleted_at', '=', NULL)
+                    ->where('users.deleted_at', '=', NULL)
+                    ->where('roles.deleted_at', '=', NULL);
+            if ($userRoleFilter != 'all') {
+                $users->where('roles.id', '=', $userRoleFilter);
+            }
+            if (!empty($userActivityFilter)) {
+                if ($userActivityFilter == 1) {
+                    $users->where('users.is_active', '=', $userActivityFilter);
+                } else if ($userActivityFilter == 2) {
+                    $users->where('users.is_active', '=', 0);
+                }
+            }
+            $users = $users->orderBy('users.id', 'desc')->groupBy('users.id')->get();
+//            $users = $users->orderBy('users.id', 'desc')->distinct()->get();
+
+            return view('user.usersfilter', compact('users', 'roles', 'userRoleRelations', 'userRoles'))->render();
+        }
+
+
+        $users = User::sortable()->whereNull('deleted_at')->orderBy('users.id', 'desc')->paginate(10);
         $modules = DB::table('modules')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $modulePermissions = DB::table('permissions')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
+        $serviceProviders = array();
+        $serviceProviderRoleIds = array();
+        $serviceProviderRoles = DB::table('roles')->whereNull('deleted_at')->where('roles.is_service_provider', '=', true)->orderBy('id', 'desc')->get();
+        if ($serviceProviderRoles) {
+            foreach ($serviceProviderRoles as $serviceProviderRole) {
+                $spr['role_id'] = $serviceProviderRole->id;
+                $serviceProviderRoleIds[] = $spr;
+            }
+        }
+        if (count($serviceProviderRoleIds) > 0) {
+            $serviceProviders = User::sortable()
+                    ->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'roles.name as name')
+                    ->leftjoin('user_role_relations', 'users.id', '=', 'user_role_relations.user_id')
+                    ->leftjoin('roles', 'roles.id', '=', 'user_role_relations.role_id')
+                    ->whereIn('user_role_relations.role_id', $serviceProviderRoleIds)
+                    ->where('user_role_relations.deleted_at', '=', NULL)
+                    ->where('users.deleted_at', '=', NULL)
+                    ->where('roles.deleted_at', '=', NULL)
+                    ->orderBy('users.id', 'desc')
+                    ->get();
+        }
+        //print_r($serviceProviders);exit;
 
-        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles', 'modules', 'modulePermissions'));
+        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles', 'modules', 'modulePermissions', 'serviceProviders'));
     }
 
     /*
@@ -133,6 +174,102 @@ class UserController extends Controller {
         }
 
         return view('user.user_edit', compact('user'));
+    }
+
+    /*
+     * create new members
+     * 
+     */
+
+    public function memberSave(Request $request) {
+        $formData = $request->all();
+
+        // check email & confirm email are same or not
+        if ($formData['email'] != $formData['confirmEmail']) {
+            return response()->json(array('status' => 'error', 'message' => 'Email and Confirm email are not matching'));
+        }
+
+        // check same emaile already exists
+        $sameExists = DB::table('users')->where([['email', '=', $formData['email']], ['deleted_at', '=', NULL]])->first();
+        if ($sameExists) {
+            return response()->json(array('status' => 'error', 'message' => 'Email already exists'));
+        }
+
+        $validation = Validator::make($formData, [
+                    'firstName' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                    'userRole' => ['required'],
+        ]);
+        if ($validation->fails()) {
+            return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+        }
+        $password = $this->random_strings(8);
+        // save user details
+        $save = User::create([
+                    'first_name' => $formData['firstName'],
+                    'last_name' => $formData['lastName'],
+                    'email' => $formData['email'],
+                    'password' => Hash::make($password),
+        ]);
+        // save user role details
+        $insertUserId = $save->id;
+        if ($insertUserId) {
+            $saveRole = UserRoleRelation::create([
+                        'role_id' => $formData['userRole'],
+                        'user_id' => $insertUserId,
+            ]);
+            // send mail to member
+            if ($saveRole) {
+                $user = array('first_name' => $formData['firstName'], 'last_name' => $formData['lastName'], 'email' => $formData['email'], 'password' => $password);
+                Mail::to($user['email'])->send(new MemberCredentialsMail($user));
+            }
+        }
+        if ($save && $saveRole) {
+            return response()->json(array('status' => 'success', 'message' => 'New member saved successfully'));
+        } else {
+            return response()->json(array('status' => 'error', 'message' => 'New member not saved, Please try again later'));
+        }
+    }
+
+    /*
+     * update member details
+     * 
+     */
+
+    public function memberUpdate(Request $request) {
+
+        if ($request->isMethod('post')) {
+
+            $formData = $request->all();
+            $validation = Validator::make($formData, [
+                        'firstName' => ['required', 'string', 'max:255'],
+            ]);
+            if ($validation->fails()) {
+                return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+            }
+            $user = User::find($formData['id']);
+            if (empty($user)) {
+                return response()->json(array('status' => 'error', 'message' => "Selected user details not getting, Please try again later"));
+            }
+            // update user details
+            $user->first_name = $formData['firstName'];
+            $user->last_name = $formData['lastName'];
+            $response = $user->save();
+
+            if ($response) {
+                return response()->json(array('status' => 'success', 'message' => 'User details updated successfully'));
+            } else {
+                return response()->json(array('status' => 'error', 'message' => 'User details not updated, Please try again later'));
+            }
+        }
+        return response()->json(array('status' => 'error', 'message' => 'Some error found, Please try again later'));
+    }
+
+    function random_strings($length_of_string) {
+
+        // md5 the timestamps and returns substring 
+        // of specified length 
+        return substr(md5(time()), 0, $length_of_string);
     }
 
 }

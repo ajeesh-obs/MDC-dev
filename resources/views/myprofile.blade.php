@@ -33,27 +33,27 @@
                                 <ul class="list-inline mb-0 social-menu">
                                     <li class="list-inline-item mr-0">
                                         <a data-toggle="tooltip" data-placement="top" title="Share Profile to Social media" target="_blank" @if( !empty($userDetails->facebook_link)) href="{{$userDetails->facebook_link}}" @endif>
-                                            <i class="icon icon-social filter-gold"></i>
+                                           <i class="icon icon-social filter-gold"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item mr-0">
                                         <a data-toggle="tooltip" data-placement="top"title="Share Profile to Social media" target="_blank" @if( !empty($userDetails->twitter_link)) href="{{$userDetails->twitter_link}}" @endif>
-                                            <i class="icon icon-social filter-gold"></i>
+                                           <i class="icon icon-social filter-gold"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item mr-0">
                                         <a data-toggle="tooltip" data-placement="top" title="Share Profile to Social media" target="_blank" @if( !empty($userDetails->instagram_link)) href="{{$userDetails->instagram_link}}" @endif>
-                                            <i class="icon icon-social filter-gold"></i>
+                                           <i class="icon icon-social filter-gold"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item mr-0">
                                         <a data-toggle="tooltip" data-placement="top" title="Share Profile to Social media" target="_blank" @if( !empty($userDetails->youtube_link)) href="{{$userDetails->youtube_link}}" @endif>
-                                            <i class="icon icon-social filter-gold"></i>
+                                           <i class="icon icon-social filter-gold"></i>
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
                                         <a data-toggle="tooltip" data-placement="top" title="Share Profile to Social media" target="_blank" @if( !empty($userDetails->linkedin_link)) href="{{$userDetails->linkedin_link}}" @endif>
-                                            <i class="icon icon-social filter-gold"></i>
+                                           <i class="icon icon-social filter-gold"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -80,6 +80,7 @@
                             </div>
                         </div>
                         <ul class="list-inline mb-4">
+                            <li class="accent-color font-weight-bold">Languages Spoken</li>
                             <li class="list-inline-item">@if( !empty($userDetails->languages_spoken)) {{ $userDetails->languages_spoken }} @endif</li>
                         </ul>
                         <a href="{{ route('profileedit') }}" class="btn btn-outline-warning rounded-pill w-50 accent">

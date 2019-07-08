@@ -192,4 +192,17 @@ class HomeController extends Controller {
         return view('mindset');
     }
 
+    /*
+     * after admin login pagr
+     * 
+     */
+
+    public function adminHome() {
+
+        $user = Auth::user();
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+
+        return view('admin.home', compact('user', 'userDetails'));
+    }
+
 }

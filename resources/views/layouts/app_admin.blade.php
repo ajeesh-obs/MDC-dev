@@ -6,28 +6,22 @@
         <meta name="description" content="">
         <meta name="author" content="OBS Virtual">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link rel="icon" href="{{ asset('img/favicon.png') }}">  
+        <link rel="icon" href="{{ asset('img/favicon.png') }}"> 
         <title>The Million Dollar Club</title>
-
-        <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="{{ asset('js/script.js') }}" defer></script>
-
         <!-- Bootstrap core CSS -->
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-
         <!-- Custom styles for this template -->
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-
         <!-- Custom fonts for this template -->
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,400,700" rel="stylesheet">
+        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/script.js') }}" defer></script>
     </head>
 
     <body>
-
         <div class="container">
-            @if (Auth::check())
             <nav class="navbar navbar-expand-md navbar-main">
-                <a class="navbar-brand p-0 text-center" href="{{ route('index') }}">
+                <a class="navbar-brand p-0 text-center" href="index.html">
                     <img class="" src="{{ asset('img/logo.png') }}" alt="MDC">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -35,50 +29,39 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="mr-auto position-relative">
+                    <div class="ml-4 mr-auto position-relative">
                         <ul class="navbar-nav primary-menu">
                             <li class="nav-item active">
-                                <a class="nav-link" href="{{ route('mindset') }}">
-                                    <i class="icon icon-mindset filter-white"></i>
-                                    MINDSET</a>
+                                <a class="nav-link" href="{{ route('adminhome') }}">
+                                    DASHBOARD</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="connect.html">
-                                    <i class="icon icon-connect filter-white"></i>
-                                    CONNECT</a>
+                                <a class="nav-link" href="leaderboard.html">
+                                    LEADERBOARD</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="mastermind.html">
-                                    <i class="icon icon-mastermind filter-white"></i>
-                                    MASTERMIND</a>
+                                <a class="nav-link" href="{{ route('userslist') }}">
+                                    USERS</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="masterclass.html">
-                                    <i class="icon icon-masterclass filter-white"></i>
-                                    MASTERCLASS</a>
+                                <a class="nav-link" href="enrollment.html">
+                                    ENROLLMENT</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="legacy.html">
-                                    <i class="icon icon-legacy filter-white"></i>
-                                    LEGACY</a>
+                                <a class="nav-link" href="financial.html">
+                                    FINANCIAL</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="system.html">
+                                    SYSTEM</a>
                             </li>
                         </ul>
-                        <div class="collapse position-absolute w-100" id="collapseSearch" style="top: -5px;">
-                            <input type="search"
-                                   class="form-control-sm bg-color-4 border-color-1 rounded-custom w-100 text-white">
-                        </div>
                     </div>
                     <ul class="navbar-nav mr-auto secondary-menu">
-                        <li class="nav-item active">
-                            <a class="nav-link" data-toggle="collapse" href="#collapseSearch" role="button"
-                               aria-expanded="false" aria-controls="collapseSearch">
-                                <i class="icon icon-search filter-light"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown dropdown-chat">
+                        <li class="nav-item dropdown dropdown-chat border-left border-right">
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="navbarDropdown3" role="button"
                                aria-haspopup="true" aria-expanded="false">
-                                <i class="icon icon-chat filter-light">
+                                <i class="icon icon-chat filter-white">
                                 </i>
                                 <span class="badge rounded-circle">3</span>
                             </a>
@@ -168,7 +151,8 @@
                                 <div class="collapse multi-collapse-chat-search" id="multiCollapseSearch">
                                     <div class="pt-3 border-bottom">
                                         <div class="text-uppercase px-3 d-flex flex-row align-items-center">
-                                            <a class="pr-2 text-white font-weight-bold text-decoration-none" data-toggle="collapse" href=".multi-collapse-chat-search"
+                                            <a class="pr-2 text-white font-weight-bold text-decoration-none"
+                                               data-toggle="collapse" href=".multi-collapse-chat-search"
                                                role="button" aria-expanded="false"
                                                aria-controls="multiCollapseChat multiCollapseSearch">
                                                 <
@@ -179,7 +163,8 @@
                                             </a>
                                         </div>
                                         <div class="px-3 py-2 text-left">
-                                            <a href="#" class="mx-1 text-decoration-none text-white small font-weight-bold">Select All Followers</a>
+                                            <a href="#" class="mx-1 text-decoration-none text-white small font-weight-bold">Select
+                                                All Followers</a>
                                         </div>
                                     </div>
                                     <div class="py-3 search-list-wrapper pre-scrollable">
@@ -249,36 +234,18 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item border-right">
                             <a class="nav-link" href="#">
-                                <i class="icon icon-notification filter-light"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="icon icon-cart filter-light"></i>
+                                <i class="icon icon-cart filter-white"></i>
                                 <span class="badge rounded-circle">1</span>
                             </a>
-                        </li>
-                        <li class="nav-item position-relative">
-                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="navbarDropdown1" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon icon-dollar filter-gold"></i>
-                            </a>
-                            <div class="dropdown-menu p-0 dropdown-menu-center dropdown-menu-sm"
-                                 aria-labelledby="navbarDropdown1">
-                                <div class="dropdown-item-text d-flex flex-column align-items-center px-2">
-                                    <span class="text-white d-inline-block">BALANCE</span>
-                                    <span class="accent-color  d-inline-block font-weight-bold">36 COINS</span>
-                                </div>
-                            </div>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto user-menu">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                                Welcome, John Doe
                                 <img class="rounded-circle ml-2"
                                      src="img/profile1.jpg"
                                      alt="Generic placeholder image" width="40" height="40">
@@ -286,15 +253,12 @@
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
                                 <a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('accountsettings') }}">Account Settings</a>
-                                <!--<a class="dropdown-item" href="{{ route('users') }}">Users</a>-->
-                                <!--<a class="dropdown-item" href="{{ route('userslist') }}">Users</a>-->
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
-            @endif
         </div>
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -304,6 +268,7 @@
         <!--<main class="py-4" role="main" class="container">-->
             @yield('content')
         <!--</main>-->
+
 
         <!-- Bootstrap core JavaScript
         ================================================== -->
@@ -317,12 +282,13 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-
+        <script src="js/script.js" type="text/javascript"></script>
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-        
+
         <script type="text/javascript">
-            $(document).ready(function () {
+            $(document).ready(function () {        
             $("#navbarDropdown2").click(function () {
             $(".profileSettingsDiv").toggle();
             });
@@ -354,7 +320,8 @@
             $('.displayMsgDiv').delay(2000).fadeOut('slow');
 
             $(".userActivityFilter").change(function () {  
-            var userActivityFilter = $(".userActivityFilter").val();
+                userFilterList();
+            /*var userActivityFilter = $(".userActivityFilter").val();
             $.ajax({
             url:'/userslist?userActivityFilter='+userActivityFilter,
             success:function(data)
@@ -362,11 +329,12 @@
             $(".userlisttbody").html("");
             $(".userlisttbody").html(data);
             }
-            })
+            })*/
             });
             
-            $(".userRoleFilter").change(function () {  
-            var userRoleFilter = $(".userRoleFilter").val();
+            $(".userRoleFilter").change(function () {
+                userFilterList();
+            /*var userRoleFilter = $(".userRoleFilter").val();
             $.ajax({
             url:'/userslist?userRoleFilter='+userRoleFilter,
             success:function(data)
@@ -374,11 +342,20 @@
             $(".userlisttbody").html("");
             $(".userlisttbody").html(data);
             }
-            })
+            })*/
             });
             
             function userFilterList(){
-                
+                var userActivityFilter = $(".userActivityFilter").val();
+                var userRoleFilter = $(".userRoleFilter").val();
+                $.ajax({
+                    url:'/userslist?userRoleFilter='+userRoleFilter+'&userActivityFilter='+ userActivityFilter,
+                    success:function(data)
+                    {  
+                    $(".userlisttbody").html("");
+                    $(".userlisttbody").html(data);
+                    }
+                })
             }
 
             $(document).on('click', '.user-delete', function (e) {
@@ -428,7 +405,7 @@
             });
             });
 
-            $(document).on('change', 'input:checkbox.userRoleSetting', function (e) {        //$("input:checkbox.userRoleSetting").change(function(e) {  
+            $(document).on('change', 'input:checkbox.userRoleSetting', function (e) {
                 e.preventDefault();
                 var ischecked = $(this).is(':checked');
                 var role_id = $(this).val(); 
@@ -558,8 +535,99 @@
                 }
             });
             
+            $(".editmember").click(function() {   
+                
+                var id = $(this).data('id');
+                var lname = $(this).data('lname');
+                var fname = $(this).data('fname');  
+                var email = $(this).data('email');  
+                if(id){
+                    
+                    $("#editServiceProviderfirstName").val(fname);
+                    $("#editServiceProviderlastName").val(lname);
+                    $("#editServiceProvideremail").val(email);
+                    $("#editServiceProviderid").val(id);
+                    $("#collapseEditMember").show();
+                }
+            });
+                
+            $("#editServiceProviderBtn").click(function() {   
+                var firstName = $("#editServiceProviderfirstName").val();  
+                var lastName = $("#editServiceProviderlastName").val();  
+                var id = $("#editServiceProviderid").val(); 
+                if(id && firstName){  
+                     $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '{{ route('member.update') }}',
+                        data: {'firstName': firstName, 'lastName':lastName, 'id': id},
+                        success: function (data) {
+                            swal({
+                                text: data.message,
+                                title: 'Success!',
+                                type: data.status,
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            })
+                            if (data.status == 'success') {
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },1000);
+                            }
+                        }
+                    })
+                }
+            });
             
+            $(".edituser").click(function() {   
+                
+                var id = $(this).data('id');
+                var lname = $(this).data('lname');
+                var fname = $(this).data('fname');  
+                var email = $(this).data('email');  
+                if(id){
+                    
+                    $("#editUserfirstName").val(fname);
+                    $("#editUserlastName").val(lname);
+                    $("#editUseremail").val(email);
+                    $("#editUserid").val(id);
+                    $("#collapseEditUser").show();
+                }
+            });
             
+             $("#editUserBtn").click(function() {   
+                var firstName = $("#editUserfirstName").val();  
+                var lastName = $("#editUserlastName").val();  
+                var id = $("#editUserid").val(); 
+                if(id && firstName){  
+                     $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '{{ route('member.update') }}',
+                        data: {'firstName': firstName, 'lastName':lastName, 'id': id},
+                        success: function (data) {
+                            swal({
+                                text: data.message,
+                                title: 'Success!',
+                                type: data.status,
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            })
+                            if (data.status == 'success') {
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },1000);
+                            }
+                        }
+                    })
+                }
+            });
 
             });
         </script>

@@ -34,7 +34,7 @@
         </div>
         <div class="bg-color-2 p-3 sectionDiv contentSection">
             <div>
-                <h4 class="text-white mb-0 mr-4">{{ __('Reset Password') }}</h4>
+                <h4 class="text-white mb-0 mr-4">{{ __('Admin Reset Password') }}</h4>
             </div>
             <div class="card-body">
                 @if (session('status'))
@@ -43,7 +43,7 @@
                 </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.email') }}">
+                <form method="POST" action="{{ route('admin.passwordsent') }}">
                     @csrf
 
                     <div class="form-group row">
