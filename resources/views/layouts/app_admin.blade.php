@@ -582,7 +582,8 @@
                 }
             });
             
-            $(".edituser").click(function() {   
+            $(document).on('click', '.edituser', function (e) {  
+                e.preventDefault();
                 
                 var id = $(this).data('id');
                 var lname = $(this).data('lname');
@@ -628,6 +629,10 @@
                     })
                 }
             });
+            
+            
+            
+            
 
             });
         </script>

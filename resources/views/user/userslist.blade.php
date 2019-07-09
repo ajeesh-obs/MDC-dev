@@ -177,78 +177,78 @@
                             <td colspan="6" class="text-center">No Records Found!</td>
                         </tr>
                         @endif
-                        <tr class="form collapse" id="collapseAddUser"> 
-                            <td colspan="6">
-                                <div class="px-2 py-3">
-                                    <a data-toggle="collapse" href="#collapseAddUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddUser">&times;</a>
-                                    <h2 class="mb-3 font-weight-normal">Add Member</h2>
-                                    <form class="w-50">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputEmail4">First Name</label>
-                                                <input type="text" class="form-control form-control-sm" placeholder="First Name" name="firstName" id="firstName">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputPassword4">Last Name</label>
-                                                <input type="text" class="form-control form-control-sm" placeholder="Last Name" name="lastName" id="lastName">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputEmail4">Email</label>
-                                                <input type="email" class="form-control form-control-sm" placeholder="Email" name="email" id="email">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputPassword4">Confirm Email</label>
-                                                <input type="email" class="form-control form-control-sm" placeholder="Confirm Email" name="confirmEmail" id="confirmEmail">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputEmail4">Role</label>
-                                                <select class="custom-select custom-select-sm" id="userRole" name="userRole">
-                                                    @if($roles->count() > 0)
-                                                    @foreach($roles as $role)
-                                                    <option value="{{$role->id}}">{{$role->name}}</option>
-                                                    @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <button type="button" id="saveMemberBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="form" id="collapseEditUser" style="display:none;"> 
-                            <td colspan="6">
-                                <div class="px-2 py-3">
-                                    <a data-toggle="collapse" href="#collapseEditUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseEditUser">&times;</a>
-                                    <h2 class="mb-3 font-weight-normal">Edit User</h2>
-                                    <form class="w-50">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputEmail4">First Name</label>
-                                                <input type="text" class="form-control form-control-sm" placeholder="First Name" name="editUserfirstName" id="editUserfirstName">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputPassword4">Last Name</label>
-                                                <input type="text" class="form-control form-control-sm" placeholder="Last Name" name="editUserlastName" id="editUserlastName">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="text-uppercase" for="inputEmail4">Email</label>
-                                                <input type="email" class="form-control form-control-sm" placeholder="Email" name="editUseremail" id="editUseremail" readonly>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="editUserid" id="editUserid">
-                                        <button type="button" id="editUserBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
                     </tbody>
+                    <tr class="form collapse" id="collapseAddUser"> 
+                        <td colspan="6">
+                            <div class="px-2 py-3">
+                                <a data-toggle="collapse" href="#collapseAddUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddUser">&times;</a>
+                                <h2 class="mb-3 font-weight-normal">Add Member</h2>
+                                <form class="w-50">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputEmail4">First Name</label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="First Name" name="firstName" id="firstName">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputPassword4">Last Name</label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Last Name" name="lastName" id="lastName">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputEmail4">Email</label>
+                                            <input type="email" class="form-control form-control-sm" placeholder="Email" name="email" id="email">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputPassword4">Confirm Email</label>
+                                            <input type="email" class="form-control form-control-sm" placeholder="Confirm Email" name="confirmEmail" id="confirmEmail">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputEmail4">Role</label>
+                                            <select class="custom-select custom-select-sm" id="userRole" name="userRole">
+                                                @if($roles->count() > 0)
+                                                @foreach($roles as $role)
+                                                <option value="{{$role->id}}">{{$role->name}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="saveMemberBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="form" id="collapseEditUser" style="display:none;"> 
+                        <td colspan="6">
+                            <div class="px-2 py-3">
+                                <a data-toggle="collapse" href="#collapseEditUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseEditUser">&times;</a>
+                                <h2 class="mb-3 font-weight-normal">Edit User</h2>
+                                <form class="w-50">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputEmail4">First Name</label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="First Name" name="editUserfirstName" id="editUserfirstName">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputPassword4">Last Name</label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Last Name" name="editUserlastName" id="editUserlastName">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-uppercase" for="inputEmail4">Email</label>
+                                            <input type="email" class="form-control form-control-sm" placeholder="Email" name="editUseremail" id="editUseremail" readonly>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="editUserid" id="editUserid">
+                                    <button type="button" id="editUserBtn" class="btn accent-bg border-0 text-dark rounded-pill px-5 small font-weight-bold">Save</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </div>
             <!--<a href="#" class="small float-right text-uppercase text-white-50" style="border:1px solid red;">-->

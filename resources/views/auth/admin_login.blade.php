@@ -97,7 +97,7 @@
         </div>
         <div class="card-body float-right forgotPasswordDiv">
             @if (Route::has('password.request'))
-            <a class="btn btn-link text-white" href="{{ route('admin.forgotpassword') }}">
+            <a class="btn btn-link text-white" href="{{ route('admin.password.request') }}">
                 {{ __('Forgot Your Password?') }}
             </a>
             @endif

@@ -35,7 +35,7 @@
 
     <body class="bg-default">
 
-        <div class="main-content">
+        <div class="main-content" style="display:none;">
             <!-- Header -->
             <div class="header bg-gradient-primary py-7 py-lg-5">
                 <div class="container">
@@ -56,13 +56,17 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header text-center">{{ __('Login credentials') }}</div>
+                        <div class="card-header text-center"><h3>{{ __('Million Dollar Club') }}</h3></div>
                         <div class="card-body text-center">
                             <h4>Hi {{ $user['first_name'].' '.$user['last_name']}},</h4>
-
-                            <p>Email : {{ $user['email']}}</p>
-                            <p>Password : {{ $user['password']}}</p>
-                            <p><a class="navbar-brand" href="{{ url('/') }}">Million Dollar Club</a></p>
+                            <p>Please follow the link to create your password</p>
+                            <p>
+                                <a class="navbar-brand" href="{{ route('users.resetpassword', array($user['randomNumber'])) }}"> 
+                                    <button type="button" class="btn btn-primary">
+                                        {{ __('Click Here') }}
+                                    </button>
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>

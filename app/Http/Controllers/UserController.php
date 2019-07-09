@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Role;
 use App\UserRoleRelation;
+use App\MemberPasswordReset;
 use App\Mail\MemberCredentialsMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -75,7 +76,7 @@ class UserController extends Controller {
 
         if ((!empty($userRoleFilter)) || (!empty($userActivityFilter))) {
 
-            $users = User::select('users.id', 'users.first_name', 'users.last_name', 'users.is_active')
+            $users = User::select('users.id', 'users.first_name', 'users.last_name', 'users.is_active', 'users.email')
                     ->leftjoin('user_role_relations', 'users.id', '=', 'user_role_relations.user_id')
                     ->leftjoin('roles', 'roles.id', '=', 'user_role_relations.role_id')
                     ->where('user_role_relations.deleted_at', '=', NULL)
@@ -203,13 +204,13 @@ class UserController extends Controller {
         if ($validation->fails()) {
             return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
         }
-        $password = $this->random_strings(8);
+        $randomNumber = $this->random_strings(8);
         // save user details
         $save = User::create([
                     'first_name' => $formData['firstName'],
                     'last_name' => $formData['lastName'],
                     'email' => $formData['email'],
-                    'password' => Hash::make($password),
+//                    'password' => Hash::make($password),
         ]);
         // save user role details
         $insertUserId = $save->id;
@@ -218,9 +219,15 @@ class UserController extends Controller {
                         'role_id' => $formData['userRole'],
                         'user_id' => $insertUserId,
             ]);
+            // save in member password reset table
+            $saveMemberPasswordReset = MemberPasswordReset::create([
+                        'email' => $formData['email'],
+                        'token' => $randomNumber,
+                        'user_id' => $insertUserId
+            ]);
             // send mail to member
-            if ($saveRole) {
-                $user = array('first_name' => $formData['firstName'], 'last_name' => $formData['lastName'], 'email' => $formData['email'], 'password' => $password);
+            if ($saveRole && $saveMemberPasswordReset) {
+                $user = array('first_name' => $formData['firstName'], 'last_name' => $formData['lastName'], 'email' => $formData['email'], 'randomNumber' => $randomNumber);
                 Mail::to($user['email'])->send(new MemberCredentialsMail($user));
             }
         }

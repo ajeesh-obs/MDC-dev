@@ -29,7 +29,7 @@ class MemberCredentialsMail extends Mailable {
      * @return $this
      */
     public function build() {
-        return $this->subject('Member Login Credentials')->view('emails.memberlogincredential');
+        return $this->subject('Member Password Setting')->view('emails.memberlogincredential');
     }
 
 }

@@ -50,7 +50,7 @@
         @endif 
     </td>
     <td>
-        <a href=""><img src="img/grey-pencil.png"></a>                                        
+        <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="img/grey-pencil.png"></a> 
         <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="img/grey-trash.jpg"></a>
     </td>
 </tr>

@@ -558,6 +558,37 @@
                 }
             });
             
+            $(".memberPasswordUpdateBtn").click(function() {   
+                var email = $("#memberresetpasswordemail").val();  
+                var password = $("#memberresetpassword").val();  
+                var passwordconfirm = $("#memberresetpasswordconfirm").val();  
+                var id = $("#memberresetpasswordid").val(); 
+                if(id && email){  
+                     $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '{{ route('member.passordreset') }}',
+                        data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
+                        success: function (data) {
+                            swal({
+                                text: data.message,
+                                title: 'Success!',
+                                type: data.status,
+                                timer: 2000,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            })
+                            if (data.status == 'success') {
+                                setTimeout(function(){
+                                    window.location.href = '{{url("/")}}';  //window.location.reload();
+                                },1000);
+                            }
+                        }
+                    })
+                }
+            });
             
             
 
