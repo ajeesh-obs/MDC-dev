@@ -287,7 +287,7 @@
                                 <a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('accountsettings') }}">Account Settings</a>
                                 <!--<a class="dropdown-item" href="{{ route('users') }}">Users</a>-->
-                                <!--<a class="dropdown-item" href="{{ route('userslist') }}">Users</a>-->
+                                <!--<a class="dropdown-item" href="{{ route('users') }}">Users</a>-->
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
                             </div>
                         </li>

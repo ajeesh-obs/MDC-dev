@@ -40,7 +40,7 @@
                                     LEADERBOARD</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('userslist') }}">
+                                <a class="nav-link" href="{{ route('admin.userslist') }}">
                                     USERS</a>
                             </li>
                             <li class="nav-item">
@@ -349,7 +349,7 @@
                 var userActivityFilter = $(".userActivityFilter").val();
                 var userRoleFilter = $(".userRoleFilter").val();
                 $.ajax({
-                    url:'/userslist?userRoleFilter='+userRoleFilter+'&userActivityFilter='+ userActivityFilter,
+                    url:'/admin/userslist?userRoleFilter='+userRoleFilter+'&userActivityFilter='+ userActivityFilter,
                     success:function(data)
                     {  
                     $(".userlisttbody").html("");

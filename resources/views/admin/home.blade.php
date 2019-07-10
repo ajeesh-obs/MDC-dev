@@ -135,20 +135,20 @@
                 <div class="row card-deck mb-4">
                     <div class="col-6 card border accent-border bg-transparent rounded-0">
                         <div class="text-center p-3">
-                            <img src="img/hour-glass.jpg" class="img-fluid mb-2">
+                            <img src="{{ asset('img/hour-glass.jpg') }}" class="img-fluid mb-2">
                             <p class="text-uppercase accent-color small font-weight-bold mb-0">Pending Approvals</p>
                         </div>
                     </div>
                     <div class="col-3 card border accent-border bg-transparent rounded-0">
                         <div class="text-center p-3">
-                            <img src="img/gold-tick.jpg" class="img-fluid mb-2">
+                            <img src="{{ asset('img/gold-tick.jpg') }}" class="img-fluid mb-2">
                             <p class="text-uppercase accent-color small font-weight-bold mb-0">New Group is Ready to
                                 Schedule</p>
                         </div>
                     </div>
                     <div class="col-3 card border accent-border bg-transparent rounded-0">
                         <div class="text-center p-3">
-                            <img src="img/gold-3.jpg" class="img-fluid mb-2">
+                            <img src="{{ asset('img/gold-3.jpg') }}" class="img-fluid mb-2">
                             <p class="text-uppercase accent-color small mb-0">Days left</p>
                             <p class="text-uppercase accent-color small font-weight-bold mb-0">No Minimum Met</p>
                         </div>
@@ -240,7 +240,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <img src="img/gold-plus.jpg" class="img-fluid">
+                                        <img src="{{ asset('img/gold-plus.jpg') }}" class="img-fluid">
                                     </a>
                                 </li>
                             </ul>

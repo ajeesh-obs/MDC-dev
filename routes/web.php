@@ -31,6 +31,8 @@ Route::prefix('admin')->group(function() {
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+    
+    Route::get('/userslist', 'UserController@usersList')->name('admin.userslist');
 });
 
 
@@ -56,7 +58,7 @@ Route::get('auth/facebook', 'Auth\FacebookController@redirectToFacebook');
 
 Route::get('auth/facebook/callback', 'Auth\FacebookController@handleFacebookCallback');
 
-Route::get('/userslist', 'UserController@usersList')->name('userslist');
+
 Route::get('/users', 'UserController@users')->name('users');
 Route::delete('/users/delete/{id}', 'UserController@usersDelete')->name('users.delete');
 Route::match(array('get', 'post'), '/users/edit/{id}', 'UserController@usersEdit')->name('users.edit');
