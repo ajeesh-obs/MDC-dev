@@ -80,7 +80,7 @@
                                     <div class="chat-list-wrapper pre-scrollable">
                                         <ul class="list-unstyled">
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -91,7 +91,7 @@
                                                 </div>
                                             </li>
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -102,7 +102,7 @@
                                                 </div>
                                             </li>
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -113,7 +113,7 @@
                                                 </div>
                                             </li>
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -124,7 +124,7 @@
                                                 </div>
                                             </li>
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -135,7 +135,7 @@
                                                 </div>
                                             </li>
                                             <li class="d-flex flex-row align-items-center">
-                                                <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="50"
+                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
                                                      height="50">
                                                 <div class="ml-3 text-left">
                                                     <h6 class="text-white font-weight-bold small mb-1">Username</h6>
@@ -171,7 +171,7 @@
                                         <ul class="list-unstyled">
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="40"
+                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
                                                          height="40">
                                                     <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
                                                     <a href="#" class="ml-auto open-chat">
@@ -183,7 +183,7 @@
                                             </li>
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="40"
+                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
                                                          height="40">
                                                     <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
                                                     <a href="#" class="ml-auto open-chat">
@@ -195,7 +195,7 @@
                                             </li>
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="40"
+                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
                                                          height="40">
                                                     <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
                                                     <a href="#" class="ml-auto open-chat">
@@ -207,7 +207,7 @@
                                             </li>
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="40"
+                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
                                                          height="40">
                                                     <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
                                                     <a href="#" class="ml-auto open-chat">
@@ -219,7 +219,7 @@
                                             </li>
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="img/profile2.jpeg" alt="" width="40"
+                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
                                                          height="40">
                                                     <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
                                                     <a href="#" class="ml-auto open-chat">
@@ -247,7 +247,7 @@
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Welcome, John Doe
                                 <img class="rounded-circle ml-2"
-                                     src="img/profile1.jpg"
+                                     src="{{ asset('img/profile1.jpg') }}"
                                      alt="Generic placeholder image" width="40" height="40">
                             </a>
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
