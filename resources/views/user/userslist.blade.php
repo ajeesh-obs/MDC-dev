@@ -336,7 +336,7 @@
                     <tr class="form" id="collapseEditMember" style="display:none;"> 
                         <td colspan="6">
                             <div class="px-2 py-3">
-                                    <a data-toggle="collapse" href="#collapseEditMember" class="close text-white editServiceProvidersCloseBtn" role="button" aria-expanded="false" aria-controls="collapseEditMember">&times;</a>
+                                <a data-toggle="collapse" href="#collapseEditMember" class="close text-white editServiceProvidersCloseBtn" role="button" aria-expanded="false" aria-controls="collapseEditMember">&times;</a>
                                 <h2 class="mb-3 font-weight-normal">Edit Service Provider</h2>
                                 <form class="w-50">
                                     <div class="form-row">
@@ -373,8 +373,8 @@
                                 @sortablelink('email', 'EMAIL')
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
-                                @sortablelink('name', 'Role')
+                                <!--<a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>-->
+                                Role
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
                                 <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
@@ -393,7 +393,12 @@
                                 {{ $serviceProvider->email }}
                             </td>
                             <td>
-                                <span class="badge badge-primary smaller text-white px-2 py-1">{{$serviceProvider->name}}</span>
+                                @if ($serviceProvider->name != "")
+                                @foreach(explode(',', $serviceProvider->name) as $providerRole) 
+                                <span class="badge badge-primary smaller text-white px-2 py-1">{{$providerRole}}</span>   
+                                @endforeach
+                                @endif
+                    <!--<span class="badge badge-primary smaller text-white px-2 py-1">{{$serviceProvider->name}}</span>-->
                             </td>
                             <td></td>
                         </tr>

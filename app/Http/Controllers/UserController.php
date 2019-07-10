@@ -112,15 +112,27 @@ class UserController extends Controller {
             }
         }
         if (count($serviceProviderRoleIds) > 0) {
+//            $serviceProviders = User::sortable()
+//                    ->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'roles.name as name')
+//                    ->leftjoin('user_role_relations', 'users.id', '=', 'user_role_relations.user_id')
+//                    ->leftjoin('roles', 'roles.id', '=', 'user_role_relations.role_id')
+//                    ->whereIn('user_role_relations.role_id', $serviceProviderRoleIds)
+//                    ->where('user_role_relations.deleted_at', '=', NULL)
+//                    ->where('users.deleted_at', '=', NULL)
+//                    ->where('roles.deleted_at', '=', NULL)
+//                    ->orderBy('users.id', 'desc')
+//                    ->get();
+
             $serviceProviders = User::sortable()
-                    ->select('users.id', 'users.first_name', 'users.last_name', 'users.email', 'roles.name as name')
+                    ->select("users.*", DB::raw("GROUP_CONCAT(roles.name) as name"))
                     ->leftjoin('user_role_relations', 'users.id', '=', 'user_role_relations.user_id')
                     ->leftjoin('roles', 'roles.id', '=', 'user_role_relations.role_id')
-                    ->whereIn('user_role_relations.role_id', $serviceProviderRoleIds)
+                    ->whereIn('roles.id', $serviceProviderRoleIds)
                     ->where('user_role_relations.deleted_at', '=', NULL)
                     ->where('users.deleted_at', '=', NULL)
                     ->where('roles.deleted_at', '=', NULL)
                     ->orderBy('users.id', 'desc')
+                    ->groupBy("users.id")
                     ->get();
         }
         //print_r($serviceProviders);exit;
