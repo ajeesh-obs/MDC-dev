@@ -13,7 +13,7 @@ class CreateSuperAdminPermissions extends Migration {
      */
     public function up() {
         DB::table('users')->insert(array(
-            array('first_name' => 'SUPER', 'last_name' => 'ADMIN', 'email' => '1niju@bfaro.com', 'password' => '$2y$10$bkZDGw.rrngzwXtyLXpUj.Bw23Sk0mTT/19oYLTQz5fDiu0a6nXgK'),
+            array('first_name' => 'SUPER', 'last_name' => 'ADMIN', 'email' => 'admin@bfaro.com', 'password' => '$2y$10$RL6HoLosV8eGiv97ZrwJdOHcGjWDPZ1i1HCvbB4rjlMU6q1lJEQuy'),
         ));
 
         DB::table('modules')->insert(array(
