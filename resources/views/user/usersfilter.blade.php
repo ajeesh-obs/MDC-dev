@@ -2,11 +2,11 @@
 @foreach($users as $index => $user)
 <tr class="hover-permission">
     <td> 
-        <img class="rounded-circle mr-3" src="img/profile6.jpg" alt="" width="25" height="25">
+        <img class="rounded-circle mr-3" src="{{ asset('img/profile6.jpg') }}" alt="" width="25" height="25">
         {{ $user->first_name }} {{ $user->last_name }} 
     </td>
     <td> {{ $user->email }} </td>
-    <td class="text-center"> <img src="img/badge-coach.png" height="30"></td>
+    <td class="text-center"> <img src="{{ asset('img/badge-coach.png') }}" height="30"></td>
     <td>
 
         @if($userRoles > 0)
@@ -50,8 +50,8 @@
         @endif 
     </td>
     <td>
-        <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="img/grey-pencil.png"></a> 
-        <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="img/grey-trash.jpg"></a>
+        <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="{{ asset('img/grey-pencil.png') }}"></a> 
+        <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
     </td>
 </tr>
 @endforeach
