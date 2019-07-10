@@ -21,7 +21,7 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-main">
-                <a class="navbar-brand p-0 text-center" href="index.html">
+                <a class="navbar-brand p-0 text-center" href="javascript:void()">
                     <img class="" src="{{ asset('img/logo.png') }}" alt="MDC">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -36,7 +36,7 @@
                                     DASHBOARD</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="leaderboard.html">
+                                <a class="nav-link" href="javascript:void()">  
                                     LEADERBOARD</a>
                             </li>
                             <li class="nav-item">
@@ -44,15 +44,15 @@
                                     USERS</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="enrollment.html">
+                                <a class="nav-link" href="javascript:void()">
                                     ENROLLMENT</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="financial.html">
+                                <a class="nav-link" href="javascript:void()">
                                     FINANCIAL</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="system.html">
+                                <a class="nav-link" href="javascript:void()">
                                     SYSTEM</a>
                             </li>
                         </ul>
