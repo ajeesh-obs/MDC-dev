@@ -47,7 +47,7 @@ class CreateSuperAdminPermissions extends Migration {
             array('role_id' => 1, 'module_id' => 4),
             array('role_id' => 1, 'module_id' => 5),
             array('role_id' => 1, 'module_id' => 6),
-        ));*/
+        ));
     }
 
     /**
