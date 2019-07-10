@@ -25,11 +25,11 @@
                     <thead class="text-white">
                         <tr>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
+                                <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
                                 @sortablelink('first_name', 'NAME')
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
+                                <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
                                 @sortablelink('email', 'EMAIL')
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
@@ -119,11 +119,11 @@
                         @foreach($users as $index => $user)
                         <tr class="hover-permission">
                             <td> 
-                                <img class="rounded-circle mr-3" src="img/profile6.jpg" alt="" width="25" height="25">
+                                <img class="rounded-circle mr-3" src="{{ asset('img/profile6.jpg') }}" alt="" width="25" height="25">
                                 {{ $user->first_name }} {{ $user->last_name }} 
                             </td>
                             <td> {{ $user->email }} </td>
-                            <td class="text-center"> <img src="img/badge-coach.png" height="30"></td>
+                            <td class="text-center"> <img src="{{ asset('img/badge-coach.png') }}" height="30"></td>
                             <td>
 
                                 @if($userRoles > 0)
@@ -167,8 +167,8 @@
                                 @endif 
                             </td>
                             <td>
-                                <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="img/grey-pencil.png"></a>                                        
-                                <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="img/grey-trash.jpg"></a>
+                                <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="{{ asset('img/grey-pencil.png') }}"></a>                                        
+                                <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                             </td>
                         </tr>
                         @endforeach
@@ -365,11 +365,11 @@
                     <thead class="text-white">
                         <tr>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
+                                <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
                                 @sortablelink('first_name', 'NAME')
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
+                                <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
                                 @sortablelink('email', 'EMAIL')
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
@@ -377,7 +377,7 @@
                                 Role
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
-                                <a href="#" class="mr-2"><img src="img/gold-arrow-up.jpg"></a>
+                                <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
                                 Location
                             </th>
                         </tr>
@@ -386,7 +386,7 @@
                         @if($serviceProviders->count() > 0)
                         @foreach($serviceProviders as $serviceProvider)
                         <tr>
-                            <td><img class="rounded-circle mr-3" src="img/profile6.jpg" alt="" width="25" height="25">
+                            <td><img class="rounded-circle mr-3" src="{{ asset('img/profile6.jpg') }}" alt="" width="25" height="25">
                                 <a style="cursor: pointer;" class="editmember" data-email="{{$serviceProvider->email}}" data-id="{{$serviceProvider->id}}" data-lname="{{$serviceProvider->last_name}}" data-fname="{{$serviceProvider->first_name}}">{{ $serviceProvider->first_name }} {{ $serviceProvider->last_name }} </a>
                             </td>
                             <td>
