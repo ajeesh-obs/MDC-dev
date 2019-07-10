@@ -630,8 +630,33 @@
                 }
             });
             
+            $(document).on('click', '.addMemberCloseBtn', function (e) {  
+                e.preventDefault();
+                $(".addMemberDiv").hide();
+            });
+            $(document).on('click', '.addMemberAddBtn', function (e) {  
+                 e.preventDefault();
+                $(".addMemberDiv").show();
+            });
             
+            $(document).on('click', '.editMemberCloseBtn', function (e) {  
+                e.preventDefault();
+                $("#collapseEditUser").hide();
+            });
             
+            $(document).on('click', '.addRoleCloseBtn', function (e) {  
+                e.preventDefault();
+                $("#collapseAddRole").hide();
+            });
+            $(document).on('click', '.addRoleBtn', function (e) {  
+                 e.preventDefault();
+                $("#collapseAddRole").show();
+            });
+            
+            $(document).on('click', '.editServiceProvidersCloseBtn', function (e) {  
+                e.preventDefault();
+                $("#collapseEditMember").hide();
+            });
             
 
             });

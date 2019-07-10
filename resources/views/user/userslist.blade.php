@@ -178,10 +178,10 @@
                         </tr>
                         @endif
                     </tbody>
-                    <tr class="form collapse" id="collapseAddUser"> 
+                    <tr class="form collapse addMemberDiv" id="collapseAddUser"> 
                         <td colspan="6">
                             <div class="px-2 py-3">
-                                <a data-toggle="collapse" href="#collapseAddUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddUser">&times;</a>
+                                <a data-toggle="collapse" href="#collapseAddUser" class="close text-white addMemberCloseBtn" role="button" aria-expanded="false" aria-controls="collapseAddUser">&times;</a>
                                 <h2 class="mb-3 font-weight-normal">Add Member</h2>
                                 <form class="w-50">
                                     <div class="form-row">
@@ -224,7 +224,7 @@
                     <tr class="form" id="collapseEditUser" style="display:none;"> 
                         <td colspan="6">
                             <div class="px-2 py-3">
-                                <a data-toggle="collapse" href="#collapseEditUser" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseEditUser">&times;</a>
+                                <a data-toggle="collapse" href="#collapseEditUser" class="close text-white editMemberCloseBtn" role="button" aria-expanded="false" aria-controls="collapseEditUser">&times;</a>
                                 <h2 class="mb-3 font-weight-normal">Edit User</h2>
                                 <form class="w-50">
                                     <div class="form-row">
@@ -254,7 +254,7 @@
             <!--<a href="#" class="small float-right text-uppercase text-white-50" style="border:1px solid red;">-->
             {{ $users->links() }}
             <!--</a>-->
-            <a class="btn btn-outline-warning rounded-pill smaller px-5" data-toggle="collapse" href="#collapseAddUser" role="button" aria-expanded="false" aria-controls="collapseAddUser">
+            <a class="btn btn-outline-warning rounded-pill smaller px-5 addMemberAddBtn" data-toggle="collapse" href="#collapseAddUser" role="button" aria-expanded="false" aria-controls="collapseAddUser">
                 + Add New</a>
         </section>
         <section class="users mb-5">
@@ -301,9 +301,9 @@
                         @endforeach
                         @endif
                         <tr class="form collapse" id="collapseAddRole"> 
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="px-2 py-3">
-                                    <a data-toggle="collapse" href="#collapseAddRole" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseAddRole">&times;</a>
+                                    <a data-toggle="collapse" href="#collapseAddRole" class="close text-white addRoleCloseBtn" role="button" aria-expanded="false" aria-controls="collapseAddRole">&times;</a>
                                     <h2 class="mb-3 font-weight-normal">Add Role</h2>
                                     <form class="w-50">
                                         <div class="form-row">
@@ -325,7 +325,7 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn btn-outline-warning rounded-pill smaller px-5" data-toggle="collapse" href="#collapseAddRole" role="button" aria-expanded="false" aria-controls="collapseAddRole">
+            <a class="btn btn-outline-warning rounded-pill smaller px-5 addRoleBtn" data-toggle="collapse" href="#collapseAddRole" role="button" aria-expanded="false" aria-controls="collapseAddRole">
                 + Add New</a>
         </section>
         <section class="users mb-5">
@@ -336,7 +336,7 @@
                     <tr class="form" id="collapseEditMember" style="display:none;"> 
                         <td colspan="6">
                             <div class="px-2 py-3">
-                                <a data-toggle="collapse" href="#collapseEditMember" class="close text-white" role="button" aria-expanded="false" aria-controls="collapseEditMember">&times;</a>
+                                    <a data-toggle="collapse" href="#collapseEditMember" class="close text-white editServiceProvidersCloseBtn" role="button" aria-expanded="false" aria-controls="collapseEditMember">&times;</a>
                                 <h2 class="mb-3 font-weight-normal">Edit Service Provider</h2>
                                 <form class="w-50">
                                     <div class="form-row">
