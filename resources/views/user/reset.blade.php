@@ -35,18 +35,30 @@
         </div>
         <div class="bg-color-2 p-3 sectionDiv">
             <div>
-                <h4 class="text-white mb-0 mr-4">{{ __('Reset Password') }}</h4>
+                <h4 class="text-white mb-0 mr-4">{{ __('Member New Password') }}</h4>
             </div>
+            @if ($errors->any())
+            <div class="alert alert-danger displayMsgDiv">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @if(session()->has('message'))
+            <div class="alert alert-success displayMsgDiv">
+                {{ session()->get('message') }}
+            </div>
+            @endif
             <div class="card-body">
-                <form method="POST" action="{{ route('password.update') }}">
+                <form method="POST" action="{{ route('member.passordreset') }}">
                     @csrf
-
-                    <input type="hidden" name="token" value="{{ $token }}">
 
                     <div class="form-group row">
                         <label for="email" class="col-md-4 col-form-label text-md-right text-white">{{ __('E-Mail Address') }}</label>
                         <div class="col-md-6">
-                            <input id="email" type="email" class="form-control form-control-sm text-white-50 @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly>
+                            <input id="memberresetpasswordemail" type="email" class="form-control form-control-sm text-white-50 @error('email') is-invalid @enderror" name="memberresetpasswordemail" value="{{ $user->email }}" required autocomplete="email" autofocus readonly>
 
                             @error('email')
                             <span class="invalid-feedback" role="alert">
@@ -60,7 +72,7 @@
                         <label for="password" class="col-md-4 col-form-label text-md-right text-white">{{ __('Password') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password" type="password" class="form-control form-control-sm @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                            <input type="password" class="form-control form-control-sm @error('password') is-invalid @enderror" id="memberresetpassword" name="memberresetpassword" required >
 
                             @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -74,17 +86,18 @@
                         <label for="password-confirm" class="col-md-4 col-form-label text-md-right text-white">{{ __('Confirm Password') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password-confirm" type="password" class="form-control form-control-sm" name="password_confirmation" required autocomplete="new-password">
+                            <input type="password" class="form-control form-control-sm" id="memberresetpasswordconfirm" name="memberresetpasswordconfirm" required>
                         </div>
                     </div>
 
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn rounded-custom btn-dark btn-block">
-                                {{ __('Reset Password') }}
+                            <button type="button" class="btn rounded-custom btn-dark btn-block memberPasswordUpdateBtn">
+                                {{ __('Save Password') }}
                             </button>
                         </div>
                     </div>
+                    <input id="memberresetpasswordid" type="hidden" name="memberresetpasswordid" value="{{ $user->id }}">
                 </form>
             </div>
         </div>

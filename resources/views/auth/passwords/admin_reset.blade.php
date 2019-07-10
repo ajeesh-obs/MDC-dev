@@ -38,15 +38,15 @@
                 <h4 class="text-white mb-0 mr-4">{{ __('Reset Password') }}</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('password.update') }}">
+                <form method="POST" action="{{ route('admin.password.request') }}">
                     @csrf
 
                     <input type="hidden" name="token" value="{{ $token }}">
 
                     <div class="form-group row">
-                        <label for="email" class="col-md-4 col-form-label text-md-right text-white">{{ __('E-Mail Address') }}</label>
+                        <label for="email" class="col-md-4 col-form-label text-md-right text-white">{{ __('E-Mail Address ') }}</label>
                         <div class="col-md-6">
-                            <input id="email" type="email" class="form-control form-control-sm text-white-50 @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus readonly>
+                            <input id="email" type="email" class="form-control form-control-sm text-white-50 @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
 
                             @error('email')
                             <span class="invalid-feedback" role="alert">
