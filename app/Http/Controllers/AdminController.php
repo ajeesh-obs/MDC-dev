@@ -13,6 +13,7 @@ use App\UserRoleRelation;
 use App\MemberPasswordReset;
 use App\Mail\MemberCredentialsMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller {
 
@@ -30,6 +31,17 @@ class AdminController extends Controller {
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
         return view('admin.home', compact('user', 'userDetails'));
+    }
+
+    /*
+     * admin logout 
+     * 
+     */
+
+    public function logout() {
+
+        Auth::logout();
+        return Redirect::to('/admin/login');
     }
 
 }

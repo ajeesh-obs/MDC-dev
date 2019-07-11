@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\UserDetails;
 use Illuminate\Support\Facades\DB;
+use Session;
+use View;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller {
 
@@ -43,6 +46,10 @@ class HomeController extends Controller {
      */
     public function accountSettings() {
 
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
         $facebook_link = $twitter_link = $instagram_link = $youtube_link = $linkedin_link = "";
@@ -63,6 +70,10 @@ class HomeController extends Controller {
      */
 
     public function accountSettingsSave() {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
 
         $this->validate(request(), [
             'first_name' => ['required', 'string', 'max:255'],
@@ -106,6 +117,10 @@ class HomeController extends Controller {
 
     public function myProfile() {
 
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
 
@@ -118,6 +133,10 @@ class HomeController extends Controller {
      */
 
     public function myProfileEdit() {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
 
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
@@ -145,6 +164,10 @@ class HomeController extends Controller {
      */
 
     public function profileUpdate(Request $request) {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
 
         if ($request->isMethod('post')) {
 
@@ -188,7 +211,9 @@ class HomeController extends Controller {
      */
 
     public function mindset() {
-
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
         return view('mindset');
     }
 
@@ -199,10 +224,38 @@ class HomeController extends Controller {
 
     public function adminHome() {
 
-        $user = Auth::user();
-        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        $isadmin = session('isadmin');
+        if (!empty($isadmin)) {
+            $user = Auth::user();
+            $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
 
-        return view('admin.home', compact('user', 'userDetails'));
+            return view('admin.home', compact('user', 'userDetails'));
+        }
+        return Redirect::to('/'); 
+        //$message = "Page Not Found";
+        //return View::make('error_user', compact('message'));
+    }
+
+    /*
+     * check logged as admin or user 
+     * 
+     */
+
+    protected function loggedUserCheck() {
+        $isadmin = session('isadmin');
+        return $isadmin;
+    }
+
+    /*
+     * error function
+     * 
+     */
+
+    protected function errorFunction() {
+        return Redirect::to('/admin/dashboard'); 
+        
+        //$message = "Page Not Found";
+        //return View::make('error_admin', compact('message'));
     }
 
 }

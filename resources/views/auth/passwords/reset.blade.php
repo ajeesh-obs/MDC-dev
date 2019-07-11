@@ -24,6 +24,9 @@
             width: 100%; 
         }
     }
+    .form-control{
+        background-color: none !important;
+    }
 </style>
 @section('content')
 <div class="container">

@@ -13,6 +13,10 @@ use App\UserRoleRelation;
 use App\MemberPasswordReset;
 use App\Mail\MemberCredentialsMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests;
+use Session;
+use View;
 
 class UserController extends Controller {
 
@@ -57,6 +61,10 @@ class UserController extends Controller {
      */
 
     public function userslist(Request $request) {
+
+        if (empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
 
         $roles = DB::table('roles')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoleRelations = DB::table('user_role_relations')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
@@ -289,6 +297,39 @@ class UserController extends Controller {
         // md5 the timestamps and returns substring 
         // of specified length 
         return substr(md5(time()), 0, $length_of_string);
+    }
+
+    /*
+     * admin logout 
+     * 
+     */
+
+    public function adminLogout(Request $request) {
+        Auth::logout();
+        $request->session()->forget('isadmin');
+        return Redirect::to('/admin/login');
+    }
+
+    /*
+     * check logged as admin or user 
+     * 
+     */
+
+    protected function loggedUserCheck() {
+        $isadmin = session('isadmin');
+        return $isadmin;
+    }
+
+    /*
+     * error function
+     * 
+     */
+
+    protected function errorFunction() {
+        return Redirect::to('/'); 
+        
+        //$message = "Page Not Found";
+        //return View::make('error_user', compact('message'));
     }
 
 }

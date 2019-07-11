@@ -13,6 +13,7 @@ use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
 use Illuminate\Auth\Passwords;
+use Illuminate\Support\Str;
 
 class AdminResetPasswordController extends Controller {
     /*
@@ -33,7 +34,7 @@ use ResetsPasswords;
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/admin/login';
 
     /**
      * Create a new controller instance.
@@ -56,6 +57,13 @@ use ResetsPasswords;
         return view('auth.passwords.admin_reset')->with(
                         ['token' => $token, 'email' => $request->email]
         );
+    }
+
+    protected function resetPassword($user, $password) {
+        $user->forceFill([
+            'password' => bcrypt($password),
+            'remember_token' => Str::random(60),
+        ])->save();
     }
 
 }

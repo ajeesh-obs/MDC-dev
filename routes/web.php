@@ -31,8 +31,11 @@ Route::prefix('admin')->group(function() {
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
-    
+
     Route::get('/userslist', 'UserController@usersList')->name('admin.userslist');
+    Route::get('/logout', 'UserController@adminLogout')->name('admin.logout');
+    Route::get('/dashboard', 'HomeController@adminHome')->name('admin.dashboard');
+    
 });
 
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Permission;
 use App\Role;
+use Session;
 
 class AdminLoginController extends Controller {
     /*
@@ -44,7 +45,7 @@ use AuthenticatesUsers;
      * admin login form 
      */
 
-    public function login(Request $request) {
+    public function login(Request $request) {    
 
         if ($request->isMethod('post')) {
 
@@ -73,13 +74,14 @@ use AuthenticatesUsers;
                     Auth::logout();
                     return redirect()->route('admin.login')->with('errormessage', 'User not have module permissions');
                 } else {
-                    return redirect()->intended('/adminhome');
+                    Session::put('isadmin', 1);
+                    return redirect()->intended('/admin/dashboard');
                 }
             }
 //            return redirect()->route('admin.login')->withErrors($validation)->withInput();
             return back()->withInput($request->only('email', 'remember'));
         }
-
+        
         return view('auth.admin_login');
     }
 
