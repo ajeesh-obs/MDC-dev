@@ -39,6 +39,14 @@ use AuthenticatesUsers;
     public function __construct() {
         $this->middleware('guest')->except('logout');
     }
+    
+    /*
+     * function override to add additional parameters for login checking
+     */
+    protected function credentials(Request $request) {
+
+        return array_merge($request->only($this->username(), 'password'), ['is_active' => 1, 'deleted_at' => NULL]);
+    }
 
     /*
      * member reset password
@@ -55,7 +63,7 @@ use AuthenticatesUsers;
                 //check member password reset link active or not
                 $resetActive = DB::table('member_password_resets')->where([['user_id', '=', $getData->user_id], ['email', '=', $getData->email], ['token', '=', $randomNumber], ['is_active', '=', 1]])->first();
                 if (empty($resetActive)) {
-                    $message = "The password link expired"; 
+                    $message = "The password link expired";
                     return view('error', compact('message'));
                 }
             }

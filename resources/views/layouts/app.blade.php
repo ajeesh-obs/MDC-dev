@@ -377,57 +377,6 @@
             })
             });
             
-            function userFilterList(){
-                
-            }
-
-            $(document).on('click', '.user-delete', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-
-            swal({
-            title: "Are you sure?",
-            text: "User will be deleted!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
-            cancelButtonText: "No, cancel please!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-            },
-            function (isConfirm) {
-            if (isConfirm) {
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'delete',
-            url: '/users/delete/' + id,
-            success: function (data) {
-            swal({
-            text: data.message,
-            title: 'Success!',
-            type: "success",
-            timer: 2000,
-            showCancelButton: false, //There won't be any cancle button
-            showConfirmButton: false
-            },
-            function () {
-            location.reload();
-            })
-            }
-            });
-            } else {
-            swal({
-            title: 'Cancelled!',
-            type: "info", showConfirmButton: false, timer: 1000
-            });
-            e.preventDefault();
-            }
-            });
-            });
-
             $(document).on('change', 'input:checkbox.userRoleSetting', function (e) {        //$("input:checkbox.userRoleSetting").change(function(e) {  
                 e.preventDefault();
                 var ischecked = $(this).is(':checked');
@@ -493,37 +442,6 @@
                     })
                 }
             });
-            
-            $("#saveRoleBtn").click(function() {   
-                var roleName = $("#roleName").val();  
-                var is_service_provider = $('#is_service_provider:checkbox:checked').length;
-                if(roleName){
-                     $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'post',
-                        url: '{{ route('role.save') }}',
-                        data: {'roleName': roleName, 'is_service_provider':is_service_provider},
-                        success: function (data) {
-                            swal({
-                                text: data.message,
-                                title: 'Success!',
-                                type: data.status,
-                                timer: 2000,
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            })
-                            if (data.status == 'success') {
-                                setTimeout(function(){
-                                    window.location.reload();
-                                },1000);
-                            }
-                        }
-                    })
-                }
-            });
-            
             
              $("#saveMemberBtn").click(function() {   
                 var firstName = $("#firstName").val();  

@@ -245,7 +245,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Welcome, John Doe
+                                Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                                 <img class="rounded-circle ml-2"
                                      src="{{ asset('img/profile1.jpg') }}"
                                      alt="Generic placeholder image" width="40" height="40">
@@ -357,14 +357,22 @@
             $(document).on('click', '.user-delete', function (e) {
             e.preventDefault();
             var id = $(this).data('id');
+            var currentactivity = $(this).data('currentactivity');
+            var msg = "";
+            if(currentactivity == 1){
+                msg = "Do you want to Inactive the user";
+            }
+            else {
+                msg = "Do you want to Active the user";
+            }
             swal({
             title: "Are you sure?",
-                    text: "User will be deleted!",
+                    text: msg,
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "Yes",
-                    cancelButtonText: "No, cancel please!",
+                    cancelButtonText: "No, cancel",
                     closeOnConfirm: false,
                     closeOnCancel: false
             },
@@ -375,7 +383,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                             type: 'delete',
-                            url: '/users/delete/' + id,
+                            url: '/admin/users/changeactivity/' + id,
                             success: function (data) {
                             swal({
                             text: data.message,
@@ -470,7 +478,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
                     type: 'post',
-                    url: '{{ route('role.save') }}',
+                    url: '{{ route('admin.role.save') }}',
                     data: {'roleName': roleName, 'is_service_provider':is_service_provider},
                     success: function (data) {
                     swal({

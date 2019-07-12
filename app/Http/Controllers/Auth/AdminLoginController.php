@@ -45,7 +45,7 @@ use AuthenticatesUsers;
      * admin login form 
      */
 
-    public function login(Request $request) {    
+    public function login(Request $request) {
 
         if ($request->isMethod('post')) {
 
@@ -53,7 +53,13 @@ use AuthenticatesUsers;
                 'email' => 'required|email',
                 'password' => 'required|min:6'
             ]);
-            if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+            if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password, 'deleted_at' => NULL], $request->get('remember'))) {
+                // check user in active state or not
+                $userActivity = Auth::user()->is_active;
+                if (!$userActivity) {
+                    Auth::logout();
+                    return redirect()->route('admin.login')->with('errormessage', 'Your profile is not active');
+                }
                 // check user have module permissions
                 $userId = Auth::id();
                 $modulePermissionExists = 0;
@@ -61,7 +67,7 @@ use AuthenticatesUsers;
                     //get user roles 
                     $userRoles = DB::table('user_role_relations')->whereNull('deleted_at')->where('user_id', '=', $userId)->orderBy('id', 'desc')->get();
                     if ($userRoles) {
-                        foreach ($userRoles as $userRole) {  
+                        foreach ($userRoles as $userRole) {
                             // check module permission exists 
                             $usermodulePermission = DB::table('permissions')->whereNull('deleted_at')->where('role_id', '=', $userRole->role_id)->orderBy('id', 'desc')->count();
                             if ($usermodulePermission > 0) {
@@ -81,7 +87,7 @@ use AuthenticatesUsers;
 //            return redirect()->route('admin.login')->withErrors($validation)->withInput();
             return back()->withInput($request->only('email', 'remember'));
         }
-        
+
         return view('auth.admin_login');
     }
 

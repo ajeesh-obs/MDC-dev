@@ -164,6 +164,29 @@ class UserController extends Controller {
     }
 
     /*
+     * users activity change function
+     * 
+     */
+
+    public function usersActivityChange($id) {
+        $selUser = DB::table('users')->where('id', '=', $id)->first();
+        if ($selUser) {
+            $currentActivity = $selUser->is_active;
+            // Inactivate user
+            if ($currentActivity) {
+                DB::table('users')->where('id', '=', $id)->update(array('is_active' => 0));
+                return response()->json(array('status' => true, 'message' => 'User Profile Inactivated Successfully'));
+            }
+            // activate user
+            else {
+                DB::table('users')->where('id', '=', $id)->update(array('is_active' => 1));
+                return response()->json(array('status' => true, 'message' => 'User Profile Activated Successfully'));
+            }
+        }
+        return response()->json(false, 401);
+    }
+
+    /*
      * edit users
      * 
      */
@@ -326,8 +349,8 @@ class UserController extends Controller {
      */
 
     protected function errorFunction() {
-        return Redirect::to('/'); 
-        
+        return Redirect::to('/');
+
         //$message = "Page Not Found";
         //return View::make('error_user', compact('message'));
     }

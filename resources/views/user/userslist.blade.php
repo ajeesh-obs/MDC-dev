@@ -168,7 +168,7 @@
                             </td>
                             <td>
                                 <a href="javascript:void(0)" style="cursor: pointer;" class="edituser" data-id="{{$user->id}}" data-email="{{$user->email}}" data-lname="{{$user->last_name}}" data-fname="{{$user->first_name}}"><img src="{{ asset('img/grey-pencil.png') }}"></a>                                        
-                                <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                <a href="javascript:void(0)" class="ml-3 user-delete" data-id="{{ $user->id }}" data-currentactivity="{{ $user->is_active }}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                             </td>
                         </tr>
                         @endforeach

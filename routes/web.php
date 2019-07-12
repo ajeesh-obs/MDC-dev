@@ -36,6 +36,9 @@ Route::prefix('admin')->group(function() {
     Route::get('/logout', 'UserController@adminLogout')->name('admin.logout');
     Route::get('/dashboard', 'HomeController@adminHome')->name('admin.dashboard');
     
+    Route::delete('/users/changeactivity/{id}', 'UserController@usersActivityChange')->name('admin.users.activity.change');
+    Route::post('/rolesave', 'RoleController@roleNew')->name('admin.role.save');
+    
 });
 
 
@@ -63,7 +66,7 @@ Route::get('auth/facebook/callback', 'Auth\FacebookController@handleFacebookCall
 
 
 Route::get('/users', 'UserController@users')->name('users');
-Route::delete('/users/delete/{id}', 'UserController@usersDelete')->name('users.delete');
+//Route::delete('/users/delete/{id}', 'UserController@usersDelete')->name('users.delete');
 Route::match(array('get', 'post'), '/users/edit/{id}', 'UserController@usersEdit')->name('users.edit');
 Route::post('/membersave', 'UserController@memberSave')->name('member.save');
 Route::post('/memberupdate', 'UserController@memberUpdate')->name('member.update');
@@ -73,7 +76,6 @@ Route::post('/memberpassordreset', 'Auth\LoginController@memberPasswordUpdate')-
 
 Route::match(array('get', 'post'), '/role/create', 'RoleController@create')->name('role.create');
 Route::post('/rolemodify', 'RoleController@roleModify')->name('role.modify');
-Route::post('/rolesave', 'RoleController@roleNew')->name('role.save');
 
 Route::match(array('get', 'post'), '/module/create', 'ModuleController@create')->name('module.create');
 Route::post('/permissionmodify', 'ModuleController@permissionModify')->name('permission.modify');

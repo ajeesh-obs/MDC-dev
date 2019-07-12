@@ -130,9 +130,9 @@ class RoleController extends Controller {
         if ($roleExists) {
             return response()->json(array('status' => 'error', 'message' => 'Role name already exists'));
         }
-        
+
         $save = Role::create([
-                    'name' => $formData['roleName'],
+                    'name' => strtoupper($formData['roleName']),
                     'is_service_provider' => $formData['is_service_provider'],
         ]);
         if ($save) {
