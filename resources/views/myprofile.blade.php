@@ -14,7 +14,7 @@
                                data-placement="bottom" title="Level 3: Lorem ipsum"
                                data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
                                style="bottom: 0; left: 0">
-                                <img src="img/badge-coach.png" height="100">
+                                <img src="{{ asset('img/badge-coach.png') }}" height="100">
                             </a>
                         </div>
                         <p class="mb-0">
@@ -66,24 +66,24 @@
                         <div class="row">
                             <div class="col-5">
                                 <ul class="list-unstyled">
-                                    <li>Gratitude Expert</li>
-                                    <li>Marketing</li>
-                                    <li>Web Development</li>
+                                    @if($userExpertise->count() > 0) 
+                                    @foreach($userExpertise as $experise)
+                                    <li>{{ $experise->expertise }} </li>   
+                                    @endforeach
+                                    @endif
                                 </ul>
                             </div>
-                            <div class="col-7">
+<!--                            <div class="col-7">
                                 <ul class="list-unstyled">
-                                    <li>Public Speaking</li>
-                                    <li>Personal Development</li>
-                                    <li>Visualization Expert</li>
+                                    <li>Marketing</li>   
                                 </ul>
-                            </div>
+                            </div>-->
                         </div>
                         <ul class="list-inline mb-4">
                             <li class="accent-color font-weight-bold">Languages Spoken</li>
                             <li class="list-inline-item">@if( !empty($userDetails->languages_spoken)) {{ $userDetails->languages_spoken }} @endif</li>
                         </ul>
-                        <a href="{{ route('profileedit') }}" class="btn btn-outline-warning rounded-pill w-50 accent">
+                        <a href="{{ route('profile.edit') }}" class="btn btn-outline-warning rounded-pill w-50 accent">
                             Edit Profile </a>
                     </div>
                 </div>
@@ -101,19 +101,19 @@
                             <div class='text-muted'>Don't have a calendly link?</div>
                             <a class='text-dark font-weight-bold' href='#'>Sign up for a free account here</a>
                         </div>
-                        <img src="img/badge-coach.png" height="48" class="mr-2">
+                        <img src="{{ asset('img/badge-coach.png') }}" height="48" class="mr-2">
                         <h3 class="text-white">Enable Appointment Scheduling</h3>
                     </li>
                     <li class="bg-transparent border-0 px-0 list-group-item d-flex align-items-center">
-                        <img src="img/badge-coach.png" height="48" class="mr-2">
+                        <img src="{{ asset('img/badge-coach.png') }}" height="48" class="mr-2">
                         <h3 class="text-white font-weight-bold">Level 3: Black Diamond</h3>
                     </li>
                     <li class="bg-transparent border-0 px-0 py-0 list-group-item d-flex align-items-center">
-                        <img src="img/founding_members.png" height="36" class="mr-2">
+                        <img src="{{ asset('img/founding_members.png') }}" height="36" class="mr-2">
                         <h3 class="text-white font-weight-bold mb-0">Founding Member</h3>
                     </li>
                     <li class="bg-transparent border-0 px-0 py-2 list-group-item d-flex align-items-center">
-                        <img src="img/legacy_champion.png" height="36" class="mr-2">
+                        <img src="{{ asset('img/legacy_champion.png') }}" height="36" class="mr-2">
                         <h3 class="text-white font-weight-bold mb-0">Legacy Champion</h3>
                     </li>
                 </ul>

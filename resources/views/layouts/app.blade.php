@@ -353,129 +353,6 @@
             //hide message div automaticaly
             $('.displayMsgDiv').delay(2000).fadeOut('slow');
 
-            $(".userActivityFilter").change(function () {  
-            var userActivityFilter = $(".userActivityFilter").val();
-            $.ajax({
-            url:'/userslist?userActivityFilter='+userActivityFilter,
-            success:function(data)
-            {  
-            $(".userlisttbody").html("");
-            $(".userlisttbody").html(data);
-            }
-            })
-            });
-            
-            $(".userRoleFilter").change(function () {  
-            var userRoleFilter = $(".userRoleFilter").val();
-            $.ajax({
-            url:'/userslist?userRoleFilter='+userRoleFilter,
-            success:function(data)
-            {  
-            $(".userlisttbody").html("");
-            $(".userlisttbody").html(data);
-            }
-            })
-            });
-            
-            $(document).on('change', 'input:checkbox.userRoleSetting', function (e) {        //$("input:checkbox.userRoleSetting").change(function(e) {  
-                e.preventDefault();
-                var ischecked = $(this).is(':checked');
-                var role_id = $(this).val(); 
-                var user_id = $(this).attr("data-userid"); 
-                
-                if(role_id && user_id){
-                     $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'post',
-                        url: '{{ route('role.modify') }}',
-                        data: {'ischecked': ischecked,'role_id': role_id, 'user_id': user_id},
-                        success: function (data) {
-                            swal({
-                                text: data.message,
-                                title: 'Success!',
-                                type: data.status,
-                                timer: 2000,
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            })
-                            if (data.status == 'success') {
-                                setTimeout(function(){
-                                    window.location.reload();
-                                },1000);
-                            }
-                        }
-                    })
-                }
-            });
-            
-            $("input:checkbox.roleModulePermissionSetting").change(function(e) {
-                e.preventDefault();
-                var ischecked = $(this).is(':checked');
-                var module_id = $(this).val(); 
-                var role_id = $(this).attr("data-roleid"); 
-                
-                if(role_id && module_id){
-                     $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'post',
-                        url: '{{ route('permission.modify') }}',
-                        data: {'ischecked': ischecked,'role_id': role_id, 'module_id': module_id},
-                        success: function (data) {
-                            swal({
-                                text: data.message,
-                                title: 'Success!',
-                                type: data.status,
-                                timer: 2000,
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            })
-                            if (data.status == 'success') {
-                                setTimeout(function(){
-                                    window.location.reload();
-                                },1000);
-                            }
-                        }
-                    })
-                }
-            });
-            
-             $("#saveMemberBtn").click(function() {   
-                var firstName = $("#firstName").val();  
-                var lastName = $("#lastName").val();  
-                var email = $("#email").val();  
-                var confirmEmail = $("#confirmEmail").val();  
-                var userRole = $("#userRole").val();   
-                if(email && firstName){  
-                     $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'post',
-                        url: '{{ route('member.save') }}',
-                        data: {'firstName': firstName, 'lastName':lastName, 'email': email, 'confirmEmail': confirmEmail, 'userRole': userRole},
-                        success: function (data) {
-                            swal({
-                                text: data.message,
-                                title: 'Success!',
-                                type: data.status,
-                                timer: 2000,
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            })
-                            if (data.status == 'success') {
-                                setTimeout(function(){
-                                    window.location.reload();
-                                },1000);
-                            }
-                        }
-                    })
-                }
-            });
-            
             $(".memberPasswordUpdateBtn").click(function() {   
                 var email = $("#memberresetpasswordemail").val();  
                 var password = $("#memberresetpassword").val();  
@@ -507,10 +384,10 @@
                     })
                 }
             });
-            
-            
 
             });
         </script>
+        
+         @yield('script')
     </body>
 </html>

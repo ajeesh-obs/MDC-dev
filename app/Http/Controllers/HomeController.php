@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Session;
 use View;
 use Illuminate\Support\Facades\Redirect;
+use App\User;
+use App\UserExpertise;
 
 class HomeController extends Controller {
 
@@ -123,8 +125,9 @@ class HomeController extends Controller {
 
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
 
-        return view('myprofile', compact('user', 'userDetails'));
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise'));
     }
 
     /*
@@ -138,8 +141,27 @@ class HomeController extends Controller {
             return $this->errorFunction();
         }
 
+        $allExpertArr = array();
+        $userExpertArr = array();
+        $userExpertvalues = array();
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+        if ($userExpertise) {
+            foreach ($userExpertise as $usrExpertise) {
+                $spr['expertise'] = $usrExpertise->expertise;
+                $userExpertArr[] = $spr;
+                $userExpertvalues[] = $usrExpertise->expertise;
+            }
+        }
+        $userCurrentExpertise = implode(",", $userExpertvalues);
+
+        $allExpertise = DB::table('user_expertise')->select('expertise')->distinct()->whereNull('deleted_at')->whereNotIn('expertise', $userExpertArr)->get();
+        if ($allExpertise) {
+            foreach ($allExpertise as $key => $allExpertise) {
+                $allExpertArr[$key] = $allExpertise->expertise;
+            }
+        }
 
         $languages_spoken = $about_username = $goals_vision = $education = $certifications = $awards_honor = $conferences_events = $volunteer_activities = $hobbies_interests = $income = "";
         if ($userDetails) {
@@ -155,7 +177,7 @@ class HomeController extends Controller {
             $income = $userDetails->income;
         }
 
-        return view('myprofileedit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise'));
     }
 
     /*
@@ -178,7 +200,7 @@ class HomeController extends Controller {
                 ]);
 
                 if ($validation->fails()) {
-                    return redirect()->route('profileedit')->withErrors($validation)->withInput();
+                    return redirect()->route('profile.edit')->withErrors($validation)->withInput();
                 }
             }
 
@@ -197,12 +219,40 @@ class HomeController extends Controller {
             ]);
 
             if ($save) {
-                return redirect()->route('profileedit')->with('message', 'Profile details modified successfully');
+
+                // check user expertise modified or not
+                $modifiedExperise = $programFormData['userCurrentExpertise'];
+                $userExpertvalues = array();
+                $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+                if ($userExpertise) {
+                    foreach ($userExpertise as $usrExpertise) {
+                        $userExpertvalues[] = $usrExpertise->expertise;
+                    }
+                }
+                $userCurrentExpertise = implode(",", $userExpertvalues);
+                // user expertise modifed
+                if ($modifiedExperise != $userCurrentExpertise) {
+
+                    DB::table('user_expertise')->where('user_id', '=', Auth::id())->update(array('deleted_at' => date('y-m-d')));
+                    // insaert new experetise
+                    $userExpertiseNew = explode(",", $modifiedExperise);
+                    if ($userExpertiseNew) {
+                        foreach ($userExpertiseNew as $key => $value) {
+                            if (!empty($value)) {
+                                $saveUserExpertise = UserExpertise::create([
+                                            'user_id' => Auth::id(),
+                                            'expertise' => $value
+                                ]);
+                            }
+                        }
+                    }
+                }
+                return redirect()->route('profile.edit')->with('message', 'Profile details modified successfully');
             } else {
-                return redirect()->route('profileedit')->withErrors($validation)->withInput();
+                return redirect()->route('profile.edit')->withErrors($validation)->withInput();
             }
         }
-        return redirect()->route('profileedit');
+        return redirect()->route('profile.edit');
     }
 
     /*
@@ -231,7 +281,7 @@ class HomeController extends Controller {
 
             return view('admin.home', compact('user', 'userDetails'));
         }
-        return Redirect::to('/'); 
+        return Redirect::to('/');
         //$message = "Page Not Found";
         //return View::make('error_user', compact('message'));
     }
@@ -252,8 +302,8 @@ class HomeController extends Controller {
      */
 
     protected function errorFunction() {
-        return Redirect::to('/admin/dashboard'); 
-        
+        return Redirect::to('/admin/dashboard');
+
         //$message = "Page Not Found";
         //return View::make('error_admin', compact('message'));
     }

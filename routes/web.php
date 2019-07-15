@@ -35,10 +35,9 @@ Route::prefix('admin')->group(function() {
     Route::get('/userslist', 'UserController@usersList')->name('admin.userslist');
     Route::get('/logout', 'UserController@adminLogout')->name('admin.logout');
     Route::get('/dashboard', 'HomeController@adminHome')->name('admin.dashboard');
-    
+
     Route::delete('/users/changeactivity/{id}', 'UserController@usersActivityChange')->name('admin.users.activity.change');
     Route::post('/rolesave', 'RoleController@roleNew')->name('admin.role.save');
-    
 });
 
 
@@ -47,15 +46,14 @@ Auth::routes();
 //
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/myprofile', 'HomeController@myProfile')->name('myprofile');
+Route::get('/profileedit', 'HomeController@myProfileEdit')->name('profile.edit');
+Route::post('/profileupdate', 'HomeController@profileUpdate')->name('profile.update');
+
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 
 Route::post('/accountsettingssave', 'HomeController@accountSettingsSave')->name('accountsettingssave');
 
-Route::get('/myprofile', 'HomeController@myProfile')->name('myprofile');
-
-Route::get('/profileedit', 'HomeController@myProfileEdit')->name('profileedit');
-
-Route::post('/profileupdate', 'HomeController@profileUpdate')->name('profileupdate');
 
 Route::get('/mindset', 'HomeController@mindset')->name('mindset');
 

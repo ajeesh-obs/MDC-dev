@@ -8,7 +8,7 @@
 </style>
 @section('content')
 <main role="main" class="container">
-    <form id="account" method="POST" action="{{ route('profileupdate') }}">
+    <form id="account" method="POST" action="{{ route('profile.update') }}">
         @csrf
         @if ($errors->any())
         <div class="alert alert-danger displayMsgDiv">
@@ -89,31 +89,32 @@
                             </div>
                             <h3 class="text-white-50 font-weight-bold">Expertise</h3>
                             <div class="row">
-                                <div class="col-5">
-                                    <ul class="list-unstyled">
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Gratitude Expert</li>
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Marketing</li>
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Web Development</li>
+                                <div class="col-5 userExpertiseDiv">
+                                    <ul class="list-unstyled">  
+                                        @if($userExpertise->count() > 0) 
+                                        @foreach($userExpertise as $experise)
+                                        <li><a href="javascript:void()" class="text-white mr-2 userExpertise">&times;</a><span> {{$experise->expertise}}</span></li>    
+                                        @endforeach
+                                        @endif
                                     </ul>
                                 </div>
-                                <div class="col-7">
-                                    <ul class="list-unstyled">
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Public Speaking</li>
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Personal Development</li>
-                                        <li><a href="#" class="text-white mr-2">&times;</a> Visualization Expert</li>
-                                    </ul>
-                                </div>
+                                <!--                                <div class="col-7">
+                                                                    <ul class="list-unstyled">
+                                                                        <li><a href="#" class="text-white mr-2">&times;</a> Public Speaking</li>
+                                                                        <li><a href="#" class="text-white mr-2">&times;</a> Personal Development</li>
+                                                                        <li><a href="#" class="text-white mr-2">&times;</a> Visualization Expert</li>
+                                                                    </ul>
+                                                                </div>-->
                             </div>
                             <div class="autocomplete mb-3">
-                                <input id="search" type="search"
-                                       class="form-control form-control-sm text-white-50 bg-transparent"
-                                       placeholder="Search Expertise">
+                                <input id="searchExpertise" type="search" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Search Expertise">
+                                <span class="expertiseErrorDiv" style="display:none;color:red;">Maximum 3 expertise are allowed</span>
                             </div>
                             <ul class="list-inline mb-1">
                                 <li class="text-white-50 font-weight-bold">Languages Spoken</li>
                             </ul>
                             <input type="text" class="form-control form-control-sm mb-5 w-50 rounded bg-muted" value="{{ old('languages_spoken', $languages_spoken)}}" name="languages_spoken">
-                            <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent" onclick="document.getElementById('account').submit();">Edit Profile</a>
+                            <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent" onclick="document.getElementById('account').submit();">Save</a>
                         </div>
                     </div>
                 </div>
@@ -323,6 +324,62 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="userCurrentExpertise" id="userCurrentExpertise" value="{{$userCurrentExpertise}}">
     </form>
 </main>
+@endsection
+@section('script')
+<script>
+    $(document).ready(function () {
+        var expertise = @json($allExpertArr);
+                if (document.getElementById("searchExpertise")) {
+            autocomplete(document.getElementById("searchExpertise"), expertise);
+        }
+
+        $(document).on('click', '.autocomplete-item', function (e) {
+            e.preventDefault();
+
+            var val = $("#searchExpertise").val();
+            if (val) {
+                addExpertise(val);
+            }
+        });
+        $(document).on('keyup', '#searchExpertise', function (e) {
+            e.preventDefault();
+            var val = $("#searchExpertise").val();
+
+            if (e.keyCode == 13 && val) {
+                addExpertise(val);
+            }
+        });
+
+        function addExpertise(val) {
+
+            var totalExpertise = $('.userExpertiseDiv ul li').length;
+            if (totalExpertise > 2) {
+                $(".expertiseErrorDiv").show();
+                return;
+            } else {
+                $(".userExpertiseDiv ul").append('<li><a href="javascript:void()" class="text-white mr-2 userExpertise">&times;</a><span>' + val + '</span></li>');
+                $("#searchExpertise").val('');
+                $("#searchExpertise").focus();
+                getExpertiseValues();
+            }
+        }
+
+        $(document).on('click', '.userExpertise', function (e) {
+            e.preventDefault();
+
+            $(this).parent().remove();
+            getExpertiseValues();
+        });
+
+        function getExpertiseValues() {
+            var values = $('.userExpertiseDiv li span').map(function () {
+                return $(this).text();
+            }).get().join(',');
+            $("#userCurrentExpertise").val(values);
+        }
+    });
+</script>
 @endsection
