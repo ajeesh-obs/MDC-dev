@@ -47,8 +47,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/myprofile', 'HomeController@myProfile')->name('myprofile');
-Route::get('/profileedit', 'HomeController@myProfileEdit')->name('profile.edit');
-Route::post('/profileupdate', 'HomeController@profileUpdate')->name('profile.update');
+Route::get('/myprofile/edit', 'HomeController@myProfileEdit')->name('myprofile.edit');
+Route::post('/profileupdate', 'HomeController@profileUpdate')->name('myprofile.update');
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 

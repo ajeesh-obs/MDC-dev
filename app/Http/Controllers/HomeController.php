@@ -32,15 +32,15 @@ class HomeController extends Controller {
      */
     public function index() {
 
-        if (Auth::user()->first_time_login) {
-//        if (!Auth::user()->last_login) {
-            //This will redirect the user profile edit page, if they haven't logged in before.
-            return redirect()->route('profileedit');
+        $route = 'myprofile';
+        // check user is logged in first or not
+        if (empty(auth()->user()->last_login)) {
+            $route = 'myprofile.edit';
         }
+        // update last login date
+        DB::table('users')->where('id', '=', Auth::id())->update(array('last_login' => date('y-m-d')));
 
-        // redirect to profile page
-        return redirect()->route('myprofile');
-//        return view('home');
+        return redirect()->route($route);
     }
 
     /**
@@ -193,35 +193,35 @@ class HomeController extends Controller {
 
         if ($request->isMethod('post')) {
 
-            $programFormData = $request->all();
-            if (!empty($programFormData['income'])) {
-                $validation = Validator::make($programFormData, [
+            $formData = $request->all();
+            if (!empty($formData['income'])) {
+                $validation = Validator::make($formData, [
                             'income' => ['numeric']
                 ]);
 
                 if ($validation->fails()) {
-                    return redirect()->route('profile.edit')->withErrors($validation)->withInput();
+                    return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
                 }
             }
 
             $save = UserDetails::updateOrCreate(['user_id' => Auth::id()],
                             [
-                                'languages_spoken' => $programFormData['languages_spoken'],
-                                'about_username' => $programFormData['about_username'],
-                                'goals_vision' => $programFormData['goals_vision'],
-                                'education' => $programFormData['education'],
-                                'certifications' => $programFormData['certifications'],
-                                'awards_honor' => $programFormData['awards_honor'],
-                                'conferences_events' => $programFormData['conferences_events'],
-                                'volunteer_activities' => $programFormData['volunteer_activities'],
-                                'hobbies_interests' => $programFormData['hobbies_interests'],
-                                'income' => $programFormData['income']
+                                'languages_spoken' => $formData['languages_spoken'],
+                                'about_username' => $formData['about_username'],
+                                'goals_vision' => $formData['goals_vision'],
+                                'education' => $formData['education'],
+                                'certifications' => $formData['certifications'],
+                                'awards_honor' => $formData['awards_honor'],
+                                'conferences_events' => $formData['conferences_events'],
+                                'volunteer_activities' => $formData['volunteer_activities'],
+                                'hobbies_interests' => $formData['hobbies_interests'],
+                                'income' => $formData['income']
             ]);
 
             if ($save) {
 
                 // check user expertise modified or not
-                $modifiedExperise = $programFormData['userCurrentExpertise'];
+                $modifiedExperise = $formData['userCurrentExpertise'];
                 $userExpertvalues = array();
                 $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
                 if ($userExpertise) {
@@ -247,12 +247,12 @@ class HomeController extends Controller {
                         }
                     }
                 }
-                return redirect()->route('profile.edit')->with('message', 'Profile details modified successfully');
+                return redirect()->route('myprofile.edit')->with('message', 'Profile details modified successfully');
             } else {
-                return redirect()->route('profile.edit')->withErrors($validation)->withInput();
+                return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
             }
         }
-        return redirect()->route('profile.edit');
+        return redirect()->route('myprofile.edit');
     }
 
     /*

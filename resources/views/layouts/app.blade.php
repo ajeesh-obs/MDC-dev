@@ -327,29 +327,6 @@
             $(".profileSettingsDiv").toggle();
             });
 
-            // profile edit page toggle items  
-            $(".profileEducationPopup").click(function () {
-            $(".profileEducationDiv").toggle();
-            });
-            $(".profileCertificationsPopup").click(function () {
-            $(".profileCertificationsDiv").toggle();
-            });
-            $(".profileAwardsPopup").click(function () {
-            $(".profileAwardsDiv").toggle();
-            });
-            $(".profileConferencesPopup").click(function () {
-            $(".profileConferencesDiv").toggle();
-            });
-            $(".profileVolunteerPopup").click(function () {
-            $(".profileVolunteerDiv").toggle();
-            });
-            $(".profileHobbiesPopup").click(function () {
-            $(".profileHobbiesDiv").toggle();
-            });
-            $(".profileIncomePopup").click(function () {
-            $(".profileIncomeDiv").toggle();
-            });
-
             //hide message div automaticaly
             $('.displayMsgDiv').delay(2000).fadeOut('slow');
 

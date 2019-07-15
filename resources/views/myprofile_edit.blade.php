@@ -8,7 +8,7 @@
 </style>
 @section('content')
 <main role="main" class="container">
-    <form id="account" method="POST" action="{{ route('profile.update') }}">
+    <form id="account" method="POST" action="{{ route('myprofile.update') }}">
         @csrf
         @if ($errors->any())
         <div class="alert alert-danger displayMsgDiv">
@@ -25,18 +25,18 @@
         </div>
         @endif
 
-        <div class="jumbotron p-3 pt-5 mb-0 text-white rounded-0">
+        <div class="jumbotron p-3 pt-5 mb-0 text-white rounded-0">  
             <div class="d-flex">
                 <div class="flex-fill">
                     <div class="d-flex flex-row align-items-center">
                         <div class="text-center mr-4">
                             <div class="bg-cover bg-center rounded-circle mb-3 position-relative"
-                                 style="background-image: url('img/profile6.jpg'); width: 260px; height: 260px;">
+                                 style="background-image: url('/img/profile6.jpg'); width: 260px; height: 260px;">
                                 <a tabindex="0" href="javascript://" class="position-absolute" data-toggle="popover"
                                    data-placement="bottom" title="Level 3: Lorem ipsum"
                                    data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
                                    style="bottom: 0; left: 0">
-                                    <img src="img/badge-coach.png" height="100">
+                                    <img src="{{ asset('img/badge-coach.png') }}" height="100">
                                 </a>
                             </div>
                             <p class="mb-0">
@@ -131,19 +131,19 @@
                                 <div class='text-muted'>Don't have a calendly link?</div>
                                 <a class='text-dark font-weight-bold' href='#'>Sign up for a free account here</a>
                             </div>
-                            <img src="img/badge-coach.png" height="48" class="mr-2">
+                            <img src="{{ asset('img/badge-coach.png') }}" height="48" class="mr-2">
                             <h3 class="text-white">Enable Appointment Scheduling</h3>
                         </li>
                         <li class="bg-transparent border-0 px-0 list-group-item d-flex align-items-center">
-                            <img src="img/badge-coach.png" height="48" class="mr-2">
+                            <img src="{{ asset('img/badge-coach.png') }}" height="48" class="mr-2">
                             <h3 class="text-white font-weight-bold">Level 3: Black Diamond</h3>
                         </li>
                         <li class="bg-transparent border-0 px-0 py-0 list-group-item d-flex align-items-center">
-                            <img src="img/founding_members.png" height="36" class="mr-2">
+                            <img src="{{ asset('img/founding_members.png') }}" height="36" class="mr-2">
                             <h3 class="text-white font-weight-bold mb-0">Founding Member</h3>
                         </li>
                         <li class="bg-transparent border-0 px-0 py-2 list-group-item d-flex align-items-center">
-                            <img src="img/legacy_champion.png" height="36" class="mr-2">
+                            <img src="{{ asset('img/legacy_champion.png') }}" height="36" class="mr-2">
                             <h3 class="text-white font-weight-bold mb-0">Legacy Champion</h3>
                         </li>
                     </ul>
@@ -380,6 +380,29 @@
             }).get().join(',');
             $("#userCurrentExpertise").val(values);
         }
+
+        // profile edit page toggle items  
+        $(".profileEducationPopup").click(function () {
+            $(".profileEducationDiv").toggle();
+        });
+        $(".profileCertificationsPopup").click(function () {
+            $(".profileCertificationsDiv").toggle();
+        });
+        $(".profileAwardsPopup").click(function () {
+            $(".profileAwardsDiv").toggle();
+        });
+        $(".profileConferencesPopup").click(function () {
+            $(".profileConferencesDiv").toggle();
+        });
+        $(".profileVolunteerPopup").click(function () {
+            $(".profileVolunteerDiv").toggle();
+        });
+        $(".profileHobbiesPopup").click(function () {
+            $(".profileHobbiesDiv").toggle();
+        });
+        $(".profileIncomePopup").click(function () {
+            $(".profileIncomeDiv").toggle();
+        });
     });
 </script>
 @endsection

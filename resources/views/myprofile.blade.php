@@ -9,7 +9,7 @@
                 <div class="d-flex flex-row align-items-center">
                     <div class="text-center mr-4">
                         <div class="bg-cover bg-center rounded-circle mb-3 position-relative"
-                             style="background-image: url('img/profile6.jpg'); width: 260px; height: 260px;">
+                             style="background-image: url('/img/profile6.jpg'); width: 260px; height: 260px;">
                             <a tabindex="0" href="javascript://" class="position-absolute" data-toggle="popover"
                                data-placement="bottom" title="Level 3: Lorem ipsum"
                                data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
@@ -83,7 +83,7 @@
                             <li class="accent-color font-weight-bold">Languages Spoken</li>
                             <li class="list-inline-item">@if( !empty($userDetails->languages_spoken)) {{ $userDetails->languages_spoken }} @endif</li>
                         </ul>
-                        <a href="{{ route('profile.edit') }}" class="btn btn-outline-warning rounded-pill w-50 accent">
+                        <a href="{{ route('myprofile.edit') }}" class="btn btn-outline-warning rounded-pill w-50 accent">
                             Edit Profile </a>
                     </div>
                 </div>
