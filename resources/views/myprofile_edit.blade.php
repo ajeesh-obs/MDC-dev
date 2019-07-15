@@ -5,6 +5,9 @@
     .hiddenClass{
         display: none;
     }
+    .locationText {
+        width: 260px !important;
+    }
 </style>
 @section('content')
 <main role="main" class="container">
@@ -42,9 +45,10 @@
                             <p class="mb-0">
                                 <i class="icon icon-placeholder"></i>
                                 Detroit, MI, United States
+                                <!--<input id="country" type="text" class="form-control form-control-sm text-white-50 bg-transparent locationText" onFocus="initializeAutocomplete()">-->
                             </p>
                             <p class="text-muted">Eastern Timezone</p>
-                            <a href="#" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3">
+                            <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3">
                                 Update Travel Plans
                             </a>
                         </div>
@@ -405,4 +409,29 @@
         });
     });
 </script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>-->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnHdUdzSaSeFuC3IfK-91bv2wpX3gB91E&libraries=geometry,places"></script>
+<script type="text/javascript">
+
+    function initializeAutocomplete() {
+        var input = document.getElementById('country');
+        // var options = {
+        //   types: ['(regions)'],
+        //   componentRestrictions: {country: "IN"}
+        // };
+        var options = {}
+
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+            var lat = place.geometry.location.lat();
+            var lng = place.geometry.location.lng();
+            var placeId = place.place_id;
+
+//            alert(lat);
+            //alert(lng);
+            //alert(placeId);
+        });
+    }
+</script>-->
 @endsection
