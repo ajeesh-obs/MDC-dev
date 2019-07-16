@@ -21,7 +21,7 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-main">
-                <a class="navbar-brand p-0 text-center" href="javascript:void()">
+                <a class="navbar-brand p-0 text-center" href="{{ route('admin.dashboard') }}">
                     <img class="" src="{{ asset('img/logo.png') }}" alt="MDC">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -52,7 +52,7 @@
                                     FINANCIAL</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="javascript:void()">
+                                <a class="nav-link" href="{{ route('admin.system') }}">
                                     SYSTEM</a>
                             </li>
                         </ul>

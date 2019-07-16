@@ -19,7 +19,8 @@
                         </div>
                         <p class="mb-0">
                             <i class="icon icon-placeholder"></i>
-                            Detroit, MI, United States
+                            @if( !empty($userLocation->location)) {{ $userLocation->location }} @endif
+                            <!--Detroit, MI, United States-->
                         </p>
                         <p class="text-muted mb-0">Eastern Timezone</p>
                     </div>

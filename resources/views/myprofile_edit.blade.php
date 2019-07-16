@@ -44,8 +44,8 @@
                             </div>
                             <p class="mb-0">
                                 <i class="icon icon-placeholder"></i>
-                                Detroit, MI, United States
-                                <!--<input id="country" type="text" class="form-control form-control-sm text-white-50 bg-transparent locationText" onFocus="initializeAutocomplete()">-->
+                                <!--Detroit, MI, United States-->
+                                <input value="{{ old('location', $location)}}" id="location" name="location" type="text" placeholder="Location" class="form-control form-control-sm text-white-50 bg-transparent locationText" onFocus="initializeAutocomplete()">
                             </p>
                             <p class="text-muted">Eastern Timezone</p>
                             <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3">
@@ -329,6 +329,8 @@
             </div>
         </div>
         <input type="hidden" name="userCurrentExpertise" id="userCurrentExpertise" value="{{$userCurrentExpertise}}">
+        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $latitude)}}">
+        <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $longitude)}}">
     </form>
 </main>
 @endsection
@@ -409,12 +411,12 @@
         });
     });
 </script>
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>-->
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnHdUdzSaSeFuC3IfK-91bv2wpX3gB91E&libraries=geometry,places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnHdUdzSaSeFuC3IfK-91bv2wpX3gB91E&libraries=geometry,places"></script>-->
 <script type="text/javascript">
 
     function initializeAutocomplete() {
-        var input = document.getElementById('country');
+        var input = document.getElementById('location');
         // var options = {
         //   types: ['(regions)'],
         //   componentRestrictions: {country: "IN"}
@@ -428,10 +430,10 @@
             var lng = place.geometry.location.lng();
             var placeId = place.place_id;
 
-//            alert(lat);
-            //alert(lng);
-            //alert(placeId);
+            // assign values
+            $("#latitude").val(lat);
+            $("#longitude").val(lng);
         });
     }
-</script>-->
+</script>
 @endsection

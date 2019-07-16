@@ -13,6 +13,7 @@ use View;
 use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\UserExpertise;
+use App\UserLastLocations;
 
 class HomeController extends Controller {
 
@@ -126,8 +127,9 @@ class HomeController extends Controller {
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
         $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+        $userLocation = DB::table('user_last_locations')->where('user_id', Auth::id())->orderBy('id', 'desc')->first();
 
-        return view('myprofile', compact('user', 'userDetails', 'userExpertise'));
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation'));
     }
 
     /*
@@ -163,6 +165,14 @@ class HomeController extends Controller {
             }
         }
 
+        $location = $latitude = $longitude = "";
+        $userLocation = DB::table('user_last_locations')->where('user_id', Auth::id())->orderBy('id', 'desc')->first();
+        if ($userLocation) {
+            $location = $userLocation->location;
+            $latitude = $userLocation->latitude;
+            $longitude = $userLocation->longitude;
+        }
+
         $languages_spoken = $about_username = $goals_vision = $education = $certifications = $awards_honor = $conferences_events = $volunteer_activities = $hobbies_interests = $income = "";
         if ($userDetails) {
             $languages_spoken = $userDetails->languages_spoken;
@@ -177,7 +187,7 @@ class HomeController extends Controller {
             $income = $userDetails->income;
         }
 
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude'));
     }
 
     /*
@@ -247,6 +257,17 @@ class HomeController extends Controller {
                         }
                     }
                 }
+                // save user location details
+                if ((!empty($formData['location'])) && (!empty($formData['latitude'])) && (!empty($formData['longitude']))) {
+                    $saveUserLocation = UserLastLocations::create([
+                                'location' => $formData['location'],
+                                'latitude' => $formData['latitude'],
+                                'longitude' => $formData['longitude'],
+                                'user_id' => Auth::id(),
+                                'location_date' => date('y-m-d')
+                    ]);
+                }
+
                 return redirect()->route('myprofile.edit')->with('message', 'Profile details modified successfully');
             } else {
                 return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();

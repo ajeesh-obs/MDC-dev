@@ -38,6 +38,8 @@ Route::prefix('admin')->group(function() {
 
     Route::delete('/users/changeactivity/{id}', 'UserController@usersActivityChange')->name('admin.users.activity.change');
     Route::post('/rolesave', 'RoleController@roleNew')->name('admin.role.save');
+
+    Route::get('/system', 'SystemController@index')->name('admin.system');
 });
 
 
