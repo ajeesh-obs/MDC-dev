@@ -95,11 +95,11 @@
                                 <input type="text" value="coins : {{ $level->coins }}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
-                         @else
-                         <tr style="display:none;">
+                        @else
+                        <tr stylec="display:none;">
                             <td>
-                                <p class="displayContent">
-                                    Limitations:
+                                <p style="margin-left: 58px;">
+                                    Limitations: <br>
                                     <input type="checkbox">Legacy <br>
                                     <input type="checkbox">Master Group <br>
                                     <input type="checkbox">Messaging <br>
