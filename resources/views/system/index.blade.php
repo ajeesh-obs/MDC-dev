@@ -131,7 +131,7 @@
                 <div class="table-responsive">
                     <form id="levelForm" method="POST" action="{{ route('admin.level.save') }}" enctype="multipart/form-data">
                         @csrf
-                        <table class="table table-hover mb-2" style="border:1px solid #fff;">
+                        <table class="table table-hover mb-2">
                             <tr>
                                 <td>
                                     <input type="text" name="title" value="{{ old('title')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Title">
