@@ -40,6 +40,8 @@ Route::prefix('admin')->group(function() {
     Route::post('/rolesave', 'RoleController@roleNew')->name('admin.role.save');
 
     Route::get('/system', 'SystemController@index')->name('admin.system');
+    Route::post('/level/save', 'SystemController@newLevel')->name('admin.level.save');
+    Route::delete('/level/delete/{id}', 'SystemController@deleteLevel')->name('admin.level.delete');
 });
 
 
