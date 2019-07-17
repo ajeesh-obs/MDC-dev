@@ -20,6 +20,11 @@
 
         <!-- Custom fonts for this template -->
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,400,700" rel="stylesheet">
+        <style>
+            .navbar-main .nav-link{
+                padding: 0 0.4rem !important; 
+            }
+        </style>
     </head>
 
     <body>
@@ -43,22 +48,22 @@
                                     MINDSET</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="connect.html">
+                                <a class="nav-link" href="javascript:void()">
                                     <i class="icon icon-connect filter-white"></i>
                                     CONNECT</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="mastermind.html">
+                                <a class="nav-link" href="javascript:void()">
                                     <i class="icon icon-mastermind filter-white"></i>
                                     MASTERMIND</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="masterclass.html">
+                                <a class="nav-link" href="javascript:void()">
                                     <i class="icon icon-masterclass filter-white"></i>
                                     MASTERCLASS</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="legacy.html">
+                                <a class="nav-link" href="javascript:void()">
                                     <i class="icon icon-legacy filter-white"></i>
                                     LEGACY</a>
                             </li>
@@ -302,7 +307,7 @@
         </form>
 
         <!--<main class="py-4" role="main" class="container">-->
-            @yield('content')
+        @yield('content')
         <!--</main>-->
 
         <!-- Bootstrap core JavaScript
@@ -320,51 +325,48 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-        
+
         <script type="text/javascript">
-            $(document).ready(function () {
-            $("#navbarDropdown2").click(function () {
-            $(".profileSettingsDiv").toggle();
-            });
-
-            //hide message div automaticaly
-            $('.displayMsgDiv').delay(2000).fadeOut('slow');
-
-            $(".memberPasswordUpdateBtn").click(function() {   
-                var email = $("#memberresetpasswordemail").val();  
-                var password = $("#memberresetpassword").val();  
-                var passwordconfirm = $("#memberresetpasswordconfirm").val();  
-                var id = $("#memberresetpasswordid").val(); 
-                if(id && email){  
-                     $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'post',
-                        url: '{{ route('member.passordreset') }}',
-                        data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
-                        success: function (data) {
-                            swal({
-                                text: data.message,
-                                title: 'Success!',
-                                type: data.status,
-                                timer: 2000,
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            })
-                            if (data.status == 'success') {
-                                setTimeout(function(){
-                                    window.location.href = '{{url("/")}}';  //window.location.reload();
-                                },1000);
-                            }
-                        }
-                    })
-                }
-            });
-
-            });
+                                    $(document).ready(function () {
+                                    $("#navbarDropdown2").click(function () {
+                                    $(".profileSettingsDiv").toggle();
+                                    });
+                                    //hide message div automaticaly
+                                    $('.displayMsgDiv').delay(2000).fadeOut('slow');
+                                    $(".memberPasswordUpdateBtn").click(function() {
+                                    var email = $("#memberresetpasswordemail").val();
+                                    var password = $("#memberresetpassword").val();
+                                    var passwordconfirm = $("#memberresetpasswordconfirm").val();
+                                    var id = $("#memberresetpasswordid").val();
+                                    if (id && email){
+                                    $.ajax({
+                                    headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                            type: 'post',
+                                            url: '{{ route('member.passordreset') }}',
+                                            data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
+                                            success: function (data) {
+                                            swal({
+                                            text: data.message,
+                                                    title: 'Success!',
+                                                    type: data.status,
+                                                    timer: 2000,
+                                                    showCancelButton: false,
+                                                    showConfirmButton: false
+                                            })
+                                                    if (data.status == 'success') {
+                                            setTimeout(function(){
+                                            window.location.href = '{{url("/")}}'; //window.location.reload();
+                                            }, 1000);
+                                            }
+                                            }
+                                    })
+                                    }
+                                    });
+                                    });
         </script>
-        
-         @yield('script')
+
+        @yield('script')
     </body>
 </html>

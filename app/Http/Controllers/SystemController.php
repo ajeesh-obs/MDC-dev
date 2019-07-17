@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Redirect;
 use App\Level;
 
 class SystemController extends Controller {
@@ -26,6 +27,10 @@ class SystemController extends Controller {
      */
 
     public function index(Request $request) {
+
+        if (empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
 
         $levels = DB::table('level')->whereNull('deleted_at')->orderBy('id', 'asc')->get();
         return view('system.index', compact('levels'));
@@ -113,6 +118,25 @@ class SystemController extends Controller {
             return response()->json(array('status' => true, 'message' => 'Level deleted successfully'));
         }
         return response()->json(false, 401);
+    }
+
+    /*
+     * check logged as admin or user 
+     * 
+     */
+
+    protected function loggedUserCheck() {
+        $isadmin = session('isadmin');
+        return $isadmin;
+    }
+
+    /*
+     * error function
+     * 
+     */
+
+    protected function errorFunction() {
+        return Redirect::to('/');
     }
 
 }
