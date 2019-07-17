@@ -39,7 +39,7 @@
                                    data-placement="bottom" title="Level 3: Lorem ipsum"
                                    data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
                                    style="bottom: 0; left: 0">
-                                    <img src="{{ asset('img/badge-coach.png') }}" height="100">
+                                    <!--<img src="{{ asset('img/badge-coach.png') }}" height="100">-->
                                 </a>
                             </div>
                             <p class="mb-0">
