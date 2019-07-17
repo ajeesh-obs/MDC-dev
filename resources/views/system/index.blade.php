@@ -20,6 +20,9 @@
         margin-left: 58px;
         /*border: 1px solid red;*/
     }
+    .borderNone{
+        border:none !important;
+    }
 </style>
 
 @section('content')
@@ -50,24 +53,24 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-2 levelListTable">
                         <tr>
-                            <td style="float:right;">
+                            <td style="float:right;" class="borderNone">
                                 @if (!$level->is_default)
                                 <a href="javascript:void(0)" class="ml-3 lavel-delete" data-id="{{ $level->id }}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <td class="centerAlign">
+                            <td class="centerAlign borderNone">
                                 <input type="text" value="{{ $level->title}}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="borderNone">
                                 <input type="text" value="{{ $level->level}}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <td class="centerAlign"> 
+                            <td class="centerAlign borderNone"> 
                                 @if ($level->badge)
                                 @if (file_exists(public_path().'/images/level/'.$level->badge))
                                 <img id="eventImageUploaded" src="{{ asset('images/level/thumbnail_'.$level->badge) }}" classc="img-thumbnail img-fluid" height="150" width="150">
@@ -76,7 +79,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="borderNone">
                                 @if (!$level->is_default)
                                 <input type="text" value="${{ $level->price}}/year" class="form-control form-control-sm bg-transparent displayContent" readonly>
                                 @else
@@ -86,18 +89,18 @@
                         </tr>
                         @if (!$level->is_default)
                         <tr>
-                            <td>
+                            <td class="borderNone">
                                 <input type="text" value="Legacy : {{ $level->legacy }}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="borderNone">
                                 <input type="text" value="coins : {{ $level->coins }}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
                         @else
                         <tr stylec="display:none;">
-                            <td>
+                            <td class="borderNone">
                                 <p style="margin-left: 58px;">
                                     Limitations: <br>
                                     <input type="checkbox">Legacy <br>
@@ -111,12 +114,12 @@
                         </tr>
                         @endif
                         <tr>
-                            <td style="text-align: center;"> 
+                            <td style="text-align: center;" class="borderNone"> 
                                 <font color="#fff">{{$level->description}}</font>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="borderNone">
                                 <input type="text" value="Discount Code : {{ $level->discount_code }}" class="form-control form-control-sm bg-transparent displayContent" readonly>
                             </td>
                         </tr>
@@ -132,49 +135,50 @@
                     <form id="levelForm" method="POST" action="{{ route('admin.level.save') }}" enctype="multipart/form-data">
                         @csrf
                         <table class="table table-hover mb-2">
+                            <tr><td class="borderNone"></td></tr>
                             <tr>
-                                <td>
-                                    <input type="text" name="title" value="{{ old('title')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Title">
+                                <td class="borderNone">
+                                    <input type="text" name="title" value="{{ old('title')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Title">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="text" name="level" value="{{ old('level')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Level">
+                                <td class="borderNone">
+                                    <input type="text" name="level" value="{{ old('level')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Level">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="file" name="image" class="form-control form-control-sm text-white-50 bg-transparent">
+                                <td class="borderNone">
+                                    <input type="file" name="image" class="form-control form-control-sm text-white-50 bg-transparent displayContent">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="text" name="price" value="{{ old('price')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Price">
+                                <td class="borderNone">
+                                    <input type="text" name="price" value="{{ old('price')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Price">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="text" name="legacy" value="{{ old('legacy')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Legacy">
+                                <td class="borderNone">
+                                    <input type="text" name="legacy" value="{{ old('legacy')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Legacy">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <input type="text" name="coins" value="{{ old('coins')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="Coins">
+                                <td class="borderNone">
+                                    <input type="text" name="coins" value="{{ old('coins')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Coins">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <textarea name="description" style="width:100%;">{{ old('description')}}</textarea>
+                                <td class="borderNone">
+                                    <textarea style="color: #fff !important;" name="description" class="form-control form-control-sm bg-transparent" >{{ old('description')}}</textarea>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                    <font color="#fff">Discount Code</font>  
-                                    <input type="text" name="discount_code" value="{{ old('discount_code')}}" class="form-control form-control-sm text-white-50 bg-transparent" placeholder="">
+                                <td class="borderNone">
+                                    <!--<font color="#fff">Discount Code</font>-->  
+                                    <input type="text" name="discount_code" value="{{ old('discount_code')}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Discount Code">
                                 </td>
                             </tr>
                             <tr style="text-align:center;">
-                                <td>
+                                <td class="borderNone">
                                     <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent" onclick="document.getElementById('levelForm').submit();">Add Level</a>
                                 </td>
                             </tr>
