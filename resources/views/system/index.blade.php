@@ -70,7 +70,7 @@
                             <td class="centerAlign"> 
                                 @if ($level->badge)
                                 @if (file_exists(public_path().'/images/level/'.$level->badge))
-                                <img id="eventImageUploaded" src="{{ asset('images/level/thumbnail_'.$level->badge) }}" class="img-thumbnail img-fluid" height="150" width="150">
+                                <img id="eventImageUploaded" src="{{ asset('images/level/thumbnail_'.$level->badge) }}" classc="img-thumbnail img-fluid" height="150" width="150">
                                 @endif
                                 @endif
                             </td>

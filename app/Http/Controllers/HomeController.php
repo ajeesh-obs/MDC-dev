@@ -268,7 +268,7 @@ class HomeController extends Controller {
                     ]);
                 }
 
-                return redirect()->route('myprofile.edit')->with('message', 'Profile details modified successfully');
+                return redirect()->route('myprofile')->with('message', 'Profile details modified successfully');
             } else {
                 return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
             }
