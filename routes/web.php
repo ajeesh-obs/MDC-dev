@@ -75,6 +75,8 @@ Route::post('/memberupdate', 'UserController@memberUpdate')->name('member.update
 Route::match(array('get', 'post'), '/resetpassword/{id}', 'Auth\LoginController@usersResetPassword')->name('users.resetpassword');
 Route::post('/memberpassordreset', 'Auth\LoginController@memberPasswordUpdate')->name('member.passordreset');
 
+Route::match(array('get', 'post'), '/emailverification/{id}', 'Auth\LoginController@usersEmailVerification')->name('users.email.verification');
+
 
 Route::match(array('get', 'post'), '/role/create', 'RoleController@create')->name('role.create');
 Route::post('/rolemodify', 'RoleController@roleModify')->name('role.modify');

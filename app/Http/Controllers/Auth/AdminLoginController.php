@@ -56,9 +56,15 @@ use AuthenticatesUsers;
             if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password, 'deleted_at' => NULL], $request->get('remember'))) {
                 // check user in active state or not
                 $userActivity = Auth::user()->is_active;
+                $userEmailVerifiedAt = Auth::user()->email_verified_at;
                 if (!$userActivity) {
                     Auth::logout();
                     return redirect()->route('admin.login')->with('errormessage', 'Your profile is not active');
+                }
+                // check email is verified or not
+                if (empty($userEmailVerifiedAt)) {
+                    Auth::logout();
+                    return redirect()->route('admin.login')->with('errormessage', 'Your email is not verified');
                 }
                 // check user have module permissions
                 $userId = Auth::id();

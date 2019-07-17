@@ -33,6 +33,12 @@ class HomeController extends Controller {
      */
     public function index() {
 
+        // check email is verified or not
+        if (empty(auth()->user()->email_verified_at)) {
+            Auth::logout();
+            return redirect()->route('login')->with('errormessage', 'Your email is not verified');
+        }
+
         $route = 'myprofile';
         // check user is logged in first or not
         if (empty(auth()->user()->last_login)) {

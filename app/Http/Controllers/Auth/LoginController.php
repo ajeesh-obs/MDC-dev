@@ -39,10 +39,11 @@ use AuthenticatesUsers;
     public function __construct() {
         $this->middleware('guest')->except('logout');
     }
-    
+
     /*
      * function override to add additional parameters for login checking
      */
+
     protected function credentials(Request $request) {
 
         return array_merge($request->only($this->username(), 'password'), ['is_active' => 1, 'deleted_at' => NULL]);
@@ -100,7 +101,7 @@ use AuthenticatesUsers;
         }
         // update user details 
         $password = Hash::make($formData['password']);
-        $response = DB::table('users')->where([['id', '=', $formData['id']], ['email', '=', $formData['email']]])->update(['password' => $password]);
+        $response = DB::table('users')->where([['id', '=', $formData['id']], ['email', '=', $formData['email']]])->update(['password' => $password, 'email_verified_at' => date('Y-m-d h:i:s')]);
         $save = DB::table('member_password_resets')->where([['user_id', '=', $formData['id']], ['email', '=', $formData['email']]])->update(['is_active' => 0]);
         // update member password details
         if ($response && $save) {
@@ -109,6 +110,29 @@ use AuthenticatesUsers;
             return response()->json(array('status' => 'error', 'message' => 'User details not updated, Please try again later'));
         }
         return response()->json(array('status' => 'error', 'message' => 'Some error found, Please try again later'));
+    }
+
+    /*
+     * email verification 
+     */
+
+    public function usersEmailVerification($id, Request $request) {
+        $message = "Error occured, Please try again later";
+        $randomNumber = $id;
+        $getData = DB::table('users')->where([['email_token', '=', $randomNumber]])->first();
+        if ($getData) {
+            // check already verified 
+            if (!empty($getData->email_verified_at)) {
+                $message = "This email already verified";
+                return view('error', compact('message'));
+            }
+            // update verified date 
+            $response = DB::table('users')->where([['email_token', '=', $randomNumber]])->update(['email_verified_at' => date('Y-m-d h:i:s')]);
+            if ($response) {
+                return redirect()->route('login')->with('message', 'Email verified successfully!');
+            }
+        }
+        return view('error', compact('message'));
     }
 
 }

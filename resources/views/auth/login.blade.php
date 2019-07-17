@@ -38,7 +38,16 @@
             <div>
                 <h4 class="text-white mb-0 mr-4">{{ __('Login') }}</h4>
             </div>
-
+            @if(session()->has('errormessage'))
+            <div class="alert alert-danger displayMsgDiv">
+                {{ session()->get('errormessage') }}
+            </div>
+            @endif
+            @if(session()->has('message'))
+            <div class="alert alert-success displayMsgDiv">
+                {{ session()->get('message') }}
+            </div>
+            @endif
             <div class="card-body">
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
