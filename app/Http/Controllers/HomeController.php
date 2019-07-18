@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\UserExpertise;
 use App\UserLastLocations;
+use Intervention\Image\Facades\Image;
 
 class HomeController extends Controller {
 
@@ -179,7 +180,7 @@ class HomeController extends Controller {
             $longitude = $userLocation->longitude;
         }
 
-        $languages_spoken = $about_username = $goals_vision = $education = $certifications = $awards_honor = $conferences_events = $volunteer_activities = $hobbies_interests = $income = "";
+        $languages_spoken = $about_username = $goals_vision = $education = $certifications = $awards_honor = $conferences_events = $volunteer_activities = $hobbies_interests = $income = $profilePic = "";
         if ($userDetails) {
             $languages_spoken = $userDetails->languages_spoken;
             $about_username = $userDetails->about_username;
@@ -191,9 +192,11 @@ class HomeController extends Controller {
             $volunteer_activities = $userDetails->volunteer_activities;
             $hobbies_interests = $userDetails->hobbies_interests;
             $income = $userDetails->income;
+            if (!empty($userDetails->profile_pic)) {
+                $profilePic = $userDetails->profile_pic;
+            }
         }
-
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic'));
     }
 
     /*
@@ -219,6 +222,12 @@ class HomeController extends Controller {
                     return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
                 }
             }
+            $validation = Validator::make($formData, [
+                        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+            if ($validation->fails()) {
+                return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
+            }
 
             $save = UserDetails::updateOrCreate(['user_id' => Auth::id()],
                             [
@@ -231,10 +240,34 @@ class HomeController extends Controller {
                                 'conferences_events' => $formData['conferences_events'],
                                 'volunteer_activities' => $formData['volunteer_activities'],
                                 'hobbies_interests' => $formData['hobbies_interests'],
-                                'income' => $formData['income']
+                                'income' => $formData['income'],
             ]);
 
             if ($save) {
+                // upload profile pic if exists
+                $filename = NULL;
+                if (isset($formData['image'])) {
+                    $file = $formData['image'];
+                    $image_path = '';
+                    if ($file) {
+                        $fileArray = array('image' => $file);
+                        $rand = rand(11111, 99999);
+                        $filename = md5(Auth::id() . '-' . strtotime(date('Y-m-d H:i:s')) . $rand) . '.' . $file->getClientOriginalExtension();
+                        $thumbFilename = 'thumbnail_' . md5(Auth::id() . '-' . strtotime(date('Y-m-d H:i:s')) . $rand) . '.' . $file->getClientOriginalExtension();
+
+                        $imagePath = 'images/profile/' . $filename;
+                        $thumbImagePath = 'images/profile/' . $thumbFilename;
+
+                        $image = Image::make($file->getRealPath());
+                        $image->save($imagePath);
+                        $image->resize(300, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->save($thumbImagePath);
+                    }
+                }
+                if (!empty($filename)) {
+                    DB::table('user_details')->where('user_id', '=', Auth::id())->update(array('profile_pic' => $filename));
+                }
 
                 // check user expertise modified or not
                 $modifiedExperise = $formData['userCurrentExpertise'];
@@ -265,13 +298,23 @@ class HomeController extends Controller {
                 }
                 // save user location details
                 if ((!empty($formData['location'])) && (!empty($formData['latitude'])) && (!empty($formData['longitude']))) {
-                    $saveUserLocation = UserLastLocations::create([
-                                'location' => $formData['location'],
-                                'latitude' => $formData['latitude'],
-                                'longitude' => $formData['longitude'],
-                                'user_id' => Auth::id(),
-                                'location_date' => date('y-m-d')
-                    ]);
+                    $isLocationSave = 1;
+                    // check location details modified or not
+                    $userLastLocation = DB::table('user_last_locations')->where('user_id', Auth::id())->orderBy('id', 'desc')->first();
+                    if ($userLastLocation) {
+                        if (($formData['location'] == $userLastLocation->location) && ($formData['latitude'] == $userLastLocation->latitude) && ($formData['longitude'] == $userLastLocation->longitude)) {
+                            $isLocationSave = 0;
+                        }
+                    }
+                    if ($isLocationSave == 1) {
+                        $saveUserLocation = UserLastLocations::create([
+                                    'location' => $formData['location'],
+                                    'latitude' => $formData['latitude'],
+                                    'longitude' => $formData['longitude'],
+                                    'user_id' => Auth::id(),
+                                    'location_date' => date('y-m-d')
+                        ]);
+                    }
                 }
 
                 return redirect()->route('myprofile')->with('message', 'Profile details modified successfully');

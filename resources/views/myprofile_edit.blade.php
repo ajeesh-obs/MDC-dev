@@ -11,7 +11,7 @@
 </style>
 @section('content')
 <main role="main" class="container">
-    <form id="account" method="POST" action="{{ route('myprofile.update') }}">
+    <form id="account" method="POST" action="{{ route('myprofile.update') }}" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
         <div class="alert alert-danger displayMsgDiv">
@@ -33,15 +33,15 @@
                 <div class="flex-fill">
                     <div class="d-flex flex-row align-items-center">
                         <div class="text-center mr-4">
-                            <div class="bg-cover bg-center rounded-circle mb-3 position-relative"
-                                 style="background-image: url('/img/profile6.jpg'); width: 260px; height: 260px;">
-                                <a tabindex="0" href="javascript://" class="position-absolute" data-toggle="popover"
-                                   data-placement="bottom" title="Level 3: Lorem ipsum"
-                                   data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
-                                   style="bottom: 0; left: 0">
-                                    <!--<img src="{{ asset('img/badge-coach.png') }}" height="100">-->
-                                </a>
-                            </div>
+                            <a class="imageUploadLink" style="cursor:pointer;">
+                                <div class="bg-cover bg-center rounded-circle mb-3 position-relative imageDiv" @if ($profilePic) style="background-image: url('/images/profile/{{$profilePic}}'); width: 260px; height: 260px;" @else style="background-image: url('/images/profile/no-profile.png'); width: 260px; height: 260px;"  @endif>
+<!--                                    <p tabindex="0" href="javascript:void()" class="position-absolute" data-toggle="popover" data-placement="bottom" title="Level 3: Lorem ipsum" data-content="<a class='small text-muted' href='#'>LEARN MORE</a>" style="bottom: 0; left: 0">
+                                        <img src="{{ asset('img/badge-coach.png') }}" height="100">
+                                    </p>-->
+                                     <img id="profileImage" style="width: 260px; height: 260px;display:none;" classc="img-thumbnail img-fluid" />
+                                </div>
+                            </a>
+                            <input type="file" name="image" id="image" style="display: none;" onchange="readURL(this);" />
                             <p class="mb-0">
                                 <i class="icon icon-placeholder"></i>
                                 <!--Detroit, MI, United States-->
@@ -434,6 +434,38 @@
             $("#latitude").val(lat);
             $("#longitude").val(lng);
         });
+    }
+
+    $(document).on('click', '.imageUploadLink', function (e) {
+        e.preventDefault();
+        $("#image").trigger("click");
+    });
+</script>
+
+<!--<script>
+    $(document).ready(function () {
+        document.getElementById("image").onchange = function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+
+                $(".imageDiv").css('background-image', 'none');
+                $("#profileImage").show();
+                document.getElementById("profileImage").src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        };
+    });
+</script>-->
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.imageDiv').css('background', 'transparent url(' + e.target.result + ')');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
 @endsection

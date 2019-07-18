@@ -8,14 +8,10 @@
             <div class="flex-fill">
                 <div class="d-flex flex-row align-items-center">
                     <div class="text-center mr-4">
-                        <div class="bg-cover bg-center rounded-circle mb-3 position-relative"
-                             style="background-image: url('/img/profile6.jpg'); width: 260px; height: 260px;">
-                            <a tabindex="0" href="javascript://" class="position-absolute" data-toggle="popover"
-                               data-placement="bottom" title="Level 3: Lorem ipsum"
-                               data-content="<a class='small text-muted' href='#'>LEARN MORE</a>"
-                               style="bottom: 0; left: 0">
-                                <!--<img src="{{ asset('img/badge-coach.png') }}" height="100">-->
-                            </a>
+                        <div class="bg-cover bg-center rounded-circle mb-3 position-relative" @if( !empty($userDetails->profile_pic)) style="background-image: url('/images/profile/{{$userDetails->profile_pic}}'); width: 260px; height: 260px;" @else style="background-image: url('/images/profile/no-profile.png'); width: 260px; height: 260px;"  @endif>
+<!--                             <a tabindex="0" href="javascript://" class="position-absolute" data-toggle="popover" data-placement="bottom" title="Level 3: Lorem ipsum" data-content="<a class='small text-muted' href='#'>LEARN MORE</a>" style="bottom: 0; left: 0">
+                                <img src="{{ asset('img/badge-coach.png') }}" height="100">
+                            </a>-->
                         </div>
                         <p class="mb-0">
                             <i class="icon icon-placeholder"></i>
@@ -74,11 +70,11 @@
                                     @endif
                                 </ul>
                             </div>
-<!--                            <div class="col-7">
-                                <ul class="list-unstyled">
-                                    <li>Marketing</li>   
-                                </ul>
-                            </div>-->
+                            <!--                            <div class="col-7">
+                                                            <ul class="list-unstyled">
+                                                                <li>Marketing</li>   
+                                                            </ul>
+                                                        </div>-->
                         </div>
                         <ul class="list-inline mb-4">
                             <li class="accent-color font-weight-bold">Languages Spoken</li>
