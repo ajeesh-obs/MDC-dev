@@ -213,17 +213,9 @@ class HomeController extends Controller {
         if ($request->isMethod('post')) {
 
             $formData = $request->all();
-            if (!empty($formData['income'])) {
-                $validation = Validator::make($formData, [
-                            'income' => ['numeric']
-                ]);
-
-                if ($validation->fails()) {
-                    return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
-                }
-            }
             $validation = Validator::make($formData, [
                         'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                        'income' => ['numeric']
             ]);
             if ($validation->fails()) {
                 return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
@@ -316,7 +308,6 @@ class HomeController extends Controller {
                         ]);
                     }
                 }
-
                 return redirect()->route('myprofile')->with('message', 'Profile details modified successfully');
             } else {
                 return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();
