@@ -54,8 +54,17 @@ Route::get('/myprofile', 'HomeController@myProfile')->name('myprofile');
 Route::get('/myprofile/edit', 'HomeController@myProfileEdit')->name('myprofile.edit');
 Route::post('/profileupdate', 'HomeController@profileUpdate')->name('myprofile.update');
 
-Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 
+Route::post('/users/search', 'HomeController@usersSearchSuggestions')->name('users.search');
+Route::get('/users/search/result', 'HomeController@usersSearchResult')->name('users.search.result');
+Route::get('/other/profile/view/{id}', 'HomeController@otherProfileView')->name('other.profile.view');
+Route::post('/user/follow', 'HomeController@followUser')->name('user.follow');
+Route::post('/user/follow', 'HomeController@followUser')->name('user.follow');
+Route::post('/user/followers/all', 'HomeController@followersAll')->name('user.followers.all');
+
+
+
+Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 Route::post('/accountsettingssave', 'HomeController@accountSettingsSave')->name('accountsettingssave');
 
 

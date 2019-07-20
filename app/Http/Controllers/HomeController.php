@@ -15,6 +15,7 @@ use App\User;
 use App\UserExpertise;
 use App\UserLastLocations;
 use Intervention\Image\Facades\Image;
+use App\UsersFollowing;
 
 class HomeController extends Controller {
 
@@ -118,6 +119,192 @@ class HomeController extends Controller {
 
 
         return redirect()->route('accountsettings')->with('message', 'Account settings modified successfully');
+    }
+
+    /*
+     * users search suggestions list
+     */
+
+    public function usersSearchSuggestions(Request $request) {
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $formData = $request->all();
+        $keyword = $formData['keyword'];
+        $list = "<ul id='country-list' clas='suggestion'>";
+        if ($keyword) {
+            // get users list from suggestions
+            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+            if ($users) {
+                foreach ($users as $user) {
+
+                    $list .= "<li><a class='userSuggesionLink' href='javascript:void(0)'>" . $user->first_name . " " . $user->last_name . "</a></li>";
+                }
+            }
+        }
+        $list .= "</ul>";
+        return $list;
+    }
+
+    /*
+     * view others profile 
+     * 
+     */
+
+    public function usersSearchResult(Request $request) {
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $keyword = $request->searchData;
+        $userData = [];
+        if ($keyword) {
+            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+
+            if ($users) {
+                foreach ($users as $user) {
+                    //get user details
+                    $userDetails = DB::table('user_details')->where('user_id', $user->id)->first();
+                    $userExpertises = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', $user->id)->orderBy('id', 'desc')->get();
+                    $userExpertvalues = array();
+                    if ($userExpertises) {
+                        foreach ($userExpertises as $userExpertise) {
+                            $userExpertvalues[] = $userExpertise->expertise;
+                        }
+                    }
+                    $userCurrentExpertise = implode(",", $userExpertvalues);
+                    $p['id'] = $user->id;
+                    $p['name'] = $user->first_name . " " . $user->last_name;
+                    $p['expertise'] = $userCurrentExpertise;
+                    $p['image'] = "";
+                    if ($userDetails) {
+                        $p['image'] = $userDetails->profile_pic ? $userDetails->profile_pic : '';
+                    }
+                    $userData[] = $p;
+                }
+            }
+        }
+//        print_r($userData); exit;
+        return view('user_search_result', compact('userData'));
+    }
+
+    /*
+     * others profile view 
+     * 
+     */
+
+    public function otherProfileView($id = '') {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $selUserId = base64_decode($id);
+        // check user exists or not
+        $user = DB::table('users')->where('id', $selUserId)->first();
+        if (empty($user)) {
+            $message = "Selected user not found";
+            return View::make('error_user', compact('message'));
+        }
+        // check selected user active or not
+        if (empty($user->is_active)) {
+            $message = "Selected user not active";
+            return View::make('error_user', compact('message'));
+        }
+        // get selected user profile details 
+        $userDetails = DB::table('user_details')->where('user_id', $selUserId)->first();
+        $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', $selUserId)->orderBy('id', 'desc')->get();
+        $userLocation = DB::table('user_last_locations')->where('user_id', $selUserId)->orderBy('id', 'desc')->first();
+        $following = 0;
+        $followExists = DB::table('users_following')->where([['user_id', '=', Auth::id()], ['following_user_id', '=', $selUserId]])->first();
+        if ($followExists) {
+            $following = 1;
+        }
+        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id')
+                ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->where('users_following.following_user_id', '=', $selUserId)
+                ->orderBy('users_following.id', 'DESC')
+                ->take(5)
+                ->get();
+
+        $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
+//        print_r($latestFollowers);exit;
+
+        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount'));
+    }
+
+    /*
+     * get all followers of a user 
+     * 
+     */
+
+    public function followersAll(Request $request) {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $formData = $request->all();
+        $id = $formData['id'];
+        $followersCount = UsersFollowing::where('following_user_id', '=', $id)->count();
+        $list = "";
+        if ($id) {
+            $followers = UsersFollowing::select('user_details.profile_pic', 'users_following.id')
+                    ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                    ->where('users_following.following_user_id', '=', $id)
+                    ->orderBy('users_following.id', 'DESC')
+                    ->skip(5)
+                    ->take($followersCount)
+                    ->get();
+            if ($followers) {
+                $list = view('followers_all', compact('followers'));
+            }
+        }
+        return $list;
+    }
+
+    /*
+     * follow user 
+     * 
+     */
+
+    public function followUser(Request $request) {
+
+        if ($request->isMethod('post')) {
+
+            $formData = $request->all();
+            $validation = Validator::make($formData, [
+                        'id' => ['required'],
+            ]);
+            if ($validation->fails()) {
+                return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+            }
+            $user = User::find($formData['id']);
+            if (empty($user)) {
+                return response()->json(array('status' => 'error', 'message' => "Selected user details not getting, Please try again later"));
+            }
+            // check user is active or not
+            if (empty($user->is_active)) {
+                return response()->json(array('status' => 'error', 'message' => "Selected user profile is not active"));
+            }
+            // check already follow or not
+            $followExists = DB::table('users_following')->where([['user_id', '=', Auth::id()], ['following_user_id', '=', $formData['id']]])->first();
+            if ($followExists) {
+                return response()->json(array('status' => 'error', 'message' => 'Selected user already following'));
+            }
+            // save in user following
+            $saveFollowing = UsersFollowing::create([
+                        'user_id' => Auth::id(),
+                        'following_user_id' => $formData['id'],
+            ]);
+            if ($saveFollowing) {
+                return response()->json(array('status' => 'success', 'message' => 'User following saved successfully'));
+            } else {
+                return response()->json(array('status' => 'error', 'message' => 'User following not saved, Please try again later'));
+            }
+        }
+        return response()->json(array('status' => 'error', 'message' => 'Some error found, Please try again later'));
     }
 
     /*

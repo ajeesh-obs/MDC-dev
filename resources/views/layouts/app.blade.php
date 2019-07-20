@@ -24,6 +24,16 @@
             .navbar-main .nav-link{
                 padding: 0 0.4rem !important; 
             }
+            ul{
+                list-style-type:none;
+            }
+            ul li a{
+                color:#fff;
+            }
+            ul li a:hover, ul li a:focus {
+                color:#ebc243;
+                text-decoration: none;
+            }
         </style>
     </head>
 
@@ -69,14 +79,14 @@
                             </li>
                         </ul>
                         <div class="collapse position-absolute w-100" id="collapseSearch" style="top: -5px;">
-                            <input type="search"
-                                   class="form-control-sm bg-color-4 border-color-1 rounded-custom w-100 text-white">
+                            <input type="search" class="form-control-sm bg-color-4 border-color-1 rounded-custom w-100 text-white collapseSearchUsers">
+                            <div id="suggesstion-box" style="background-color:#514c4c;border:1px solid #514c4c;cursor: pointer;"></div>
                         </div>
                     </div>
                     <ul class="navbar-nav mr-auto secondary-menu">
                         <li class="nav-item active">
                             <a class="nav-link" data-toggle="collapse" href="#collapseSearch" role="button"
-                               aria-expanded="false" aria-controls="collapseSearch">
+                               aria-expanded="false" aria-controls="collapseSearch" id="usersSearchBtn">
                                 <i class="icon icon-search filter-light"></i>
                             </a>
                         </li>
@@ -362,6 +372,42 @@
                                             }
                                             }
                                     })
+                                    }
+                                    });
+                                    $("#usersSearchBtn").click(function () {
+                                    $(".collapseSearchUsers").val('');
+                                    $("#collapseSearch").toggle();
+                                    });
+                                    $(document).on('keyup', '.collapseSearchUsers', function (e) {
+                                    e.preventDefault();
+                                    var val = $(this).val();
+                                    if (val){
+                                    $.ajax({
+                                    headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                            type: "POST",
+                                            url: '{{ route('users.search') }}',
+                                            data: {'keyword': val},
+                                            beforeSend: function(){
+                                            $("#collapseSearch").css("background", "#FFF");
+                                            },
+                                            success: function(data){
+                                            $("#suggesstion-box").show();
+                                            $("#suggesstion-box").html(data);
+                                            $("#collapseSearch").css("background", "#FFF");
+                                            }
+                                    });
+                                    }
+                                    else {
+                                    $("#suggesstion-box").html("");
+                                    }
+                                    });
+                                    $(document).on('click', '.userSuggesionLink', function (e) {
+                                    e.preventDefault();
+                                    var searchData = $(".collapseSearchUsers").val();
+                                    if (searchData){
+                                    window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
                                     }
                                     });
                                     });
