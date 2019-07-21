@@ -126,7 +126,7 @@
                         @if($latestFollowers->count() > 0) 
                         @foreach($latestFollowers as $latestFollower)
                         <li class="list-inline-item">
-                            <img @if ($latestFollower->profile_pic) src="{{ asset('images/profile/thumbnail_'.$latestFollower->profile_pic) }}" @else src="{{ asset('images/profile/no-profile.png') }}" @endif
+                            <img title="{{$latestFollower->first_name}} {{$latestFollower->last_name}}" @if ($latestFollower->profile_pic) src="{{ asset('images/profile/thumbnail_'.$latestFollower->profile_pic) }}" @else src="{{ asset('images/profile/no-profile.png') }}" @endif
                                   alt="Generic placeholder image" width="50" height="50">
                         </li>
                         @endforeach

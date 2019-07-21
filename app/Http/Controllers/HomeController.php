@@ -174,9 +174,22 @@ class HomeController extends Controller {
                         }
                     }
                     $userCurrentExpertise = implode(",", $userExpertvalues);
+                    $followersCount = UsersFollowing::where('following_user_id', '=', $user->id)->count();
+
+//                    $latestFollowings = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name', 'users.id as userId')
+//                            ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+//                            ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
+//                            ->where('users_following.user_id', '=', $user->id)
+//                            ->orderBy('users_following.id', 'DESC')
+//                            ->take(5)
+//                            ->get();
+
                     $p['id'] = $user->id;
                     $p['name'] = $user->first_name . " " . $user->last_name;
                     $p['expertise'] = $userCurrentExpertise;
+                    $p['followersCount'] = $followersCount;
+//                    $p['latestFollowings'] = $latestFollowings;
+//                    $p['latestFollowingsCount'] = count($latestFollowings);
                     $p['image'] = "";
                     if ($userDetails) {
                         $p['image'] = $userDetails->profile_pic ? $userDetails->profile_pic : '';
@@ -221,8 +234,9 @@ class HomeController extends Controller {
         if ($followExists) {
             $following = 1;
         }
-        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id')
+        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
                 ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
                 ->where('users_following.following_user_id', '=', $selUserId)
                 ->orderBy('users_following.id', 'DESC')
                 ->take(5)
@@ -250,8 +264,9 @@ class HomeController extends Controller {
         $followersCount = UsersFollowing::where('following_user_id', '=', $id)->count();
         $list = "";
         if ($id) {
-            $followers = UsersFollowing::select('user_details.profile_pic', 'users_following.id')
+            $followers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users_following.id', 'users.first_name', 'users.last_name')
                     ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                    ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
                     ->where('users_following.following_user_id', '=', $id)
                     ->orderBy('users_following.id', 'DESC')
                     ->skip(5)

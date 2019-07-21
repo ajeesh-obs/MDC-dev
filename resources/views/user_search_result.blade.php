@@ -19,9 +19,9 @@
                             <a href="{{ route('other.profile.view', array(base64_encode($user['id']))) }}" style="cursor: pointer;">
                                 <h5 class="card-title font-weight-bold mb-0">{{$user['name']}}</h5>
                             </a>
-                            <!--                            <a tabindex="0" id="user-following" href="javascript://" class="text-uppercase text-white bg-transparent border-0 small" data-placement="top" data-popover-content="#user-following-popover-content">
-                                                            Following
-                                                        </a>-->
+<!--                            <a tabindex="0" id="user-following" href="javascript://" class="text-uppercase text-white bg-transparent border-0 small" data-placement="top" data-popover-content="#user-following-popover-content">
+                                Following
+                            </a>-->
                             <div id="user-following-popover-content" class="d-none">
                                 <ul class="list-inline m-0 following-list d-flex flex-row-reverse">
                                     <li class="list-inline-item">
@@ -69,16 +69,16 @@
                             </span>
                         </p>
                     </div>
-                    <!--                    <div class="card-footer">
-                                            <ul class="list-inline small m-0 text-uppercase d-flex flex-row justify-content-around">
-                                                <li class="list-inline-item">
-                                                    <a href="#" class="text-muted">5 Followers</a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="#" class="text-muted">Messages</a>
-                                                </li>
-                                            </ul>
-                                        </div>-->
+                    <div class="card-footer">
+                        <ul class="list-inline small m-0 text-uppercase d-flex flex-row justify-content-around">
+                            <li class="list-inline-item">
+                                <a href="#" class="text-muted">{{$user['followersCount']}} Followers</a>
+                            </li>
+                            <!--                                                <li class="list-inline-item">
+                                                                                <a href="#" class="text-muted">Messages</a>
+                                                                            </li>-->
+                        </ul>
+                    </div>
                 </div>
                 @endforeach
                 @endif
