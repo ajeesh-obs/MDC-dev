@@ -58,7 +58,7 @@
                                     MINDSET</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="javascript:void()">
+                                <a class="nav-link" href="{{ route('connect') }}"> 
                                     <i class="icon icon-connect filter-white"></i>
                                     CONNECT</a>
                             </li>

@@ -10,7 +10,7 @@
                 @foreach($userData as $index => $user)
                 <div class="card card-light rounded-0 mb-4">
                     <div class="card-body p-3">
-                        <div class="bg-cover bg-center mx-auto rounded-circle position-relative mb-3" @if ($user['image']) style="background-image: url('/images/profile/{{$user['image']}}');width: 140px; height: 140px;" @else style="background-image: url('/images/profile/no-profile.png'); width: 140px; height: 140px;"  @endif>
+                        <div class="bg-cover bg-center mx-auto rounded-circle position-relative mb-3" @if ($user['image']) style="background-image: url('/images/profile/thumbnail_{{$user['image']}}');width: 140px; height: 140px;" @else style="background-image: url('/images/profile/no-profile.png'); width: 140px; height: 140px;"  @endif>
                              <a tabindex="0" href="#" class="position-absolute" data-toggle="popover" data-placement="bottom" title="Level 3: Lorem ipsum" data-content="<a class='small text-muted' href='#'>LEARN MORE</a>" style="bottom: 0; left: 0">
  <!--                                <img src="{{ asset('img/badge-coach.png') }}" height="64">-->
                             </a>
@@ -72,7 +72,7 @@
                     <div class="card-footer">
                         <ul class="list-inline small m-0 text-uppercase d-flex flex-row justify-content-around">
                             <li class="list-inline-item">
-                                <a href="#" class="text-muted">{{$user['followersCount']}} Followers</a>
+                                <a href="javascript:void()" class="text-muted">{{$user['followersCount']}} Followers</a>
                             </li>
                             <!--                                                <li class="list-inline-item">
                                                                                 <a href="#" class="text-muted">Messages</a>
