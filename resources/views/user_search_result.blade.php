@@ -65,7 +65,8 @@
                         <p class="card-text">
                             <b>Expertise: </b>
                             <span class="text-white-50">
-                                {{$user['expertise']}}
+                                <!--{{$user['expertise']}}-->
+                                {{ str_limit($user['expertise'], $limit = 19, $end = '...') }}
                             </span>
                         </p>
                     </div>

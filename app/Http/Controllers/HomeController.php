@@ -173,7 +173,7 @@ class HomeController extends Controller {
                             $userExpertvalues[] = $userExpertise->expertise;
                         }
                     }
-                    $userCurrentExpertise = implode(",", $userExpertvalues);
+                    $userCurrentExpertise = implode(", ", $userExpertvalues);
                     $followersCount = UsersFollowing::where('following_user_id', '=', $user->id)->count();
 
 //                    $latestFollowings = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name', 'users.id as userId')
