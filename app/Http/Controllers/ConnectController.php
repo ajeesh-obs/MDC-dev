@@ -25,20 +25,123 @@ class ConnectController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index() {
+    public function index(Request $request) {
 
         if (!empty($this->loggedUserCheck())) {
             return $this->errorFunction();
         }
 
         $allExpertArr = array();
+        $usersList = [];
         $allExpertise = DB::table('user_expertise')->select('expertise')->distinct()->whereNull('deleted_at')->get();
         if ($allExpertise) {
             foreach ($allExpertise as $key => $allExpertise) {
                 $allExpertArr[$key] = $allExpertise->expertise;
             }
         }
-        return view('connect.index', compact('allExpertArr'));
+
+        // check the request coming from header user search or not
+        $keyword = $request->searchData;
+        if (!empty($keyword)) {
+
+            $usersData = User::select('user_details.profile_pic', 'users.first_name', 'users.last_name', 'users.id')
+                            ->leftjoin('user_details', 'user_details.user_id', '=', 'users.id')
+                            ->where('users.deleted_at', '=', NULL)
+                            ->where('users.is_active', '=', 1)
+                            ->where('users.id', '!=', Auth::id())
+//                            ->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")
+                            ->where('first_name', 'LIKE', "%$keyword%")
+                            ->orderBy('users.id', 'DESC')->get();
+
+            if ($usersData) {
+                foreach ($usersData as $data) {
+                    // get user expertises 
+                    $userExpertvalues = array();
+                    $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', $data->id)->orderBy('id', 'desc')->get();
+                    if ($userExpertise) {
+                        foreach ($userExpertise as $usrExpertise) {
+                            $userExpertvalues[] = $usrExpertise->expertise;
+                        }
+                    }
+                    $userCurrentExpertise = implode(", ", $userExpertvalues);
+                    // get followers count
+                    $followersCount = UsersFollowing::where('following_user_id', '=', $data->id)->count();
+                    // check logged user follow users
+                    $isFollowing = 0;
+                    $followExists = DB::table('users_following')->where([['user_id', '=', Auth::id()], ['following_user_id', '=', $data->id]])->first();
+                    if ($followExists) {
+                        $isFollowing = 1;
+                    }
+                    // get lastest following list
+                    $latestFollowings = UsersFollowing::select('user_details.profile_pic', 'users.first_name', 'users.last_name')
+                            ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.following_user_id')
+                            ->leftjoin('users', 'users.id', '=', 'users_following.following_user_id')
+                            ->where('users_following.user_id', '=', $data->id)
+                            ->orderBy('users_following.id', 'DESC')
+                            ->take(5)
+                            ->get();
+
+                    $res['id'] = $data->id;
+                    $res['image'] = $data->profile_pic;
+                    $res['name'] = $data->first_name . " " . $data->last_name;
+                    $res['expertise'] = $userCurrentExpertise;
+                    $res['followersCount'] = $followersCount;
+                    $res['isFollowing'] = $isFollowing;
+                    $res['latestFollowings'] = $latestFollowings;
+                    $usersList[] = $res;
+                }
+            }
+        }
+        // get Show All as default
+        else {
+            $getData = User::select('user_details.profile_pic', 'users.first_name', 'users.last_name', 'users.id')
+                            ->leftjoin('user_details', 'user_details.user_id', '=', 'users.id')
+                            ->where('users.deleted_at', '=', NULL)
+                            ->where('users.is_active', '=', 1)
+                            ->where('users.id', '!=', Auth::id())
+                            ->orderBy('users.id', 'DESC')->get();
+            if ($getData) {
+                foreach ($getData as $data) {
+
+                    // get user expertises 
+                    $userExpertvalues = array();
+                    $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', $data->id)->orderBy('id', 'desc')->get();
+                    if ($userExpertise) {
+                        foreach ($userExpertise as $usrExpertise) {
+                            $userExpertvalues[] = $usrExpertise->expertise;
+                        }
+                    }
+                    $userCurrentExpertise = implode(", ", $userExpertvalues);
+                    // get followers count
+                    $followersCount = UsersFollowing::where('following_user_id', '=', $data->id)->count();
+                    // check logged user follow users
+                    $isFollowing = 0;
+                    $followExists = DB::table('users_following')->where([['user_id', '=', Auth::id()], ['following_user_id', '=', $data->id]])->first();
+                    if ($followExists) {
+                        $isFollowing = 1;
+                    }
+                    // get lastest following list
+                    $latestFollowings = UsersFollowing::select('user_details.profile_pic', 'users.first_name', 'users.last_name')
+                            ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.following_user_id')
+                            ->leftjoin('users', 'users.id', '=', 'users_following.following_user_id')
+                            ->where('users_following.user_id', '=', $data->id)
+                            ->orderBy('users_following.id', 'DESC')
+                            ->take(5)
+                            ->get();
+
+                    $res['id'] = $data->id;
+                    $res['image'] = $data->profile_pic;
+                    $res['name'] = $data->first_name . " " . $data->last_name;
+                    $res['expertise'] = $userCurrentExpertise;
+                    $res['followersCount'] = $followersCount;
+                    $res['isFollowing'] = $isFollowing;
+                    $res['latestFollowings'] = $latestFollowings;
+                    $usersList[] = $res;
+                }
+            }
+        }
+
+        return view('connect.index', compact('allExpertArr', 'usersList'));
     }
 
     /*

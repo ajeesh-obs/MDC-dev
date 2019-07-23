@@ -135,7 +135,8 @@ class HomeController extends Controller {
         $list = "<ul id='country-list' clas='suggestion'>";
         if ($keyword) {
             // get users list from suggestions
-            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+//            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
             if ($users) {
                 foreach ($users as $user) {
 
@@ -307,6 +308,10 @@ class HomeController extends Controller {
             $followExists = DB::table('users_following')->where([['user_id', '=', Auth::id()], ['following_user_id', '=', $formData['id']]])->first();
             if ($followExists) {
                 return response()->json(array('status' => 'error', 'message' => 'Selected user already following'));
+            }
+            // check user id & follow id are same
+            if (Auth::id() == $formData['id']) {
+                return response()->json(array('status' => 'error', 'message' => 'This opeartion is not allowed'));
             }
             // save in user following
             $saveFollowing = UsersFollowing::create([

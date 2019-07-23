@@ -13,10 +13,10 @@
             </a>
             @if($user['isFollowing']) 
             <a tabindex="0" id="user-following" href="javascript://"
-               class="text-uppercase text-white bg-transparent border-0 small followingList" data-placement="top" data-popover-content="#user-following-popover-content">
+               class="text-uppercase text-white bg-transparent border-0 small followingList" data-placement="top" data-popover-content="#user-following-popover-content{{$user['id']}}">
                 Following
             </a>
-            <div id="user-following-popover-content" class="d-none followingLists">
+            <div id="user-following-popover-content{{$user['id']}}" class="d-none followingLists">
                 <ul class="list-inline m-0 following-list d-flex flex-row-reverse">
 
                     @if($user['latestFollowings']->count() > 0) 

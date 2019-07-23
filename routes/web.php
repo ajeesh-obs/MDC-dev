@@ -56,7 +56,9 @@ Route::post('/profileupdate', 'HomeController@profileUpdate')->name('myprofile.u
 
 
 Route::post('/users/search', 'HomeController@usersSearchSuggestions')->name('users.search');
-Route::get('/users/search/result', 'HomeController@usersSearchResult')->name('users.search.result');
+//Route::get('/users/search/result', 'HomeController@usersSearchResult')->name('users.search.result');
+Route::get('/users/search/result', 'ConnectController@index')->name('users.search.result');
+    
 Route::get('/other/profile/view/{id}', 'HomeController@otherProfileView')->name('other.profile.view');
 Route::post('/user/follow', 'HomeController@followUser')->name('user.follow');
 Route::post('/user/followers/all', 'HomeController@followersAll')->name('user.followers.all');
