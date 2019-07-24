@@ -136,7 +136,18 @@ class HomeController extends Controller {
         if ($keyword) {
             // get users list from suggestions
 //            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
-            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+//            $users = User::whereNull('deleted_at')->where('is_active', '=', 1)->where('id', '!=', Auth::id())->where('first_name', 'LIKE', "%$keyword%")->orderBy('users.id', 'desc')->get();
+            $users = User::whereNull('deleted_at')
+                    ->where('is_active', '=', 1)
+                    ->where('id', '!=', Auth::id())
+                    ->where(function($query) use($keyword) {
+                        $query->where('first_name', 'LIKE', "%$keyword%")
+                        ->orWhere('last_name', 'LIKE', "%$keyword%");
+                    })
+                    ->orderBy('users.id', 'desc')
+                    ->get();
+
+
             if ($users) {
                 foreach ($users as $user) {
 

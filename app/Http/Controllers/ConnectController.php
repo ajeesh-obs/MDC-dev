@@ -49,8 +49,12 @@ class ConnectController extends Controller {
                             ->where('users.deleted_at', '=', NULL)
                             ->where('users.is_active', '=', 1)
                             ->where('users.id', '!=', Auth::id())
+                            ->where(function($query) use($keyword) {
+                                $query->where('first_name', 'LIKE', "%$keyword%")
+                                ->orWhere('last_name', 'LIKE', "%$keyword%");
+                            })
 //                            ->where('first_name', 'LIKE', "%$keyword%")->orWhere('last_name', 'LIKE', "%$keyword%")
-                            ->where('first_name', 'LIKE', "%$keyword%")
+//                            ->where('first_name', 'LIKE', "%$keyword%")
                             ->orderBy('users.id', 'DESC')->get();
 
             if ($usersData) {
@@ -177,7 +181,11 @@ class ConnectController extends Controller {
                     ->where('users.id', '!=', Auth::id());
             if (!empty($searchByPersonLocationLevel)) {
 //                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+//                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                $getData->where(function($query) use($searchByPersonLocationLevel) {
+                    $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
+                            ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                });
             }
             $getData = $getData->orderBy('users.id', 'DESC')->get();
             if ($getData) {
@@ -243,7 +251,11 @@ class ConnectController extends Controller {
                     ->where('users_following.following_user_id', '=', Auth::id());
             if (!empty($searchByPersonLocationLevel)) {
 //                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+//                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                $followersData->where(function($query) use($searchByPersonLocationLevel) {
+                    $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
+                            ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                });
             }
             $followersData = $followersData->orderBy('users_following.id', 'DESC')->get();
 
@@ -310,7 +322,11 @@ class ConnectController extends Controller {
                     ->where('users_following.user_id', '=', Auth::id());
             if (!empty($searchByPersonLocationLevel)) {
 //                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-                $followingData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+//                $followingData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                $followingData->where(function($query) use($searchByPersonLocationLevel) {
+                    $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
+                            ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
+                });
             }
             $followingData = $followingData->orderBy('users_following.id', 'DESC')->get();
 
