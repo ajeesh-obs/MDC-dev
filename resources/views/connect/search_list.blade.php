@@ -31,7 +31,7 @@
                 </ul>
             </div>
             @else 
-            <a>
+            <a class="text-uppercase text-white bg-transparent border-0 small">
                 Follow
             </a>
             @endif
