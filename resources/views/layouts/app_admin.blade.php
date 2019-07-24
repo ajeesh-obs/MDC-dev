@@ -246,9 +246,11 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                                <img class="rounded-circle ml-2"
-                                     src="{{ asset('img/profile1.jpg') }}"
-                                     alt="Generic placeholder image" width="40" height="40">
+                                @if(isset($LoginUserProfilePic)) 
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$LoginUserProfilePic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
                             </a>
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
                                 <!--<a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>-->
@@ -289,364 +291,364 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
         <script type="text/javascript">
-            $(document).ready(function () {
-            $("#navbarDropdown2").click(function () {
-            $(".profileSettingsDiv").toggle();
-            });
-            // profile edit page toggle items  
-            $(".profileEducationPopup").click(function () {
-            $(".profileEducationDiv").toggle();
-            });
-            $(".profileCertificationsPopup").click(function () {
-            $(".profileCertificationsDiv").toggle();
-            });
-            $(".profileAwardsPopup").click(function () {
-            $(".profileAwardsDiv").toggle();
-            });
-            $(".profileConferencesPopup").click(function () {
-            $(".profileConferencesDiv").toggle();
-            });
-            $(".profileVolunteerPopup").click(function () {
-            $(".profileVolunteerDiv").toggle();
-            });
-            $(".profileHobbiesPopup").click(function () {
-            $(".profileHobbiesDiv").toggle();
-            });
-            $(".profileIncomePopup").click(function () {
-            $(".profileIncomeDiv").toggle();
-            });
-            //hide message div automaticaly
-            $('.displayMsgDiv').delay(2000).fadeOut('slow');
-            $(".userActivityFilter").change(function () {
-            userFilterList();
-            /*var userActivityFilter = $(".userActivityFilter").val();
-             $.ajax({
-             url:'/userslist?userActivityFilter='+userActivityFilter,
-             success:function(data)
-             {  
-             $(".userlisttbody").html("");
-             $(".userlisttbody").html(data);
-             }
-             })*/
-            });
-            $(".userRoleFilter").change(function () {
-            userFilterList();
-            /*var userRoleFilter = $(".userRoleFilter").val();
-             $.ajax({
-             url:'/userslist?userRoleFilter='+userRoleFilter,
-             success:function(data)
-             {  
-             $(".userlisttbody").html("");
-             $(".userlisttbody").html(data);
-             }
-             })*/
-            });
-            function userFilterList(){
-            var userActivityFilter = $(".userActivityFilter").val();
-            var userRoleFilter = $(".userRoleFilter").val();
-            $.ajax({
-            url:'/admin/userslist?userRoleFilter=' + userRoleFilter + '&userActivityFilter=' + userActivityFilter,
-                    success:function(data)
-                    {
-                    $(".userlisttbody").html("");
-                    $(".userlisttbody").html(data);
-                    }
-            })
-            }
+$(document).ready(function () {
+$("#navbarDropdown2").click(function () {
+$(".profileSettingsDiv").toggle();
+});
+// profile edit page toggle items  
+$(".profileEducationPopup").click(function () {
+$(".profileEducationDiv").toggle();
+});
+$(".profileCertificationsPopup").click(function () {
+$(".profileCertificationsDiv").toggle();
+});
+$(".profileAwardsPopup").click(function () {
+$(".profileAwardsDiv").toggle();
+});
+$(".profileConferencesPopup").click(function () {
+$(".profileConferencesDiv").toggle();
+});
+$(".profileVolunteerPopup").click(function () {
+$(".profileVolunteerDiv").toggle();
+});
+$(".profileHobbiesPopup").click(function () {
+$(".profileHobbiesDiv").toggle();
+});
+$(".profileIncomePopup").click(function () {
+$(".profileIncomeDiv").toggle();
+});
+//hide message div automaticaly
+$('.displayMsgDiv').delay(2000).fadeOut('slow');
+$(".userActivityFilter").change(function () {
+userFilterList();
+/*var userActivityFilter = $(".userActivityFilter").val();
+ $.ajax({
+ url:'/userslist?userActivityFilter='+userActivityFilter,
+ success:function(data)
+ {  
+ $(".userlisttbody").html("");
+ $(".userlisttbody").html(data);
+ }
+ })*/
+});
+$(".userRoleFilter").change(function () {
+userFilterList();
+/*var userRoleFilter = $(".userRoleFilter").val();
+ $.ajax({
+ url:'/userslist?userRoleFilter='+userRoleFilter,
+ success:function(data)
+ {  
+ $(".userlisttbody").html("");
+ $(".userlisttbody").html(data);
+ }
+ })*/
+});
+function userFilterList(){
+var userActivityFilter = $(".userActivityFilter").val();
+var userRoleFilter = $(".userRoleFilter").val();
+$.ajax({
+url:'/admin/userslist?userRoleFilter=' + userRoleFilter + '&userActivityFilter=' + userActivityFilter,
+        success:function(data)
+        {
+        $(".userlisttbody").html("");
+        $(".userlisttbody").html(data);
+        }
+})
+}
 
-            $(document).on('click', '.user-delete', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var currentactivity = $(this).data('currentactivity');
-            var msg = "";
-            if(currentactivity == 1){
-                msg = "Do you want to Inactive the user";
-            }
-            else {
-                msg = "Do you want to Active the user";
-            }
-            swal({
-            title: "Are you sure?",
-                    text: msg,
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "No, cancel",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-            },
-                    function (isConfirm) {
-                    if (isConfirm) {
-                    $.ajax({
-                    headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                            type: 'delete',
-                            url: '/admin/users/changeactivity/' + id,
-                            success: function (data) {
-                            swal({
-                            text: data.message,
-                                    title: 'Success!',
-                                    type: "success",
-                                    timer: 2000,
-                                    showCancelButton: false, //There won't be any cancle button
-                                    showConfirmButton: false
-                            },
-                                    function () {
-                                    location.reload();
-                                    })
-                            }
-                    });
-                    } else {
-                    swal({
-                    title: 'Cancelled!',
-                            type: "info", showConfirmButton: false, timer: 1000
-                    });
-                    e.preventDefault();
-                    }
-                    });
-            });
-            $(document).on('change', 'input:checkbox.userRoleSetting', function (e) {
-            e.preventDefault();
-            var ischecked = $(this).is(':checked');
-            var role_id = $(this).val();
-            var user_id = $(this).attr("data-userid");
-            if (role_id && user_id){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('role.modify') }}',
-                    data: {'ischecked': ischecked, 'role_id': role_id, 'user_id': user_id},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $("input:checkbox.roleModulePermissionSetting").change(function(e) {
-            e.preventDefault();
-            var ischecked = $(this).is(':checked');
-            var module_id = $(this).val();
-            var role_id = $(this).attr("data-roleid");
-            if (role_id && module_id){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('permission.modify') }}',
-                    data: {'ischecked': ischecked, 'role_id': role_id, 'module_id': module_id},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $("#saveRoleBtn").click(function() {
-            var roleName = $("#roleName").val();
-            var is_service_provider = $('#is_service_provider:checkbox:checked').length;
-            if (roleName){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('admin.role.save') }}',
-                    data: {'roleName': roleName, 'is_service_provider':is_service_provider},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $("#saveMemberBtn").click(function() {
-            var firstName = $("#firstName").val();
-            var lastName = $("#lastName").val();
-            var email = $("#email").val();
-            var confirmEmail = $("#confirmEmail").val();
-            var userRole = $("#userRole").val();
-            if (email && firstName){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('member.save') }}',
-                    data: {'firstName': firstName, 'lastName':lastName, 'email': email, 'confirmEmail': confirmEmail, 'userRole': userRole},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $(".editmember").click(function() {
+$(document).on('click', '.user-delete', function (e) {
+e.preventDefault();
+var id = $(this).data('id');
+var currentactivity = $(this).data('currentactivity');
+var msg = "";
+if (currentactivity == 1){
+msg = "Do you want to Inactive the user";
+}
+else {
+msg = "Do you want to Active the user";
+}
+swal({
+title: "Are you sure?",
+        text: msg,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No, cancel",
+        closeOnConfirm: false,
+        closeOnCancel: false
+},
+        function (isConfirm) {
+        if (isConfirm) {
+        $.ajax({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+                type: 'delete',
+                url: '/admin/users/changeactivity/' + id,
+                success: function (data) {
+                swal({
+                text: data.message,
+                        title: 'Success!',
+                        type: "success",
+                        timer: 2000,
+                        showCancelButton: false, //There won't be any cancle button
+                        showConfirmButton: false
+                },
+                        function () {
+                        location.reload();
+                        })
+                }
+        });
+        } else {
+        swal({
+        title: 'Cancelled!',
+                type: "info", showConfirmButton: false, timer: 1000
+        });
+        e.preventDefault();
+        }
+        });
+});
+$(document).on('change', 'input:checkbox.userRoleSetting', function (e) {
+e.preventDefault();
+var ischecked = $(this).is(':checked');
+var role_id = $(this).val();
+var user_id = $(this).attr("data-userid");
+if (role_id && user_id){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('role.modify') }}',
+        data: {'ischecked': ischecked, 'role_id': role_id, 'user_id': user_id},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$("input:checkbox.roleModulePermissionSetting").change(function(e) {
+e.preventDefault();
+var ischecked = $(this).is(':checked');
+var module_id = $(this).val();
+var role_id = $(this).attr("data-roleid");
+if (role_id && module_id){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('permission.modify') }}',
+        data: {'ischecked': ischecked, 'role_id': role_id, 'module_id': module_id},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$("#saveRoleBtn").click(function() {
+var roleName = $("#roleName").val();
+var is_service_provider = $('#is_service_provider:checkbox:checked').length;
+if (roleName){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('admin.role.save') }}',
+        data: {'roleName': roleName, 'is_service_provider':is_service_provider},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$("#saveMemberBtn").click(function() {
+var firstName = $("#firstName").val();
+var lastName = $("#lastName").val();
+var email = $("#email").val();
+var confirmEmail = $("#confirmEmail").val();
+var userRole = $("#userRole").val();
+if (email && firstName){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('member.save') }}',
+        data: {'firstName': firstName, 'lastName':lastName, 'email': email, 'confirmEmail': confirmEmail, 'userRole': userRole},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$(".editmember").click(function() {
 
-            var id = $(this).data('id');
-            var lname = $(this).data('lname');
-            var fname = $(this).data('fname');
-            var email = $(this).data('email');
-            if (id){
+var id = $(this).data('id');
+var lname = $(this).data('lname');
+var fname = $(this).data('fname');
+var email = $(this).data('email');
+if (id){
 
-            $("#editServiceProviderfirstName").val(fname);
-            $("#editServiceProviderlastName").val(lname);
-            $("#editServiceProvideremail").val(email);
-            $("#editServiceProviderid").val(id);
-            $("#collapseEditMember").show();
-            }
-            });
-            $("#editServiceProviderBtn").click(function() {
-            var firstName = $("#editServiceProviderfirstName").val();
-            var lastName = $("#editServiceProviderlastName").val();
-            var id = $("#editServiceProviderid").val();
-            if (id && firstName){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('member.update') }}',
-                    data: {'firstName': firstName, 'lastName':lastName, 'id': id},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $(document).on('click', '.edituser', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var lname = $(this).data('lname');
-            var fname = $(this).data('fname');
-            var email = $(this).data('email');
-            if (id){
+$("#editServiceProviderfirstName").val(fname);
+$("#editServiceProviderlastName").val(lname);
+$("#editServiceProvideremail").val(email);
+$("#editServiceProviderid").val(id);
+$("#collapseEditMember").show();
+}
+});
+$("#editServiceProviderBtn").click(function() {
+var firstName = $("#editServiceProviderfirstName").val();
+var lastName = $("#editServiceProviderlastName").val();
+var id = $("#editServiceProviderid").val();
+if (id && firstName){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('member.update') }}',
+        data: {'firstName': firstName, 'lastName':lastName, 'id': id},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$(document).on('click', '.edituser', function (e) {
+e.preventDefault();
+var id = $(this).data('id');
+var lname = $(this).data('lname');
+var fname = $(this).data('fname');
+var email = $(this).data('email');
+if (id){
 
-            $("#editUserfirstName").val(fname);
-            $("#editUserlastName").val(lname);
-            $("#editUseremail").val(email);
-            $("#editUserid").val(id);
-            $("#collapseEditUser").show();
-            }
-            });
-            $("#editUserBtn").click(function() {
-            var firstName = $("#editUserfirstName").val();
-            var lastName = $("#editUserlastName").val();
-            var id = $("#editUserid").val();
-            if (id && firstName){
-            $.ajax({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-                    type: 'post',
-                    url: '{{ route('member.update') }}',
-                    data: {'firstName': firstName, 'lastName':lastName, 'id': id},
-                    success: function (data) {
-                    swal({
-                    text: data.message,
-                            title: 'Success!',
-                            type: data.status,
-                            timer: 2000,
-                            showCancelButton: false,
-                            showConfirmButton: false
-                    })
-                            if (data.status == 'success') {
-                    setTimeout(function(){
-                    window.location.reload();
-                    }, 1000);
-                    }
-                    }
-            })
-            }
-            });
-            $(document).on('click', '.addMemberCloseBtn', function (e) {
-            e.preventDefault();
-            $(".addMemberDiv").hide();
-            });
-            $(document).on('click', '.addMemberAddBtn', function (e) {
-            e.preventDefault();
-            $(".addMemberDiv").show();
-            });
-            $(document).on('click', '.editMemberCloseBtn', function (e) {
-            e.preventDefault();
-            $("#collapseEditUser").hide();
-            });
-            $(document).on('click', '.addRoleCloseBtn', function (e) {
-            e.preventDefault();
-            $("#collapseAddRole").hide();
-            });
-            $(document).on('click', '.addRoleBtn', function (e) {
-            e.preventDefault();
-            $("#collapseAddRole").show();
-            });
-            $(document).on('click', '.editServiceProvidersCloseBtn', function (e) {
-            e.preventDefault();
-            $("#collapseEditMember").hide();
-            });
-            });
+$("#editUserfirstName").val(fname);
+$("#editUserlastName").val(lname);
+$("#editUseremail").val(email);
+$("#editUserid").val(id);
+$("#collapseEditUser").show();
+}
+});
+$("#editUserBtn").click(function() {
+var firstName = $("#editUserfirstName").val();
+var lastName = $("#editUserlastName").val();
+var id = $("#editUserid").val();
+if (id && firstName){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('member.update') }}',
+        data: {'firstName': firstName, 'lastName':lastName, 'id': id},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$(document).on('click', '.addMemberCloseBtn', function (e) {
+e.preventDefault();
+$(".addMemberDiv").hide();
+});
+$(document).on('click', '.addMemberAddBtn', function (e) {
+e.preventDefault();
+$(".addMemberDiv").show();
+});
+$(document).on('click', '.editMemberCloseBtn', function (e) {
+e.preventDefault();
+$("#collapseEditUser").hide();
+});
+$(document).on('click', '.addRoleCloseBtn', function (e) {
+e.preventDefault();
+$("#collapseAddRole").hide();
+});
+$(document).on('click', '.addRoleBtn', function (e) {
+e.preventDefault();
+$("#collapseAddRole").show();
+});
+$(document).on('click', '.editServiceProvidersCloseBtn', function (e) {
+e.preventDefault();
+$("#collapseEditMember").hide();
+});
+});
         </script>
-        
+
         @yield('script')
     </body>
 </html>

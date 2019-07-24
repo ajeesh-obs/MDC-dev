@@ -32,8 +32,16 @@ class SystemController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $levels = DB::table('level')->whereNull('deleted_at')->orderBy('id', 'asc')->get();
-        return view('system.index', compact('levels'));
+        return view('system.index', compact('levels', 'LoginUserProfilePic'));
     }
 
     /*

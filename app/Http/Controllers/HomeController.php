@@ -582,7 +582,7 @@ class HomeController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
-        return view('mindset',compact('LoginUserProfilePic'));
+        return view('mindset', compact('LoginUserProfilePic'));
     }
 
     /*
@@ -594,10 +594,19 @@ class HomeController extends Controller {
 
         $isadmin = session('isadmin');
         if (!empty($isadmin)) {
+
+            $LoginUserProfilePic = "";
+            $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+            if ($userDetails) {
+                if ($userDetails->profile_pic) {
+                    $LoginUserProfilePic = $userDetails->profile_pic;
+                }
+            }
+
             $user = Auth::user();
             $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
 
-            return view('admin.home', compact('user', 'userDetails'));
+            return view('admin.home', compact('user', 'userDetails', 'LoginUserProfilePic'));
         }
         return Redirect::to('/');
         //$message = "Page Not Found";

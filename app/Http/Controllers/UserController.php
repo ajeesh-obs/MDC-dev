@@ -66,6 +66,14 @@ class UserController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $roles = DB::table('roles')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoleRelations = DB::table('user_role_relations')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoles = array();
@@ -145,7 +153,7 @@ class UserController extends Controller {
         }
         //print_r($serviceProviders);exit;
 
-        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles', 'modules', 'modulePermissions', 'serviceProviders'));
+        return view('user.userslist', compact('users', 'roles', 'userRoleRelations', 'userRoles', 'modules', 'modulePermissions', 'serviceProviders', 'LoginUserProfilePic'));
     }
 
     /*
