@@ -40,8 +40,10 @@ class SystemController extends Controller {
             }
         }
 
-        $levels = DB::table('level')->whereNull('deleted_at')->orderBy('id', 'asc')->get();
-        return view('system.index', compact('levels', 'LoginUserProfilePic'));
+        $levels = DB::table('level')->whereNull('deleted_at')->where('is_default', 0)->orderBy('id', 'asc')->get();
+        $levelsDefault = DB::table('level')->whereNull('deleted_at')->where('is_default', 1)->orderBy('id', 'asc')->first();
+
+        return view('system.index', compact('levels', 'levelsDefault', 'LoginUserProfilePic'));
     }
 
     /*
@@ -109,6 +111,72 @@ class SystemController extends Controller {
             } else {
                 return redirect()->route('admin.system')->withErrors($validation)->withInput();
             }
+        }
+        return redirect()->route('admin.system');
+    }
+
+    /*
+     * update deafult level
+     * 
+     */
+
+    public function updateDefaultLevel(Request $request) {
+
+        if ($request->isMethod('post')) {
+
+            $formData = $request->all();
+            $validation = Validator::make($formData, [
+//                        'title' => ['required', 'string', 'max:255'],
+                        'defaultLevel' => ['required', 'string', 'max:255'],
+                        'defaultimage' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                        'defaultDescription' => ['required', 'string', 'max:8000'],
+                        'defaultPrice' => ['numeric'],
+//                        'legacy' => ['numeric'],
+//                        'coins' => ['numeric'],
+            ]);
+            if ($validation->fails()) {
+                return redirect()->route('admin.system')->withErrors($validation)->withInput();
+            }
+
+            $update = DB::table('level')->where('is_default', '=', 1)->update(
+                    array(
+                        'title' => $formData['defaultTitle'],
+                        'level' => $formData['defaultLevel'],
+                        'price' => $formData['defaultPrice'],
+                        'description' => $formData['defaultDescription'],
+                        'discount_code' => $formData['defaultDiscountCode'],
+                    )
+            );
+            //if ($update) {
+            // upload image if exists
+            $filename = NULL;
+            if (isset($formData['defaultimage'])) {
+                $file = $formData['defaultimage'];
+                $image_path = '';
+                if ($file) {
+                    $fileArray = array('image' => $file);
+                    $rand = rand(11111, 99999);
+                    $filename = md5(Auth::id() . '-' . strtotime(date('Y-m-d H:i:s')) . $rand) . '.' . $file->getClientOriginalExtension();
+                    $thumbFilename = 'thumbnail_' . md5(Auth::id() . '-' . strtotime(date('Y-m-d H:i:s')) . $rand) . '.' . $file->getClientOriginalExtension();
+
+                    $imagePath = 'images/level/' . $filename;
+                    $thumbImagePath = 'images/level/' . $thumbFilename;
+
+                    $image = Image::make($file->getRealPath());
+                    $image->save($imagePath);
+                    $image->resize(300, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($thumbImagePath);
+                }
+            }
+
+            if (!empty($filename)) {
+                DB::table('level')->where('is_default', '=', 1)->update(array('badge' => $filename));
+            }
+            return redirect()->route('admin.system')->with('message', 'Level modified successfully');
+//            } else {
+//                return redirect()->route('admin.system')->withErrors($validation)->withInput();
+//            }
         }
         return redirect()->route('admin.system');
     }

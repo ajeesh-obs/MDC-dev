@@ -6,7 +6,7 @@
         width:33%;
         float:left;
         background-color: #2D2929 !important;
-        min-height: 57% !important;
+        min-height: 72% !important;
         border:1px solid #fff;
     }
     .centerAlign {
@@ -45,6 +45,77 @@
                 {{ session()->get('message') }}
             </div>
             @endif
+
+            <!--Default level listing starts-->
+            @if($levelsDefault)
+            <div class="sectionDiv">
+                <div class="table-responsive">
+                    <form id="levelEditForm" method="POST" action="{{ route('admin.level.update') }}" enctype="multipart/form-data">
+                        @csrf
+                        <table class="table table-hover mb-2 levelListTable">
+                            <tr>
+                                <td style="float:right;" class="borderNone">
+                                    <a href="javascript:void(0)" class="ml-3" onclick="document.getElementById('levelEditForm').submit();"><img src="{{ asset('img/grey-pencil.png') }}"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="centerAlign borderNone">
+                                    <input type="text" name="defaultTitle" value="{{ old('defaultTitle', $levelsDefault->title)}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Title">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="borderNone">
+                                    <input type="text" name="defaultLevel" value="{{ old('defaultLevel', $levelsDefault->level)}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Duration/Month">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="centerAlign borderNone"> 
+                                    @if ($levelsDefault->badge)
+                                    @if (file_exists(public_path().'/images/level/'.$levelsDefault->badge))
+                                    <img id="eventImageUploaded" src="{{ asset('images/level/thumbnail_'.$levelsDefault->badge) }}" classc="img-thumbnail img-fluid" height="150" width="150">
+                                    @endif
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="borderNone">
+                                    <input type="file" name="defaultimage" class="form-control form-control-sm text-white-50 bg-transparent displayContent">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="borderNone">
+                                    <input type="text" name="defaultPrice" value="{{ old('defaultPrice', $levelsDefault->price)}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Price">
+                                </td>
+                            </tr>
+                            <tr stylec="display:none;">
+                                <td class="borderNone">
+                                    <p style="margin-left: 58px;">
+                                        Limitations: <br>
+                                        <input type="checkbox">Legacy <br>
+                                        <input type="checkbox">Master Group <br>
+                                        <input type="checkbox">Messaging <br>
+                                        <input type="checkbox">Connect <br>
+                                        <input type="checkbox">Master Class <br>
+                                        <input type="checkbox">Mindset <br>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="borderNone">
+                                    <textarea style="color: #fff !important;" name="defaultDescription" class="form-control form-control-sm bg-transparent" >{{ old('defaultDescription', $levelsDefault->description)}}</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="borderNone">
+                                    <input type="text" name="defaultDiscountCode" value="{{ old('defaultDiscountCode', $levelsDefault->discount_code)}}" class="form-control form-control-sm bg-transparent displayContent" placeholder="Discount Code">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            @endif
+            <!-- Default level listing ends -->
 
             <!--Level listing starts-->
             @if($levels->count() > 0)

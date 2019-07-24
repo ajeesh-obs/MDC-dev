@@ -41,6 +41,7 @@ Route::prefix('admin')->group(function() {
 
     Route::get('/system', 'SystemController@index')->name('admin.system');
     Route::post('/level/save', 'SystemController@newLevel')->name('admin.level.save');
+    Route::post('/level/update', 'SystemController@updateDefaultLevel')->name('admin.level.update');
     Route::delete('/level/delete/{id}', 'SystemController@deleteLevel')->name('admin.level.delete');
 });
 
@@ -58,7 +59,7 @@ Route::post('/profileupdate', 'HomeController@profileUpdate')->name('myprofile.u
 Route::post('/users/search', 'HomeController@usersSearchSuggestions')->name('users.search');
 //Route::get('/users/search/result', 'HomeController@usersSearchResult')->name('users.search.result');
 Route::get('/users/search/result', 'ConnectController@index')->name('users.search.result');
-    
+
 Route::get('/other/profile/view/{id}', 'HomeController@otherProfileView')->name('other.profile.view');
 Route::post('/user/follow', 'HomeController@followUser')->name('user.follow');
 Route::post('/user/followers/all', 'HomeController@followersAll')->name('user.followers.all');
