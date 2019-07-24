@@ -295,7 +295,7 @@
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
 
-                                @if(isset($LoginUserProfilePic)) 
+                                @if($LoginUserProfilePic)
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$LoginUserProfilePic) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">

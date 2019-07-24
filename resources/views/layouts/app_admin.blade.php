@@ -246,7 +246,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                                @if(isset($LoginUserProfilePic)) 
+
+                                @if($LoginUserProfilePic)
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$LoginUserProfilePic) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
@@ -354,7 +355,7 @@ url:'/admin/userslist?userRoleFilter=' + userRoleFilter + '&userActivityFilter='
         $(".userlisttbody").html(data);
         }
 })
-}
+        }
 
 $(document).on('click', '.user-delete', function (e) {
 e.preventDefault();
@@ -377,7 +378,7 @@ title: "Are you sure?",
         cancelButtonText: "No, cancel",
         closeOnConfirm: false,
         closeOnCancel: false
-},
+        },
         function (isConfirm) {
         if (isConfirm) {
         $.ajax({
@@ -418,7 +419,7 @@ if (role_id && user_id){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('role.modify') }}',
         data: {'ischecked': ischecked, 'role_id': role_id, 'user_id': user_id},
@@ -438,7 +439,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $("input:checkbox.roleModulePermissionSetting").change(function(e) {
 e.preventDefault();
@@ -449,7 +450,7 @@ if (role_id && module_id){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('permission.modify') }}',
         data: {'ischecked': ischecked, 'role_id': role_id, 'module_id': module_id},
@@ -469,7 +470,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $("#saveRoleBtn").click(function() {
 var roleName = $("#roleName").val();
@@ -478,7 +479,7 @@ if (roleName){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('admin.role.save') }}',
         data: {'roleName': roleName, 'is_service_provider':is_service_provider},
@@ -498,7 +499,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $("#saveMemberBtn").click(function() {
 var firstName = $("#firstName").val();
@@ -510,7 +511,7 @@ if (email && firstName){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('member.save') }}',
         data: {'firstName': firstName, 'lastName':lastName, 'email': email, 'confirmEmail': confirmEmail, 'userRole': userRole},
@@ -530,7 +531,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $(".editmember").click(function() {
 
@@ -555,7 +556,7 @@ if (id && firstName){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('member.update') }}',
         data: {'firstName': firstName, 'lastName':lastName, 'id': id},
@@ -575,7 +576,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $(document).on('click', '.edituser', function (e) {
 e.preventDefault();
@@ -600,7 +601,7 @@ if (id && firstName){
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+        },
         type: 'post',
         url: '{{ route('member.update') }}',
         data: {'firstName': firstName, 'lastName':lastName, 'id': id},
@@ -620,7 +621,7 @@ headers: {
         }
         }
 })
-}
+        }
 });
 $(document).on('click', '.addMemberCloseBtn', function (e) {
 e.preventDefault();
