@@ -26,6 +26,7 @@ class HomeController extends Controller {
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->superAdminId = 1;
     }
 
     /**
@@ -148,6 +149,7 @@ class HomeController extends Controller {
             $users = User::whereNull('deleted_at')
                     ->where('is_active', '=', 1)
                     ->where('id', '!=', Auth::id())
+                    ->where('id', '!=', $this->superAdminId) // avoid super admin 
                     ->where(function($query) use($keyword) {
                         $query->where('first_name', 'LIKE', "%$keyword%")
                         ->orWhere('last_name', 'LIKE', "%$keyword%");

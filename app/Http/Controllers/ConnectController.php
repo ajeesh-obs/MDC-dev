@@ -18,6 +18,7 @@ class ConnectController extends Controller {
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->superAdminId = 1;
     }
 
     /**
@@ -57,6 +58,7 @@ class ConnectController extends Controller {
                             ->where('users.deleted_at', '=', NULL)
                             ->where('users.is_active', '=', 1)
                             ->where('users.id', '!=', Auth::id())
+                            ->where('users.id', '!=', $this->superAdminId) // avoid super admin 
                             ->where(function($query) use($keyword) {
                                 $query->where('first_name', 'LIKE', "%$keyword%")
                                 ->orWhere('last_name', 'LIKE', "%$keyword%");
@@ -111,6 +113,7 @@ class ConnectController extends Controller {
                             ->where('users.deleted_at', '=', NULL)
                             ->where('users.is_active', '=', 1)
                             ->where('users.id', '!=', Auth::id())
+                            ->where('users.id', '!=', $this->superAdminId) // avoid super admin 
                             ->orderBy('users.id', 'DESC')->get();
             if ($getData) {
                 foreach ($getData as $data) {
@@ -186,7 +189,10 @@ class ConnectController extends Controller {
                     ->leftjoin('user_details', 'user_details.user_id', '=', 'users.id')
                     ->where('users.deleted_at', '=', NULL)
                     ->where('users.is_active', '=', 1)
-                    ->where('users.id', '!=', Auth::id());
+                    ->where('users.id', '!=', Auth::id())
+                    ->where('users.id', '!=', $this->superAdminId) // avoid super admin 
+            ;
+
             if (!empty($searchByPersonLocationLevel)) {
 //                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
 //                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
@@ -256,7 +262,9 @@ class ConnectController extends Controller {
             $followersData = UsersFollowing::select('user_details.profile_pic', 'users.id', 'users.first_name', 'users.last_name')
                     ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
                     ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
-                    ->where('users_following.following_user_id', '=', Auth::id());
+                    ->where('users_following.following_user_id', '=', Auth::id())
+//                    ->where('users_following.following_user_id', '!=', $this->superAdminId) // avoid super admin 
+                    ;
             if (!empty($searchByPersonLocationLevel)) {
 //                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
 //                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
@@ -327,7 +335,9 @@ class ConnectController extends Controller {
             $followingData = UsersFollowing::select('user_details.profile_pic', 'users.id', 'users.first_name', 'users.last_name')
                     ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.following_user_id')
                     ->leftjoin('users', 'users.id', '=', 'users_following.following_user_id')
-                    ->where('users_following.user_id', '=', Auth::id());
+                    ->where('users_following.user_id', '=', Auth::id())
+//                    ->where('users_following.user_id', '!=', $this->superAdminId) // avoid super admin 
+                    ;
             if (!empty($searchByPersonLocationLevel)) {
 //                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
 //                $followingData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
