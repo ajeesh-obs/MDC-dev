@@ -31,6 +31,14 @@ class ConnectController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $allExpertArr = array();
         $usersList = [];
         $allExpertise = DB::table('user_expertise')->select('expertise')->distinct()->whereNull('deleted_at')->get();
@@ -145,7 +153,7 @@ class ConnectController extends Controller {
             }
         }
 
-        return view('connect.index', compact('allExpertArr', 'usersList'));
+        return view('connect.index', compact('allExpertArr', 'usersList', 'LoginUserProfilePic'));
     }
 
     /*

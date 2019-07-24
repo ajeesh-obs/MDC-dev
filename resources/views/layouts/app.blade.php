@@ -294,9 +294,12 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                                <img class="rounded-circle ml-2"
-                                     src="{{ asset('img/profile1.jpg') }}"
-                                     alt="Generic placeholder image" width="40" height="40">
+
+                                @if(isset($LoginUserProfilePic)) 
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$LoginUserProfilePic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
                             </a>
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
                                 <a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>
@@ -337,80 +340,80 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
         <script type="text/javascript">
-                                    $(document).ready(function () {
-                                    $("#navbarDropdown2").click(function () {
-                                    $(".profileSettingsDiv").toggle();
-                                    });
-                                    //hide message div automaticaly
-                                    $('.displayMsgDiv').delay(2000).fadeOut('slow');
-                                    $(".memberPasswordUpdateBtn").click(function() {
-                                    var email = $("#memberresetpasswordemail").val();
-                                    var password = $("#memberresetpassword").val();
-                                    var passwordconfirm = $("#memberresetpasswordconfirm").val();
-                                    var id = $("#memberresetpasswordid").val();
-                                    if (id && email){
-                                    $.ajax({
-                                    headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                    },
-                                            type: 'post',
-                                            url: '{{ route('member.passordreset') }}',
-                                            data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
-                                            success: function (data) {
-                                            swal({
-                                            text: data.message,
-                                                    title: 'Success!',
-                                                    type: data.status,
-                                                    timer: 2000,
-                                                    showCancelButton: false,
-                                                    showConfirmButton: false
-                                            })
-                                                    if (data.status == 'success') {
-                                            setTimeout(function(){
-                                            window.location.href = '{{url("/")}}'; //window.location.reload();
-                                            }, 1000);
-                                            }
-                                            }
-                                    })
-                                    }
-                                    });
-                                    $("#usersSearchBtn").click(function () {
-                                    $(".collapseSearchUsers").val('');
-                                    $("#collapseSearch").toggle();
-                                    });
-                                    $(document).on('keyup', '.collapseSearchUsers', function (e) {
-                                    e.preventDefault();
-                                    var val = $(this).val();
-                                    if (val){
-                                    $.ajax({
-                                    headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                    },
-                                            type: "POST",
-                                            url: '{{ route('users.search') }}',
-                                            data: {'keyword': val},
-                                            beforeSend: function(){
-                                            $("#collapseSearch").css("background", "#FFF");
-                                            },
-                                            success: function(data){
-                                            $("#suggesstion-box").show();
-                                            $("#suggesstion-box").html(data);
-                                            $("#collapseSearch").css("background", "#FFF");
-                                            }
-                                    });
-                                    }
-                                    else {
-                                    $("#suggesstion-box").html("");
-                                    }
-                                    });
-                                    $(document).on('click', '.userSuggesionLink', function (e) {
-                                    e.preventDefault();
-                                    var searchData = $(".collapseSearchUsers").val();
-                                    if (searchData){
-                                    window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
-                                    }
-                                    });
-                                    });
+$(document).ready(function () {
+$("#navbarDropdown2").click(function () {
+$(".profileSettingsDiv").toggle();
+});
+//hide message div automaticaly
+$('.displayMsgDiv').delay(2000).fadeOut('slow');
+$(".memberPasswordUpdateBtn").click(function() {
+var email = $("#memberresetpasswordemail").val();
+var password = $("#memberresetpassword").val();
+var passwordconfirm = $("#memberresetpasswordconfirm").val();
+var id = $("#memberresetpasswordid").val();
+if (id && email){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: 'post',
+        url: '{{ route('member.passordreset') }}',
+        data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
+        success: function (data) {
+        swal({
+        text: data.message,
+                title: 'Success!',
+                type: data.status,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+        })
+                if (data.status == 'success') {
+        setTimeout(function(){
+        window.location.href = '{{url("/")}}'; //window.location.reload();
+        }, 1000);
+        }
+        }
+})
+}
+});
+$("#usersSearchBtn").click(function () {
+$(".collapseSearchUsers").val('');
+$("#collapseSearch").toggle();
+});
+$(document).on('keyup', '.collapseSearchUsers', function (e) {
+e.preventDefault();
+var val = $(this).val();
+if (val){
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        type: "POST",
+        url: '{{ route('users.search') }}',
+        data: {'keyword': val},
+        beforeSend: function(){
+        $("#collapseSearch").css("background", "#FFF");
+        },
+        success: function(data){
+        $("#suggesstion-box").show();
+        $("#suggesstion-box").html(data);
+        $("#collapseSearch").css("background", "#FFF");
+        }
+});
+}
+else {
+$("#suggesstion-box").html("");
+}
+});
+$(document).on('click', '.userSuggesionLink', function (e) {
+e.preventDefault();
+var searchData = $(".collapseSearchUsers").val();
+if (searchData){
+window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
+}
+});
+});
         </script>
 
         @yield('script')

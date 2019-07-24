@@ -61,6 +61,14 @@ class HomeController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
         $facebook_link = $twitter_link = $instagram_link = $youtube_link = $linkedin_link = "";
@@ -72,7 +80,7 @@ class HomeController extends Controller {
             $linkedin_link = $userDetails->linkedin_link;
         }
 
-        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link'));
+        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link', 'LoginUserProfilePic'));
     }
 
     /*
@@ -225,6 +233,14 @@ class HomeController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $selUserId = base64_decode($id);
         // check user exists or not
         $user = DB::table('users')->where('id', $selUserId)->first();
@@ -257,7 +273,7 @@ class HomeController extends Controller {
         $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
 //        print_r($latestFollowers);exit;
 
-        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount'));
+        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount', 'LoginUserProfilePic'));
     }
 
     /*
@@ -349,12 +365,20 @@ class HomeController extends Controller {
             return $this->errorFunction();
         }
 
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
         $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
         $userLocation = DB::table('user_last_locations')->where('user_id', Auth::id())->orderBy('id', 'desc')->first();
 
-        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation'));
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'LoginUserProfilePic'));
     }
 
     /*
@@ -366,6 +390,14 @@ class HomeController extends Controller {
 
         if (!empty($this->loggedUserCheck())) {
             return $this->errorFunction();
+        }
+
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
         }
 
         $allExpertArr = array();
@@ -414,7 +446,7 @@ class HomeController extends Controller {
                 $profilePic = $userDetails->profile_pic;
             }
         }
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'LoginUserProfilePic'));
     }
 
     /*
@@ -543,7 +575,14 @@ class HomeController extends Controller {
         if (!empty($this->loggedUserCheck())) {
             return $this->errorFunction();
         }
-        return view('mindset');
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+        return view('mindset',compact('LoginUserProfilePic'));
     }
 
     /*
