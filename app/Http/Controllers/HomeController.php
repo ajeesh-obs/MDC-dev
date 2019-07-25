@@ -380,7 +380,17 @@ class HomeController extends Controller {
         $userExpertise = DB::table('user_expertise')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
         $userLocation = DB::table('user_last_locations')->where('user_id', Auth::id())->orderBy('id', 'desc')->first();
 
-        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'LoginUserProfilePic'));
+        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
+                ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
+                ->where('users_following.following_user_id', '=', Auth::id())
+                ->orderBy('users_following.id', 'DESC')
+                ->take(5)
+                ->get();
+
+        $followersCount = UsersFollowing::where('following_user_id', '=', Auth::id())->count();
+
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'latestFollowers', 'followersCount', 'LoginUserProfilePic'));
     }
 
     /*
@@ -401,6 +411,15 @@ class HomeController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
+                ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
+                ->where('users_following.following_user_id', '=', Auth::id())
+                ->orderBy('users_following.id', 'DESC')
+                ->take(5)
+                ->get();
+
+        $followersCount = UsersFollowing::where('following_user_id', '=', Auth::id())->count();
 
         $allExpertArr = array();
         $userExpertArr = array();
@@ -448,7 +467,7 @@ class HomeController extends Controller {
                 $profilePic = $userDetails->profile_pic;
             }
         }
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'LoginUserProfilePic'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'latestFollowers', 'followersCount', 'LoginUserProfilePic'));
     }
 
     /*

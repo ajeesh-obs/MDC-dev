@@ -154,82 +154,29 @@
                     <div>
                         <div class="row">
                             <div class="col">
-                                <p class="mb-2">Followers . 105</p>
+                                <p class="mb-2">Followers . {{$followersCount}}</p>
                             </div>
+                            @if($latestFollowers->count() > 0) 
                             <div class="col ml-auto">
-                                <a href=".multi-collapse" class="small text-muted float-right dropdown-toggle"
+                                <a data-id="{{ Auth::user()->id }}" href=".multi-collapse" class="small text-muted float-right dropdown-toggle viewAllFollowers"
                                    role="button" aria-controls="multiCollapseExample1 multiCollapseExample2"
                                    data-toggle="collapse" aria-expanded="false">VIEW ALL</a>
                             </div>
+                            @endif
                         </div>
                         <ul class="list-inline d-flex flex-row justify-content-between mb-2">
+
+                            @if($latestFollowers->count() > 0) 
+                            @foreach($latestFollowers as $latestFollower)
                             <li class="list-inline-item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                <img title="{{$latestFollower->first_name}} {{$latestFollower->last_name}}" @if ($latestFollower->profile_pic) src="{{ asset('images/profile/thumbnail_'.$latestFollower->profile_pic) }}" @else src="{{ asset('images/profile/no-profile.png') }}" @endif
                                      alt="Generic placeholder image" width="50" height="50">
                             </li>
-                            <li class="list-inline-item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                     alt="Generic placeholder image" width="50" height="50">
-                            </li>
-                            <li class="list-inline-item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                     alt="Generic placeholder image" width="50" height="50">
-                            </li>
-                            <li class="list-inline-item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                     alt="Generic placeholder image" width="50" height="50">
-                            </li>
-                            <li class="list-inline-item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                     alt="Generic placeholder image" width="50" height="50">
-                            </li>
+                            @endforeach
+                            @endif
                         </ul>
                         <div class="collapse show multi-collapse" id="multiCollapseExample1">
-                            <ul class="list-inline d-flex flex-row justify-content-between mb-2">
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="collapse show multi-collapse" id="multiCollapseExample2">
-                            <ul class="list-inline d-flex flex-row justify-content-between mb-2">
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                         alt="Generic placeholder image" width="50" height="50">
-                                </li>
+                            <ul class="list-inline d-flex flex-row justify-content-between mb-2 viewAllFollowersDiv">
                             </ul>
                         </div>
                     </div>
@@ -337,78 +284,96 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        var expertise = @json($allExpertArr);
-                if (document.getElementById("searchExpertise")) {
-            autocomplete(document.getElementById("searchExpertise"), expertise);
-        }
+    var expertise = @json($allExpertArr);
+    if (document.getElementById("searchExpertise")) {
+    autocomplete(document.getElementById("searchExpertise"), expertise);
+    }
 
-        $(document).on('click', '.autocomplete-item', function (e) {
-            e.preventDefault();
+    $(document).on('click', '.autocomplete-item', function (e) {
+    e.preventDefault();
 
-            var val = $("#searchExpertise").val();
-            if (val) {
-                addExpertise(val);
-            }
-        });
-        $(document).on('keyup', '#searchExpertise', function (e) {
-            e.preventDefault();
-            var val = $("#searchExpertise").val();
+    var val = $("#searchExpertise").val();
+    if (val) {
+    addExpertise(val);
+    }
+    });
+    $(document).on('keyup', '#searchExpertise', function (e) {
+    e.preventDefault();
+    var val = $("#searchExpertise").val();
 
-            if (e.keyCode == 13 && val) {
-                addExpertise(val);
-            }
-        });
+    if (e.keyCode == 13 && val) {
+    addExpertise(val);
+    }
+    });
 
-        function addExpertise(val) {
+    function addExpertise(val) {
 
-            var totalExpertise = $('.userExpertiseDiv ul li').length;
-            if (totalExpertise > 2) {
-                $(".expertiseErrorDiv").show();
-                return;
-            } else {
-                $(".userExpertiseDiv ul").append('<li><a href="javascript:void()" class="text-white mr-2 userExpertise">&times;</a><span>' + val + '</span></li>');
-                $("#searchExpertise").val('');
-                $("#searchExpertise").focus();
-                getExpertiseValues();
-            }
-        }
+    var totalExpertise = $('.userExpertiseDiv ul li').length;
+    if (totalExpertise > 2) {
+    $(".expertiseErrorDiv").show();
+    return;
+    } else {
+    $(".userExpertiseDiv ul").append('<li><a href="javascript:void()" class="text-white mr-2 userExpertise">&times;</a><span>' + val + '</span></li>');
+    $("#searchExpertise").val('');
+    $("#searchExpertise").focus();
+    getExpertiseValues();
+    }
+    }
 
-        $(document).on('click', '.userExpertise', function (e) {
-            e.preventDefault();
+    $(document).on('click', '.userExpertise', function (e) {
+    e.preventDefault();
 
-            $(this).parent().remove();
-            getExpertiseValues();
-        });
+    $(this).parent().remove();
+    getExpertiseValues();
+    });
 
-        function getExpertiseValues() {
-            var values = $('.userExpertiseDiv li span').map(function () {
-                return $(this).text();
-            }).get().join(',');
-            $("#userCurrentExpertise").val(values);
-        }
+    function getExpertiseValues() {
+    var values = $('.userExpertiseDiv li span').map(function () {
+    return $(this).text();
+    }).get().join(',');
+    $("#userCurrentExpertise").val(values);
+    }
 
-        // profile edit page toggle items  
-        $(".profileEducationPopup").click(function () {
-            $(".profileEducationDiv").toggle();
-        });
-        $(".profileCertificationsPopup").click(function () {
-            $(".profileCertificationsDiv").toggle();
-        });
-        $(".profileAwardsPopup").click(function () {
-            $(".profileAwardsDiv").toggle();
-        });
-        $(".profileConferencesPopup").click(function () {
-            $(".profileConferencesDiv").toggle();
-        });
-        $(".profileVolunteerPopup").click(function () {
-            $(".profileVolunteerDiv").toggle();
-        });
-        $(".profileHobbiesPopup").click(function () {
-            $(".profileHobbiesDiv").toggle();
-        });
-        $(".profileIncomePopup").click(function () {
-            $(".profileIncomeDiv").toggle();
-        });
+    // profile edit page toggle items  
+    $(".profileEducationPopup").click(function () {
+    $(".profileEducationDiv").toggle();
+    });
+    $(".profileCertificationsPopup").click(function () {
+    $(".profileCertificationsDiv").toggle();
+    });
+    $(".profileAwardsPopup").click(function () {
+    $(".profileAwardsDiv").toggle();
+    });
+    $(".profileConferencesPopup").click(function () {
+    $(".profileConferencesDiv").toggle();
+    });
+    $(".profileVolunteerPopup").click(function () {
+    $(".profileVolunteerDiv").toggle();
+    });
+    $(".profileHobbiesPopup").click(function () {
+    $(".profileHobbiesDiv").toggle();
+    });
+    $(".profileIncomePopup").click(function () {
+    $(".profileIncomeDiv").toggle();
+    });
+    });
+
+    $(document).on('click', '.viewAllFollowers', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    if (id){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "POST",
+    url: '{{ route('user.followers.all') }}',
+    data: {'id': id},
+    success: function(data){
+    $(".viewAllFollowersDiv").html(data);
+    }
+    });
+    }
     });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>
@@ -416,29 +381,29 @@
 <script type="text/javascript">
 
     function initializeAutocomplete() {
-        var input = document.getElementById('location');
-        // var options = {
-        //   types: ['(regions)'],
-        //   componentRestrictions: {country: "IN"}
-        // };
-        var options = {}
+    var input = document.getElementById('location');
+    // var options = {
+    //   types: ['(regions)'],
+    //   componentRestrictions: {country: "IN"}
+    // };
+    var options = {}
 
-        var autocomplete = new google.maps.places.Autocomplete(input, options);
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            var place = autocomplete.getPlace();
-            var lat = place.geometry.location.lat();
-            var lng = place.geometry.location.lng();
-            var placeId = place.place_id;
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    var place = autocomplete.getPlace();
+    var lat = place.geometry.location.lat();
+    var lng = place.geometry.location.lng();
+    var placeId = place.place_id;
 
-            // assign values
-            $("#latitude").val(lat);
-            $("#longitude").val(lng);
-        });
+    // assign values
+    $("#latitude").val(lat);
+    $("#longitude").val(lng);
+    });
     }
 
     $(document).on('click', '.imageUploadLink', function (e) {
-        e.preventDefault();
-        $("#image").trigger("click");
+    e.preventDefault();
+    $("#image").trigger("click");
     });
 </script>
 
@@ -458,14 +423,14 @@
 </script>-->
 <script type="text/javascript">
     function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    if (input.files && input.files[0]) {
+    var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('.imageDiv').css('background', 'transparent url(' + e.target.result + ')');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
+    reader.onload = function (e) {
+    $('.imageDiv').css('background', 'transparent url(' + e.target.result + ')');
+    }
+    reader.readAsDataURL(input.files[0]);
+    }
     }
 </script>
 @endsection
