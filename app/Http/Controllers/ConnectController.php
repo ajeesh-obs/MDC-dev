@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\UsersFollowing;
+use Session;
 
 class ConnectController extends Controller {
 
@@ -169,14 +170,83 @@ class ConnectController extends Controller {
         if (!empty($this->loggedUserCheck())) {
             return $this->errorFunction();
         }
+
         $list = "";
-        $usersList = [];
         $formData = $request->all();
         $all = $formData['all'];
         $followers = $formData['followers'];
         $following = $formData['following'];
         $userCurrentExpertise = $formData['userCurrentExpertise'];
         $searchByPersonLocationLevel = $formData['searchByPersonLocationLevel'];
+
+        // search values put on session for map view 
+        Session::put('connectAll', $all);
+        Session::put('connectFollowers', $followers);
+        Session::put('connectFollowing', $following);
+        Session::put('connectUserCurrentExpertise', $userCurrentExpertise);
+        Session::put('connectSearchByPersonLocationLevel', $searchByPersonLocationLevel);
+
+        // get search list
+        $usersList = $this->getList($all, $followers, $following, $userCurrentExpertise, $searchByPersonLocationLevel);
+
+        $list = view('connect.search_list', compact('usersList'));
+        return $list;
+    }
+
+    /*
+     * map view
+     * 
+     */
+
+    public function mapView(Request $request) {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
+        // get session values for map view 
+        $all = session('connectAll');
+        $followers = session('connectFollowers');
+        $following = session('connectFollowing');
+        $userCurrentExpertise = session('connectUserCurrentExpertise');
+        $searchByPersonLocationLevel = session('connectSearchByPersonLocationLevel');
+        // set default as view all
+        if ((empty($all)) && (empty($followers)) && (empty($following))) {
+            $all = 1;
+        }
+        $usersList = $this->getList($all, $followers, $following, $userCurrentExpertise, $searchByPersonLocationLevel);
+
+        // clear session values 
+        $request->session()->forget('connectAll');
+        $request->session()->forget('connectFollowers');
+        $request->session()->forget('connectFollowing');
+        $request->session()->forget('connectUserCurrentExpertise');
+        $request->session()->forget('connectSearchByPersonLocationLevel');
+
+        $searchExpertiseArr = "";
+        if (!empty($userCurrentExpertise)) {
+            $searchExpertiseArr = explode(",", $userCurrentExpertise);
+        }
+
+        return view('connect.map', compact('LoginUserProfilePic', 'usersList', 'all', 'followers', 'following', 'searchExpertiseArr', 'searchByPersonLocationLevel'));
+    }
+
+    /*
+     * get search list 
+     * 
+     */
+
+    private function getList($all = '', $followers = '', $following = '', $userCurrentExpertise = '', $searchByPersonLocationLevel = '') {
+
+        $usersList = [];
         $searchExpertiseArr = "";
         if (!empty($userCurrentExpertise)) {
             $searchExpertiseArr = explode(",", $userCurrentExpertise);
@@ -194,8 +264,6 @@ class ConnectController extends Controller {
             ;
 
             if (!empty($searchByPersonLocationLevel)) {
-//                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-//                $getData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
                 $getData->where(function($query) use($searchByPersonLocationLevel) {
                     $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
                             ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
@@ -243,6 +311,17 @@ class ConnectController extends Controller {
                             ->take(5)
                             ->get();
 
+                    // get location details
+                    $userLocation = '';
+                    $userLatitude = '';
+                    $userLongitude = '';
+                    $userLocationData = DB::table('user_last_locations')->where('user_id', $data->id)->orderBy('id', 'desc')->first();
+                    if ($userLocationData) {
+                        $userLocation = $userLocationData->location;
+                        $userLatitude = $userLocationData->latitude;
+                        $userLongitude = $userLocationData->longitude;
+                    }
+
                     if ($isValidData == 1) {
                         $res['id'] = $data->id;
                         $res['image'] = $data->profile_pic;
@@ -251,6 +330,14 @@ class ConnectController extends Controller {
                         $res['followersCount'] = $followersCount;
                         $res['isFollowing'] = $isFollowing;
                         $res['latestFollowings'] = $latestFollowings;
+
+                        $res['userLocation'] = $userLocation;
+                        $res['userLatitude'] = $userLatitude;
+                        $res['userLongitude'] = $userLongitude;
+                        $res['followingText'] = $isFollowing == 1 ? 'FOLLOWING' : '';
+//                        $res['imageMap'] = $data->profile_pic ? \URL::to('') . '/images/profile/' . $data->profile_picr : \URL::to('') . '/images/profile/no-profile.png';
+
+
                         $usersList[] = $res;
                     }
                 }
@@ -264,10 +351,8 @@ class ConnectController extends Controller {
                     ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
                     ->where('users_following.following_user_id', '=', Auth::id())
 //                    ->where('users_following.following_user_id', '!=', $this->superAdminId) // avoid super admin 
-                    ;
+            ;
             if (!empty($searchByPersonLocationLevel)) {
-//                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-//                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
                 $followersData->where(function($query) use($searchByPersonLocationLevel) {
                     $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
                             ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
@@ -316,6 +401,17 @@ class ConnectController extends Controller {
                             ->take(5)
                             ->get();
 
+                    // get location details
+                    $userLocation = '';
+                    $userLatitude = '';
+                    $userLongitude = '';
+                    $userLocationData = DB::table('user_last_locations')->where('user_id', $data->id)->orderBy('id', 'desc')->first();
+                    if ($userLocationData) {
+                        $userLocation = $userLocationData->location;
+                        $userLatitude = $userLocationData->latitude;
+                        $userLongitude = $userLocationData->longitude;
+                    }
+
                     if ($isValidData == 1) {
                         $res['id'] = $data->id;
                         $res['image'] = $data->profile_pic;
@@ -324,6 +420,13 @@ class ConnectController extends Controller {
                         $res['followersCount'] = $followersCount;
                         $res['isFollowing'] = $isFollowing;
                         $res['latestFollowings'] = $latestFollowings;
+
+                        $res['userLocation'] = $userLocation;
+                        $res['userLatitude'] = $userLatitude;
+                        $res['userLongitude'] = $userLongitude;
+                        $res['followingText'] = $isFollowing == 1 ? 'FOLLOWING' : '';
+//                        $res['imageMap'] = $data->profile_pic ? \URL::to('') . '/images/profile/' . $data->profile_picr : \URL::to('') . '/images/profile/no-profile.png';
+
                         $usersList[] = $res;
                     }
                 }
@@ -337,10 +440,8 @@ class ConnectController extends Controller {
                     ->leftjoin('users', 'users.id', '=', 'users_following.following_user_id')
                     ->where('users_following.user_id', '=', Auth::id())
 //                    ->where('users_following.user_id', '!=', $this->superAdminId) // avoid super admin 
-                    ;
+            ;
             if (!empty($searchByPersonLocationLevel)) {
-//                $followersData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
-//                $followingData->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%");
                 $followingData->where(function($query) use($searchByPersonLocationLevel) {
                     $query->where('first_name', 'LIKE', "%$searchByPersonLocationLevel%")
                             ->orWhere('last_name', 'LIKE', "%$searchByPersonLocationLevel%");
@@ -388,6 +489,17 @@ class ConnectController extends Controller {
                             ->take(5)
                             ->get();
 
+                    // get location details
+                    $userLocation = '';
+                    $userLatitude = '';
+                    $userLongitude = '';
+                    $userLocationData = DB::table('user_last_locations')->where('user_id', $data->id)->orderBy('id', 'desc')->first();
+                    if ($userLocationData) {
+                        $userLocation = $userLocationData->location;
+                        $userLatitude = $userLocationData->latitude;
+                        $userLongitude = $userLocationData->longitude;
+                    }
+
                     if ($isValidData == 1) {
                         $res['id'] = $data->id;
                         $res['image'] = $data->profile_pic;
@@ -396,13 +508,19 @@ class ConnectController extends Controller {
                         $res['followersCount'] = $followersCount;
                         $res['isFollowing'] = $isFollowing;
                         $res['latestFollowings'] = $latestFollowings;
+
+                        $res['userLocation'] = $userLocation;
+                        $res['userLatitude'] = $userLatitude;
+                        $res['userLongitude'] = $userLongitude;
+                        $res['followingText'] = $isFollowing == 1 ? 'FOLLOWING' : '';
+//                        $res['imageMap'] = $data->profile_pic ? \URL::to('') . '/images/profile/' . $data->profile_picr : \URL::to('') . '/images/profile/no-profile.png';
+
                         $usersList[] = $res;
                     }
                 }
             }
         }
-        $list = view('connect.search_list', compact('usersList'));
-        return $list;
+        return $usersList;
     }
 
     /*

@@ -49,7 +49,7 @@
                     <div class="card-img-overlay text-center h-max"
                          style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
                         <!--<a href="map.html">-->
-                        <a href="javascript:void()">
+                        <a href="{{ route('map.view') }}">
                             <div class="badge badge-dark px-4 py-2 rounded-pill font-weight-normal text-white">View On
                                 Map
                             </div>
@@ -199,13 +199,13 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-            type: "POST",
-            url: '{{ route('connect.search') }}',
-            data: {'all': all, 'followers':followers, 'following':following, 'userCurrentExpertise':userCurrentExpertise, 'searchByPersonLocationLevel':searchByPersonLocationLevel},
-            success: function(data){
-            $(".card-columns").html(data);
-            $(".mapDiv").show();
-            }
+    type: "POST",
+    url: '{{ route('connect.search') }}',
+    data: {'all': all, 'followers':followers, 'following':following, 'userCurrentExpertise':userCurrentExpertise, 'searchByPersonLocationLevel':searchByPersonLocationLevel},
+    success: function(data){
+    $(".card-columns").html(data);
+    $(".mapDiv").show();
+    }
     });
     }
 

@@ -67,6 +67,7 @@ Route::post('/user/followers/all', 'HomeController@followersAll')->name('user.fo
 
 Route::get('/connect', 'ConnectController@index')->name('connect');
 Route::post('/connect/search', 'ConnectController@search')->name('connect.search');
+Route::get('/connect/map', 'ConnectController@mapView')->name('map.view');
 
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
