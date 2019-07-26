@@ -16,6 +16,8 @@ use App\UserExpertise;
 use App\UserLastLocations;
 use Intervention\Image\Facades\Image;
 use App\UsersFollowing;
+use App\Services\UserService;
+use App\UserActivityLog;
 
 class HomeController extends Controller {
 
@@ -24,8 +26,9 @@ class HomeController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct(UserService $userService) {
         $this->middleware('auth');
+        $this->userService = $userService;
         $this->superAdminId = 1;
     }
 
@@ -272,10 +275,17 @@ class HomeController extends Controller {
                 ->take(5)
                 ->get();
 
-        $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
-//        print_r($latestFollowers);exit;
+        // get latest activity log
+        $latestActivityLog = UserActivityLog::select('user_activity_log.module', 'user_activity_log.activity', 'users.first_name', 'users.last_name')
+                ->leftjoin('users', 'users.id', '=', 'user_activity_log.user_id')
+                ->where('user_activity_log.user_id', '=', $selUserId)
+                ->orderBy('user_activity_log.id', 'DESC')
+                ->take(5)
+                ->get();
 
-        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount', 'LoginUserProfilePic'));
+        $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
+
+        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog'));
     }
 
     /*
@@ -310,6 +320,46 @@ class HomeController extends Controller {
     }
 
     /*
+     * get all recent activities
+     * 
+     */
+
+    public function recentActivitiesAll(Request $request) {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+
+        $formData = $request->all();
+        $type = $formData['type'];
+        if ($type == 'self') {
+            $id = Auth::id();
+        } else {
+            $id = $formData['id'];
+        }
+
+        $count = UserActivityLog::where('user_id', '=', $id)->count();
+        $list = "";
+        if ($id) {
+            $recentactivity = UserActivityLog::select('user_activity_log.module', 'user_activity_log.activity', 'users.first_name', 'users.last_name')
+                    ->leftjoin('users', 'users.id', '=', 'user_activity_log.user_id')
+                    ->where('user_activity_log.user_id', '=', $id)
+                    ->orderBy('user_activity_log.id', 'DESC')
+                    ->skip(5)
+                    ->take($count)
+                    ->get();
+            if ($recentactivity) {
+                if ($type == 'self') {
+                    $list = view('recent_activity_all', compact('recentactivity'));
+                } else {
+                    $list = view('other_recent_activity_all', compact('recentactivity'));
+                }
+            }
+        }
+        return $list;
+    }
+
+    /*
      * follow user 
      * 
      */
@@ -329,6 +379,7 @@ class HomeController extends Controller {
             if (empty($user)) {
                 return response()->json(array('status' => 'error', 'message' => "Selected user details not getting, Please try again later"));
             }
+            $selUserName = $user->first_name . " " . $user->last_name;
             // check user is active or not
             if (empty($user->is_active)) {
                 return response()->json(array('status' => 'error', 'message' => "Selected user profile is not active"));
@@ -348,6 +399,10 @@ class HomeController extends Controller {
                         'following_user_id' => $formData['id'],
             ]);
             if ($saveFollowing) {
+                // update useractivity 
+                $loggedUserName = 
+                $this->userService->saveUserActivityLog('User Following', auth()->user()->first_name .' '.auth()->user()->last_name.' started following ' . $selUserName);
+
                 return response()->json(array('status' => 'success', 'message' => 'User following saved successfully'));
             } else {
                 return response()->json(array('status' => 'error', 'message' => 'User following not saved, Please try again later'));
@@ -390,7 +445,15 @@ class HomeController extends Controller {
 
         $followersCount = UsersFollowing::where('following_user_id', '=', Auth::id())->count();
 
-        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'latestFollowers', 'followersCount', 'LoginUserProfilePic'));
+        // get latest activity log
+        $latestActivityLog = UserActivityLog::select('user_activity_log.module', 'user_activity_log.activity', 'users.first_name', 'users.last_name')
+                ->leftjoin('users', 'users.id', '=', 'user_activity_log.user_id')
+                ->where('user_activity_log.user_id', '=', Auth::id())
+                ->orderBy('user_activity_log.id', 'DESC')
+                ->take(5)
+                ->get();
+
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog'));
     }
 
     /*
@@ -579,6 +642,9 @@ class HomeController extends Controller {
                         ]);
                     }
                 }
+                // update useractivity
+//                $this->userService->saveUserActivityLog('Profile', 'Profile details modified');
+
                 return redirect()->route('myprofile')->with('message', 'Profile details modified successfully');
             } else {
                 return redirect()->route('myprofile.edit')->withErrors($validation)->withInput();

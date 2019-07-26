@@ -237,36 +237,26 @@
             </section>
             <section class="mb-5">
                 <h2 class="mb-3">Recent Activity</h2>
+
+                @if($latestActivityLog->count() > 0) 
+                @foreach($latestActivityLog as $activity)
+
                 <ul class="list-unstyled text-white small mb-4">
-                    <li class="font-weight-bold mb-1">
-                        <i class="icon icon-mindset filter-gold"></i> MINDSET
-                    </li>
-                    <li>
-                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                             alt="Generic placeholder image" width="250" height="130">
-                    </li>
-                </ul>
-                <ul class="list-unstyled text-white small mb-4">
-                    <li class="font-weight-bold mb-1">
-                        <i class="icon icon-mastermind filter-gold"></i> MASTERMIND
-                    </li>
-                    <li>
-                        <span class="small text-muted mb-1 d-inline-block">John Doe asked a question</span>
-                        <p>
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud?"
-                        </p>
-                    </li>
-                </ul>
-                <ul class="list-unstyled text-white mb-4">
                     <li>
                         <i class="icon icon-mastermind filter-gold"></i>
-                        John Doe started following <a href="#" class="text-white text-underline font-weight-bold">Username</a>
+                        {{$activity->activity}}
                     </li>
                 </ul>
-                <a href="#" class="btn btn-block btn-outline-warning rounded-pill accent">
-                    Load More</a>
+                @endforeach
+                @endif
+                <div class="mb-5 recentactivityDiv"></div>
             </section>
+            @if($latestActivityLog->count() > 0) 
+            <section class="mb-5">
+                <a href="javascript:void()" id="recentActivityLoadMore" class="btn btn-block btn-outline-warning rounded-pill accent">Load More</a>
+                <a href="javascript:void()" id="recentActivityLoadLess" class="btn btn-block btn-outline-warning rounded-pill accent" style="display:none;">Load Less</a>
+            </section>
+            @endif
         </div>
     </div>
 </div>
@@ -275,24 +265,45 @@
 
 @section('script')
 <script>
-    $(document).ready(function () {   
-        $(document).on('click', '.viewAllFollowers', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-                if (id){
-                    $.ajax({
-                    headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                            type: "POST",
-                            url: '{{ route('user.followers.all') }}',
-                            data: {'id': id},
-                            success: function(data){
-                            $(".viewAllFollowersDiv").html(data);
-                            }
-                    });
-                }
-        });
+    $(document).ready(function () {
+    $(document).on('click', '.viewAllFollowers', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    if (id) {
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+            type: "POST",
+            url: '{{ route('user.followers.all') }}',
+            data: {'id': id},
+            success: function (data) {
+            $(".viewAllFollowersDiv").html(data);
+            }
+    });
+    }
+    });
+    $(document).on('click', '#recentActivityLoadMore', function (e) {
+    e.preventDefault();
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+            type: "POST",
+            url: '{{ route('recent.activity.all') }}',
+            data: {'type':'self'},
+            success: function (data) {
+            $(".recentactivityDiv").append(data);
+            $("#recentActivityLoadMore").hide();
+            $("#recentActivityLoadLess").show();
+            }
+    });
+    });
+    $(document).on('click', '#recentActivityLoadLess', function (e) {
+    $(".recentactivityDiv").html("");
+    $("#recentActivityLoadMore").show();
+    $("#recentActivityLoadLess").hide();
+    });
     });
 </script>
 @endsection

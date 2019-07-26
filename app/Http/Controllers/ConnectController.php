@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\UsersFollowing;
 use Session;
+use App\Services\UserService;
 
 class ConnectController extends Controller {
 
@@ -17,8 +18,9 @@ class ConnectController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct(UserService $userService) {
         $this->middleware('auth');
+        $this->userService = $userService;
         $this->superAdminId = 1;
     }
 

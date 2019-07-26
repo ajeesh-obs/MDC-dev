@@ -63,6 +63,7 @@ Route::get('/users/search/result', 'ConnectController@index')->name('users.searc
 Route::get('/other/profile/view/{id}', 'HomeController@otherProfileView')->name('other.profile.view');
 Route::post('/user/follow', 'HomeController@followUser')->name('user.follow');
 Route::post('/user/followers/all', 'HomeController@followersAll')->name('user.followers.all');
+Route::post('/recent/activity/all', 'HomeController@recentActivitiesAll')->name('recent.activity.all');
 
 
 Route::get('/connect', 'ConnectController@index')->name('connect');
