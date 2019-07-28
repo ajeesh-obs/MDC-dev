@@ -112,7 +112,7 @@
                                 <a href="#" class="text-muted">{{$user['followersCount']}} Followers</a>
                             </li>
                             <li class="list-inline-item">
-                                <a href="#" class="text-muted">Messages</a>
+                                <a href="{{ route('connect.message', array(base64_encode($user['id']))) }}" class="text-muted">Messages</a>
                             </li>
                         </ul>
                     </div>

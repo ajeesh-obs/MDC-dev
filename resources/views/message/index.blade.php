@@ -29,7 +29,7 @@
                         <div class="d-flex flex-row align-items-center">
                             <div class="text-center mr-4">
                                 <p class="mb-0" id="collapseSearch-users">
-                                    <input id="toUser" name="toUser" type="text" placeholder="To" class="form-control form-control-sm text-white-50 bg-transparent locationText">
+                                    <input id="toUser" name="toUser" type="text" placeholder="To" class="form-control form-control-sm text-white-50 bg-transparent locationText" @if ($selUserId) value='{{$selUserName}}' data-id='{{$selUserId}}' @endif>
                                 </p>
                                 <div id="suggesstion-box-users" style="background-color:#514c4c;border:1px solid #514c4c;cursor: pointer;"></div>
                                 <p class="mb-0">
@@ -47,7 +47,43 @@
             </div>
         </section> 
         <br>
-        <div class="recentactivityDiv"></div>
+        <div class="recentactivityDiv">
+            @if($selUserId)
+            @if($getData->count() > 0)
+            @foreach($getData as $index => $list)
+            <div class="card card-light rounded-0 mb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-2">
+                        @if($list->sender_user_id == Auth::user()->id)
+                        <tr>
+                            <td style="float:right;border:none !important;">
+                                &nbsp;{{$list->message}}
+                                @if($list->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                            </td>
+                        </tr>
+                        @else
+                        <tr>
+                            <td style="border:none !important;">
+                                @if($list->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                                &nbsp;{{$list->message}}
+                            </td>
+                        </tr>
+                        @endif
+                    </table>
+                </div>
+            </div>
+            @endforeach
+            @endif
+            @endif
+        </div>
     </div>
 </main>
 @endsection

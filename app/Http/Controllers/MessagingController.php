@@ -26,7 +26,7 @@ class MessagingController extends Controller {
      * landing page
      */
 
-    public function index(Request $request) {
+    public function index($id = '') {
 
         if (!empty($this->loggedUserCheck())) {
             return $this->errorFunction();
@@ -40,7 +40,27 @@ class MessagingController extends Controller {
             }
         }
 
-        return view('message.index', compact('LoginUserProfilePic'));
+        $getData = [];
+        $selUserId = "";
+        $selUserName = "";  
+
+        if (!empty($id)) {
+            $selUserId = base64_decode($id);
+            $selUser = DB::table('users')->where('id', '=', $selUserId)->first();
+            if ($selUser) {
+                $selUserName = $selUser->first_name . ' ' . $selUser->last_name;
+
+                $ids = array(Auth::id(), $selUserId);
+                // get message history 
+                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id')
+                                ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
+                                ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
+                                ->whereIn('messaging.sender_user_id', $ids)
+                                ->whereIn('messaging.receiver_user_id', $ids)
+                                ->orderBy('messaging.id', 'DESC')->get();
+            }
+        }
+        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName'));
     }
 
     /*

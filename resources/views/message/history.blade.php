@@ -2,7 +2,7 @@
 @foreach($getData as $index => $list)
 <div class="card card-light rounded-0 mb-4">
     <div class="table-responsive">
-        <table class="table table-hover mb-2 levelListTable">
+        <table class="table table-hover mb-2">
             @if($list->sender_user_id == Auth::user()->id)
             <tr>
                 <td style="float:right;border:none !important;">
