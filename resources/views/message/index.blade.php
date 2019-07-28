@@ -75,7 +75,7 @@
             }
     });
     } else {
-    $("#suggesstion-box").html("");
+    $("#suggesstion-box-users").html("");
     }
     });
     $(document).on('click', '.getusersList', function (e) {
@@ -85,17 +85,7 @@
     if (id && val) {
 
     // show history
-    $.ajax({
-    headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-            type: "POST",
-            url: '{{ route('message.history') }}',
-            data: {'toUserId':id},
-            success: function (data) {
-            $(".recentactivityDiv").html(data);
-            }
-    });
+    getHistory(id);
     $('#toUser').data('id', id);
     $('#toUser').val(val);
     $("#suggesstion-box-users").hide();
@@ -111,7 +101,7 @@
     $("#toUser").focus();
     return false;
     }
-    if (toUserId && message){
+    if (toUserId && message && toUser){
     $.ajax({
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -129,14 +119,28 @@
                     showConfirmButton: false
             })
                     if (data.status == 'success') {
-            setTimeout(function(){
-            window.location.reload();
-            }, 1000);
+            $("#message").val("");
+            getHistory(toUserId);
             }
             }
     })
     }
     });
     });
+    function getHistory(userId = ''){
+    if (userId){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+            type: "POST",
+            url: '{{ route('message.history') }}',
+            data: {'toUserId':userId},
+            success: function (data) {
+            $(".recentactivityDiv").html(data);
+            }
+    });
+    }
+    }
 </script>
 @endsection
