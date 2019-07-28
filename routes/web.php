@@ -70,6 +70,10 @@ Route::get('/connect', 'ConnectController@index')->name('connect');
 Route::post('/connect/search', 'ConnectController@search')->name('connect.search');
 Route::get('/connect/map', 'ConnectController@mapView')->name('map.view');
 
+Route::get('/message', 'MessagingController@index')->name('message');
+Route::post('/message/send', 'MessagingController@messageSend')->name('send.message');
+Route::post('/message/history', 'MessagingController@messageHistory')->name('message.history');
+
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 Route::post('/accountsettingssave', 'HomeController@accountSettingsSave')->name('accountsettingssave');

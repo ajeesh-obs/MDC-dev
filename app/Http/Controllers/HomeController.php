@@ -163,8 +163,8 @@ class HomeController extends Controller {
 
             if ($users) {
                 foreach ($users as $user) {
-
-                    $list .= "<li><a class='userSuggesionLink' href='javascript:void(0)'>" . $user->first_name . " " . $user->last_name . "</a></li>";
+                    $name = $user->first_name . " " . $user->last_name;
+                    $list .= "<li><a  data-id= '$user->id' data-name='$name' class='userSuggesionLink getusersList' href='javascript:void(0)'>" . $user->first_name . " " . $user->last_name . "</a></li>";
                 }
             }
         }
@@ -400,8 +400,7 @@ class HomeController extends Controller {
             ]);
             if ($saveFollowing) {
                 // update useractivity 
-                $loggedUserName = 
-                $this->userService->saveUserActivityLog('User Following', auth()->user()->first_name .' '.auth()->user()->last_name.' started following ' . $selUserName);
+                $this->userService->saveUserActivityLog('User Following', auth()->user()->first_name . ' ' . auth()->user()->last_name . ' started following ' . $selUserName);
 
                 return response()->json(array('status' => 'success', 'message' => 'User following saved successfully'));
             } else {

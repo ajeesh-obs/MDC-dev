@@ -280,6 +280,39 @@
         <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $longitude)}}">
     </form>
 </main>
+<div class="modal fade" id="favoritesModal" 
+     tabindex="-1" role="dialog" 
+     aria-labelledby="favoritesModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" 
+                        data-dismiss="modal" 
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" 
+                    id="favoritesModalLabel">The Sun Also Rises</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Please confirm you would like to add 
+                    <b><span id="fav-title">The Sun Also Rises</span></b> 
+                    to your favorites list.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" 
+                        class="btn btn-default" 
+                        data-dismiss="modal">Close</button>
+                <span class="pull-right">
+                    <button type="button" class="btn btn-primary">
+                        Add to Favorites
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script>
@@ -291,7 +324,6 @@
 
     $(document).on('click', '.autocomplete-item', function (e) {
     e.preventDefault();
-
     var val = $("#searchExpertise").val();
     if (val) {
     addExpertise(val);
@@ -300,12 +332,10 @@
     $(document).on('keyup', '#searchExpertise', function (e) {
     e.preventDefault();
     var val = $("#searchExpertise").val();
-
     if (e.keyCode == 13 && val) {
     addExpertise(val);
     }
     });
-
     function addExpertise(val) {
 
     var totalExpertise = $('.userExpertiseDiv ul li').length;
@@ -322,11 +352,9 @@
 
     $(document).on('click', '.userExpertise', function (e) {
     e.preventDefault();
-
     $(this).parent().remove();
     getExpertiseValues();
     });
-
     function getExpertiseValues() {
     var values = $('.userExpertiseDiv li span').map(function () {
     return $(this).text();
@@ -357,7 +385,6 @@
     $(".profileIncomeDiv").toggle();
     });
     });
-
     $(document).on('click', '.viewAllFollowers', function (e) {
     e.preventDefault();
     var id = $(this).data('id');
@@ -366,16 +393,15 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-    type: "POST",
-    url: '{{ route('user.followers.all') }}',
-    data: {'id': id},
-    success: function(data){
-    $(".viewAllFollowersDiv").html(data);
-    }
+            type: "POST",
+            url: '{{ route('user.followers.all') }}',
+            data: {'id': id},
+            success: function(data){
+            $(".viewAllFollowersDiv").html(data);
+            }
     });
     }
-    });
-</script>
+    });</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>
 <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnHdUdzSaSeFuC3IfK-91bv2wpX3gB91E&libraries=geometry,places"></script>-->
 <script type="text/javascript">
@@ -394,7 +420,6 @@
     var lat = place.geometry.location.lat();
     var lng = place.geometry.location.lng();
     var placeId = place.place_id;
-
     // assign values
     $("#latitude").val(lat);
     $("#longitude").val(lng);
@@ -404,8 +429,7 @@
     $(document).on('click', '.imageUploadLink', function (e) {
     e.preventDefault();
     $("#image").trigger("click");
-    });
-</script>
+    });</script>
 
 <!--<script>
     $(document).ready(function () {
@@ -425,7 +449,6 @@
     function readURL(input) {
     if (input.files && input.files[0]) {
     var reader = new FileReader();
-
     reader.onload = function (e) {
     $('.imageDiv').css('background', 'transparent url(' + e.target.result + ')');
     }

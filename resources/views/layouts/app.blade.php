@@ -304,8 +304,7 @@
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
                                 <a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('accountsettings') }}">Account Settings</a>
-                                <!--<a class="dropdown-item" href="{{ route('users') }}">Users</a>-->
-                                <!--<a class="dropdown-item" href="{{ route('users') }}">Users</a>-->
+                                <a class="dropdown-item" href="{{ route('message') }}">Messaging</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
                             </div>
                         </li>
@@ -393,12 +392,12 @@ headers: {
         url: '{{ route('users.search') }}',
         data: {'keyword': val},
         beforeSend: function(){
-        $("#collapseSearch").css("background", "#FFF");
+//        $("#collapseSearch").css("background", "#FFF");
         },
         success: function(data){
         $("#suggesstion-box").show();
         $("#suggesstion-box").html(data);
-        $("#collapseSearch").css("background", "#FFF");
+//        $("#collapseSearch").css("background", "#FFF");
         }
 });
 }
