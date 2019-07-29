@@ -210,7 +210,7 @@ $(document).ready(function () {
                 title: value.name,
                 infoWindow: {
                     content: "<div style='background-color:#000' class='user-pin-popover-content'><div class='card bg-transparent border-0'><div class='card-body px-2 py-1'>\n\
-                                <img class='rounded-circle mb-1' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN89h8AAtEB5wrzxXEAAAAASUVORK5CYII=' width='54' height='54'>\n\
+                                <img class='rounded-circle mb-1' src='{{ asset('images/profile/no-profile.png') }}' width='54' height='54'>\n\
                                 <div class='d-flex flex-row justify-content-between align-items-center mb-2'>\n\
                                 <h6 class='card-title text-white font-weight-bold mb-0'>" + value.name + "</h6>\n\
                                 <a class='text-uppercase text-white bg-transparent border-0 small'>" + value.followingText + "</a></div>\n\

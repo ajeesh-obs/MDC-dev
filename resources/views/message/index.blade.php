@@ -27,15 +27,15 @@
                 <div class="d-flex">
                     <div class="flex-fill">
                         <div class="d-flex flex-row align-items-center">
-                            <div class="text-center mr-4">
+                            <div class="text-center mr-4" style="width:100%;">
                                 <p class="mb-0" id="collapseSearch-users">
                                     <input id="toUser" name="toUser" type="text" placeholder="To" class="form-control form-control-sm text-white-50 bg-transparent locationText" @if ($selUserId) value='{{$selUserName}}' data-id='{{$selUserId}}' @endif>
-                                </p>
+                                </p> 
                                 <div id="suggesstion-box-users" style="background-color:#514c4c;border:1px solid #514c4c;cursor: pointer;"></div>
-                                <p class="mb-0">
+                                <br><p class="mb-0">
                                     <textarea style="color: #fff !important;" id="message" name="message" placeholder="Message" class="form-control form-control-sm bg-transparent"></textarea>
                                 </p>
-                                <p class="mb-0" style="text-align:left;">
+                                <br><p class="mb-0" style="text-align:left;">
                                     <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 sendMessage">
                                         Send
                                     </a>
