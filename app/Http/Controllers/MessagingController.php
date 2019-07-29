@@ -18,8 +18,9 @@ class MessagingController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct(UserService $userService) {
         $this->middleware('auth');
+        $this->userService = $userService;
     }
 
     /*
@@ -39,10 +40,13 @@ class MessagingController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        // get unread messages 
+        $unreadMessages = $this->userService->getUnreadMessages();
+        $unreadMessagesCount = count($unreadMessages);
 
         $getData = [];
         $selUserId = "";
-        $selUserName = "";  
+        $selUserName = "";
 
         if (!empty($id)) {
             $selUserId = base64_decode($id);
@@ -50,9 +54,12 @@ class MessagingController extends Controller {
             if ($selUser) {
                 $selUserName = $selUser->first_name . ' ' . $selUser->last_name;
 
+                // set all messages as read status 
+                DB::table('messaging')->where([['sender_user_id', '=', $selUserId], ['receiver_user_id', '=', Auth::id()]])->update(['is_read' => 1]);
+
                 $ids = array(Auth::id(), $selUserId);
                 // get message history 
-                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id')
+                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed')
                                 ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
                                 ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
                                 ->whereIn('messaging.sender_user_id', $ids)
@@ -60,7 +67,7 @@ class MessagingController extends Controller {
                                 ->orderBy('messaging.id', 'DESC')->get();
             }
         }
-        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName'));
+        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount'));
     }
 
     /*
@@ -101,6 +108,34 @@ class MessagingController extends Controller {
     }
 
     /*
+     * dismiss messages
+     * 
+     */
+
+    public function messageDismiss(Request $request) {
+        $formData = $request->all();
+        $validation = Validator::make($formData, [
+                    'id' => ['required'],
+        ]);
+        if ($validation->fails()) {
+            return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+        }
+
+        // check entry valid or not
+        $selData = DB::table('messaging')->where('id', '=', $formData['id'])->first();
+        if ($selData) {
+            // cross check this msg was send to logged user
+            if (Auth::id() == $selData->receiver_user_id) {
+                // dismiss selected msg
+//                $selData->is_receiver_dismissed = 1;
+                DB::table('messaging')->where('id', '=', $formData['id'])->update(array('is_receiver_dismissed' => 1));
+                return response()->json(array('status' => 'success', 'message' => 'Message dismissed successfully'));
+            }
+        }
+        return response()->json(array('status' => 'error', 'message' => 'Message not dismissed, Please try again later'));
+    }
+
+    /*
      * get message history
      * 
      */
@@ -111,12 +146,15 @@ class MessagingController extends Controller {
         $toUserId = $formData['toUserId'];
         $ids = array(Auth::id(), $toUserId);
 
+        // set all messages as read status 
+        DB::table('messaging')->where([['sender_user_id', '=', $formData['toUserId']], ['receiver_user_id', '=', Auth::id()]])->update(['is_read' => 1]);
+
         if ($toUserId) {
             // check to user is valid or not
             $selUser = DB::table('users')->where('id', '=', $formData['toUserId'])->first();
             if (!empty($selUser)) {
                 // get message history 
-                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id')
+                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed')
                                 ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
                                 ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
                                 ->whereIn('messaging.sender_user_id', $ids)

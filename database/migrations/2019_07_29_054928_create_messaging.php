@@ -19,6 +19,7 @@ class CreateMessaging extends Migration {
             $table->integer('receiver_user_id')->unsigned()->nullable();
             //$table->foreign('receiver_user_id')->references('id')->on('users')->nullable();
             $table->string('message')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

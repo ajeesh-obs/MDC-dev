@@ -51,10 +51,11 @@
             @if($selUserId)
             @if($getData->count() > 0)
             @foreach($getData as $index => $list)
+
+            @if($list->sender_user_id == Auth::user()->id)
             <div class="card card-light rounded-0 mb-4">
                 <div class="table-responsive">
                     <table class="table table-hover mb-2">
-                        @if($list->sender_user_id == Auth::user()->id)
                         <tr>
                             <td style="float:right;border:none !important;">
                                 &nbsp;{{$list->message}}
@@ -65,7 +66,15 @@
                                 @endif
                             </td>
                         </tr>
-                        @else
+                    </table>
+                </div>
+            </div>
+            @else
+
+            @if(!$list->is_receiver_dismissed)
+            <div class="card card-light rounded-0 mb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-2">
                         <tr>
                             <td style="border:none !important;">
                                 @if($list->profile_pic)
@@ -74,12 +83,17 @@
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
                                 @endif
                                 &nbsp;{{$list->message}}
+                                <span style="float:right" >
+                                    <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                </span>
                             </td>
                         </tr>
-                        @endif
                     </table>
                 </div>
             </div>
+            @endif
+            @endif
+
             @endforeach
             @endif
             @endif
@@ -98,17 +112,17 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-            type: "POST",
-            url: '{{ route('users.search') }}',
-            data: {'keyword': val},
-            beforeSend: function () {
-//                        $("#collapseSearch-users").css("background", "#FFF");
-            },
-            success: function (data) {
-            $("#suggesstion-box-users").show();
-            $("#suggesstion-box-users").html(data);
-//                        $("#collapseSearch-users").css("background", "#FFF");
-            }
+    type: "POST",
+    url: '{{ route('users.search') }}',
+    data: {'keyword': val},
+    beforeSend: function () {
+    //                        $("#collapseSearch-users").css("background", "#FFF");
+    },
+    success: function (data) {
+    $("#suggesstion-box-users").show();
+    $("#suggesstion-box-users").html(data);
+    //                        $("#collapseSearch-users").css("background", "#FFF");
+    }
     });
     } else {
     $("#suggesstion-box-users").html("");
@@ -142,26 +156,57 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-            type: 'post',
-            url: '{{ route('send.message') }}',
-            data: {'toUserId': toUserId, 'message':message},
-            success: function (data) {
-            swal({
-            text: data.message,
-                    title: 'Success!',
-                    type: data.status,
-                    timer: 2000,
-                    showCancelButton: false,
-                    showConfirmButton: false
-            })
-                    if (data.status == 'success') {
-            $("#message").val("");
-            getHistory(toUserId);
-            }
-            }
+    type: 'post',
+    url: '{{ route('send.message') }}',
+    data: {'toUserId': toUserId, 'message':message},
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: data.status,
+    timer: 2000,
+    showCancelButton: false,
+    showConfirmButton: false
+    })
+    if (data.status == 'success') {
+    $("#message").val("");
+    getHistory(toUserId);
+    }
+    }
     })
     }
     });
+
+    $(".message-dismiss").click(function(e) {
+    e.preventDefault();
+
+    var id = $(this).data('id');
+    var toUserId = $('#toUser').data('id');  
+    if (id){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'post',
+    url: '{{ route('send.message.dismiss') }}',
+    data: {'id': id},
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: data.status,
+    timer: 2000,
+    showCancelButton: false,
+    showConfirmButton: false
+    })
+    if (data.status == 'success') {
+    getHistory(toUserId);
+    }
+    }
+    })
+    }
+    });
+
     });
     function getHistory(userId = ''){
     if (userId){
@@ -169,12 +214,12 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-            type: "POST",
-            url: '{{ route('message.history') }}',
-            data: {'toUserId':userId},
-            success: function (data) {
-            $(".recentactivityDiv").html(data);
-            }
+    type: "POST",
+    url: '{{ route('message.history') }}',
+    data: {'toUserId':userId},
+    success: function (data) {
+    $(".recentactivityDiv").html(data);
+    }
     });
     }
     }

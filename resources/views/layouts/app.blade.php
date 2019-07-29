@@ -95,7 +95,9 @@
                                aria-haspopup="true" aria-expanded="false">
                                 <i class="icon icon-chat filter-light">
                                 </i>
-                                <span class="badge rounded-circle">3</span>
+                                @if($unreadMessagesCount)
+                                <span class="badge rounded-circle">{{$unreadMessagesCount}}</span>
+                                @endif
                             </a>
                             <div class="dropdown-menu text-center dropdown-menu-left p-0" aria-labelledby="navbarDropdown3"
                                  style="min-width: 390px; min-height: 360px;">
@@ -109,74 +111,29 @@
                                             <i class="icon icon-dollar filter-white"></i>
                                         </a>
                                     </h6>
-                                    <div class="chat-list-wrapper pre-scrollable">
+                                    <div class="chat-list-wrapper pre-scrollable" style="overflow-y:auto;">
                                         <ul class="list-unstyled">
+                                            @if($unreadMessages->count() > 0)
+                                            @foreach($unreadMessages as $index => $msg)
                                             <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
+                                                @if($msg->profile_pic)
+                                                <img class="rounded-circle" src="{{ asset('images/profile/thumbnail_'.$msg->profile_pic) }}" alt="" width="50" height="50">
+                                                @else
+                                                <img class="rounded-circle" src="{{ asset('images/profile/no-profile.png') }}" alt="" width="50" height="50">
+                                                @endif
                                                 <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
+                                                    <h6 class="text-white font-weight-bold small mb-1">
+                                                        <a href="{{ route('connect.message', array(base64_encode($msg->sender_user_id))) }}">
+                                                            {{$msg->first_name}} {{$msg->last_name}}
+                                                        </a>
+                                                    </h6>
                                                     <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
+                                                        {{$msg->message}}
                                                     </p>
                                                 </div>
                                             </li>
-                                            <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
-                                                <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
-                                                    <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
-                                                <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
-                                                    <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
-                                                <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
-                                                    <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex flex-row align-items-center mb-3">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
-                                                <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
-                                                    <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex flex-row align-items-center">
-                                                <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="50"
-                                                     height="50">
-                                                <div class="ml-3 text-left">
-                                                    <h6 class="text-white font-weight-bold small mb-1">Username</h6>
-                                                    <p class="small mb-0 font-weight-light lh-1">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                                        tempor
-                                                    </p>
-                                                </div>
-                                            </li>
+                                            @endforeach
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
@@ -339,80 +296,80 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
         <script type="text/javascript">
-$(document).ready(function () {
-$("#navbarDropdown2").click(function () {
-$(".profileSettingsDiv").toggle();
-});
-//hide message div automaticaly
-$('.displayMsgDiv').delay(2000).fadeOut('slow');
-$(".memberPasswordUpdateBtn").click(function() {
-var email = $("#memberresetpasswordemail").val();
-var password = $("#memberresetpassword").val();
-var passwordconfirm = $("#memberresetpasswordconfirm").val();
-var id = $("#memberresetpasswordid").val();
-if (id && email){
-$.ajax({
-headers: {
-'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
-        type: 'post',
-        url: '{{ route('member.passordreset') }}',
-        data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
-        success: function (data) {
-        swal({
-        text: data.message,
-                title: 'Success!',
-                type: data.status,
-                timer: 2000,
-                showCancelButton: false,
-                showConfirmButton: false
-        })
-                if (data.status == 'success') {
-        setTimeout(function(){
-        window.location.href = '{{url("/")}}'; //window.location.reload();
-        }, 1000);
-        }
-        }
-})
-}
-});
-$("#usersSearchBtn").click(function () {
-$(".collapseSearchUsers").val('');
-$("#collapseSearch").toggle();
-});
-$(document).on('keyup', '.collapseSearchUsers', function (e) {
-e.preventDefault();
-var val = $(this).val();
-if (val){
-$.ajax({
-headers: {
-'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
-        type: "POST",
-        url: '{{ route('users.search') }}',
-        data: {'keyword': val},
-        beforeSend: function(){
-//        $("#collapseSearch").css("background", "#FFF");
-        },
-        success: function(data){
-        $("#suggesstion-box").show();
-        $("#suggesstion-box").html(data);
-//        $("#collapseSearch").css("background", "#FFF");
-        }
-});
-}
-else {
-$("#suggesstion-box").html("");
-}
-});
-$(document).on('click', '.userSuggesionLink', function (e) {
-e.preventDefault();
-var searchData = $(".collapseSearchUsers").val();
-if (searchData){
-window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
-}
-});
-});
+            $(document).ready(function () {
+            $("#navbarDropdown2").click(function () {
+            $(".profileSettingsDiv").toggle();
+            });
+            //hide message div automaticaly
+            $('.displayMsgDiv').delay(2000).fadeOut('slow');
+            $(".memberPasswordUpdateBtn").click(function() {
+            var email = $("#memberresetpasswordemail").val();
+            var password = $("#memberresetpassword").val();
+            var passwordconfirm = $("#memberresetpasswordconfirm").val();
+            var id = $("#memberresetpasswordid").val();
+            if (id && email){
+            $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '{{ route('member.passordreset') }}',
+            data: {'email': email, 'password':password, 'passwordconfirm': passwordconfirm, 'id': id},
+            success: function (data) {
+            swal({
+            text: data.message,
+            title: 'Success!',
+            type: data.status,
+            timer: 2000,
+            showCancelButton: false,
+            showConfirmButton: false
+            })
+            if (data.status == 'success') {
+            setTimeout(function(){
+            window.location.href = '{{url("/")}}'; //window.location.reload();
+            }, 1000);
+            }
+            }
+            })
+            }
+            });
+            $("#usersSearchBtn").click(function () {
+            $(".collapseSearchUsers").val('');
+            $("#collapseSearch").toggle();
+            });
+            $(document).on('keyup', '.collapseSearchUsers', function (e) {
+            e.preventDefault();
+            var val = $(this).val();
+            if (val){
+            $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: '{{ route('users.search') }}',
+            data: {'keyword': val},
+            beforeSend: function(){
+            //        $("#collapseSearch").css("background", "#FFF");
+            },
+            success: function(data){
+            $("#suggesstion-box").show();
+            $("#suggesstion-box").html(data);
+            //        $("#collapseSearch").css("background", "#FFF");
+            }
+            });
+            }
+            else {
+            $("#suggesstion-box").html("");
+            }
+            });
+            $(document).on('click', '.userSuggesionLink', function (e) {
+            e.preventDefault();
+            var searchData = $(".collapseSearchUsers").val();
+            if (searchData){
+            window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
+            }
+            });
+            });
         </script>
 
         @yield('script')

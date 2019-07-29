@@ -39,6 +39,9 @@ class SystemController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        // get unread messages 
+//        $unreadMessages = $this->userService->getUnreadMessages();
+//        $unreadMessagesCount = count($unreadMessages);
 
         $levels = DB::table('level')->whereNull('deleted_at')->where('is_default', 0)->orderBy('id', 'asc')->get();
         $levelsDefault = DB::table('level')->whereNull('deleted_at')->where('is_default', 1)->orderBy('id', 'asc')->first();

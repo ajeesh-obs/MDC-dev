@@ -4,8 +4,12 @@ namespace App\Services;
 
 use App\UserActivityLog;
 use Illuminate\Support\Facades\Auth;
+use App\Messaging;
 
 class UserService {
+    /*
+     * save user activities
+     */
 
     public function saveUserActivityLog($module = '', $activity = '') {
 
@@ -15,6 +19,23 @@ class UserService {
             'activity' => $activity
         ]);
         return true;
+    }
+
+    /*
+     * get unread messages 
+     * 
+     */
+
+    public function getUnreadMessages() {
+
+        // get message history 
+        $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id')
+                        ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
+                        ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
+                        ->where('messaging.receiver_user_id', Auth::id())
+                        ->where('messaging.is_read', 0)
+                        ->orderBy('messaging.id', 'DESC')->get();
+        return $getData;
     }
 
 }

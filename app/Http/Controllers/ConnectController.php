@@ -42,6 +42,10 @@ class ConnectController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        // get unread messages 
+        $unreadMessages = $this->userService->getUnreadMessages();
+        $unreadMessagesCount = count($unreadMessages);
+
 
         $allExpertArr = array();
         $usersList = [];
@@ -159,7 +163,7 @@ class ConnectController extends Controller {
             }
         }
 
-        return view('connect.index', compact('allExpertArr', 'usersList', 'LoginUserProfilePic'));
+        return view('connect.index', compact('allExpertArr', 'usersList', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount'));
     }
 
     /*
@@ -213,6 +217,9 @@ class ConnectController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        // get unread messages 
+        $unreadMessages = $this->userService->getUnreadMessages();
+        $unreadMessagesCount = count($unreadMessages);
 
         // get session values for map view 
         $all = session('connectAll');
@@ -238,7 +245,7 @@ class ConnectController extends Controller {
             $searchExpertiseArr = explode(",", $userCurrentExpertise);
         }
 
-        return view('connect.map', compact('LoginUserProfilePic', 'usersList', 'all', 'followers', 'following', 'searchExpertiseArr', 'searchByPersonLocationLevel'));
+        return view('connect.map', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'unreadMessages', 'unreadMessagesCount', 'usersList', 'all', 'followers', 'following', 'searchExpertiseArr', 'searchByPersonLocationLevel'));
     }
 
     /*

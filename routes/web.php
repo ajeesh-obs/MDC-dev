@@ -74,6 +74,7 @@ Route::get('/message', 'MessagingController@index')->name('message');
 Route::post('/message/send', 'MessagingController@messageSend')->name('send.message');
 Route::post('/message/history', 'MessagingController@messageHistory')->name('message.history');
 Route::get('/message/{id}', 'MessagingController@index')->name('connect.message');
+Route::post('/message/dismiss', 'MessagingController@messageDismiss')->name('send.message.dismiss');
 
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');

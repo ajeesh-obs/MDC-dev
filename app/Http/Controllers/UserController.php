@@ -73,6 +73,9 @@ class UserController extends Controller {
                 $LoginUserProfilePic = $userDetails->profile_pic;
             }
         }
+        // get unread messages 
+//        $unreadMessages = $this->userService->getUnreadMessages();
+//        $unreadMessagesCount = count($unreadMessages);
 
         $roles = DB::table('roles')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
         $userRoleRelations = DB::table('user_role_relations')->whereNull('deleted_at')->orderBy('id', 'desc')->get();
