@@ -18,7 +18,6 @@
     </div>
 </div>
 @else
-
 @if(!$list->is_receiver_dismissed)
 <div class="card card-light rounded-0 mb-4">
     <div class="table-responsive">

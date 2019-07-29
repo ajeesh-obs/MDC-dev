@@ -177,7 +177,7 @@
     }
     });
 
-    $(".message-dismiss").click(function(e) {
+    $(document).on('click', '.message-dismiss', function (e) { 
     e.preventDefault();
 
     var id = $(this).data('id');
