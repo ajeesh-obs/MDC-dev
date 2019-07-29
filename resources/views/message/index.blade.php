@@ -1,6 +1,8 @@
 @extends('layouts.app')
 <style>
-
+    .whitecolor{
+        color:#fff;
+    }
 </style>
 @section('content')
 <main role="main" class="container">
@@ -32,13 +34,25 @@
                                     <input id="toUser" name="toUser" type="text" placeholder="To" class="form-control form-control-sm text-white-50 bg-transparent locationText" @if ($selUserId) value='{{$selUserName}}' data-id='{{$selUserId}}' @endif>
                                 </p> 
                                 <div id="suggesstion-box-users" style="background-color:#514c4c;border:1px solid #514c4c;cursor: pointer;"></div>
-                                <br><p class="mb-0">
+                                <br>
+                                <p class="mb-0">
                                     <textarea style="color: #fff !important;" id="message" name="message" placeholder="Message" class="form-control form-control-sm bg-transparent"></textarea>
                                 </p>
-                                <br><p class="mb-0" style="text-align:left;">
-                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 sendMessage">
+                                <br>
+                                <p class="mb-0" style="text-align:left;" id='sendMessageDiv'>
+                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 sendMessage sendMessageBtn">
                                         Send
                                     </a>
+                                </p>
+                                <p class="mb-0" style="text-align:left;display:none;" id='replayMessageDiv'>
+                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayMessageBtn">
+                                        Replay
+                                    </a>
+                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 cancelMessageBtn">
+                                        Cancel
+                                    </a>
+                                    <input type="hidden" id="messageIdHidden">
+                                    <input type="hidden" id="replayTypeHidden">
                                 </p>
                             </div>
                         </div>
@@ -49,45 +63,78 @@
         <br>
         <div class="recentactivityDiv">
             @if($selUserId)
-            @if($getData->count() > 0)
-            @foreach($getData as $index => $list)
+            @if($messageList)
+            @foreach($messageList as $index => $list)
 
-            @if($list->sender_user_id == Auth::user()->id)
+            @if($list['sender_user_id'] == Auth::user()->id)
             <div class="card card-light rounded-0 mb-4">
                 <div class="table-responsive">
                     <table class="table table-hover mb-2">
                         <tr>
-                            <td style="float:right;border:none !important;">
-                                &nbsp;{{$list->message}}
-                                @if($list->profile_pic)
-                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                            <td class='whitecolor' style="float:right;border:none !important;">
+                                &nbsp;{{$list['message']}}
+                                @if($list['profile_pic'])
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                            </td>
+
+                        <span>
+                            <button data-type='self' data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                        </span>
+                        </tr>
+                        @if($list['replays']->count() > 0)  
+                        @foreach($list['replays'] as $index => $replay)
+                        <tr>
+                            <td class='whitecolor' style="text-align:center;">
+                                &nbsp;{{$replay->message}}
+                                @if($replay->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
                                 @endif
                             </td>
                         </tr>
+                        @endforeach
+                        @endif
                     </table>
                 </div>
             </div>
             @else
 
-            @if(!$list->is_receiver_dismissed)
+            @if(!$list['is_receiver_dismissed'])
             <div class="card card-light rounded-0 mb-4">
                 <div class="table-responsive">
                     <table class="table table-hover mb-2">
                         <tr>
-                            <td style="border:none !important;">
-                                @if($list->profile_pic)
-                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                            <td class='whitecolor' style="border:none !important;">
+                                @if($list['profile_pic'])
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
                                 @endif
-                                &nbsp;{{$list->message}}
+                                &nbsp;{{$list['message']}}
                                 <span style="float:right" >
-                                    <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                    <button data-type='replay'  data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                                    <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                                 </span>
                             </td>
                         </tr>
+                        @if($list['replays']->count() > 0)  
+                        @foreach($list['replays'] as $index => $replay)
+                        <tr>
+                            <td class='whitecolor' style="text-align:center;">
+                                &nbsp;{{$replay->message}}  222
+                                @if($replay->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endif
                     </table>
                 </div>
             </div>
@@ -142,7 +189,7 @@
     $("#message").focus();
     }
     });
-    $(".sendMessage").click(function(e) {
+    $(".sendMessage").click(function(e) {   
     e.preventDefault();
     var toUser = $("#toUser").val();
     var toUserId = $('#toUser').data('id');
@@ -200,6 +247,68 @@
     showConfirmButton: false
     })
     if (data.status == 'success') {
+    getHistory(toUserId);
+    }
+    }
+    })
+    }
+    });
+
+    $(document).on('click', '.replayBtn', function (e) { 
+    e.preventDefault();
+
+    var id = $(this).data('id');
+    var replayType = $(this).data('type');
+    if(id){
+    $("#sendMessageDiv").hide();
+    $("#replayMessageDiv").show();
+    $("#messageIdHidden").val(id);
+    $("#replayTypeHidden").val(replayType);
+    $("#message").focus();
+    }
+    });  
+
+    $(document).on('click', '.cancelMessageBtn', function (e) { 
+    e.preventDefault();
+    $("#sendMessageDiv").show();
+    $("#replayMessageDiv").hide();
+    $("#messageIdHidden").val('');
+    $("#replayTypeHidden").val('');
+    $("#message").val('');
+    });
+
+
+    $(".replayMessageBtn").click(function(e) {
+    e.preventDefault();
+
+    var toUser = $("#toUser").val();
+    var toUserId = $('#toUser').data('id');
+    var message = $("#message").val();
+    var messageIdHidden = $("#messageIdHidden").val();
+    var replayTypeHidden = $("#replayTypeHidden").val();
+    if (toUserId == null){
+    $("#toUser").focus();
+    return false;
+    }
+    if (toUserId && message && toUser && messageIdHidden){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'post',
+    url: '{{ route('send.message.replay') }}',
+    data: {'toUserId': toUserId, 'message':message, 'parentMessageId':messageIdHidden, 'replayTypeHidden':replayTypeHidden},
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: data.status,
+    timer: 2000,
+    showCancelButton: false,
+    showConfirmButton: false
+    })
+    if (data.status == 'success') {
+    $("#message").val("");
     getHistory(toUserId);
     }
     }

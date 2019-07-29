@@ -47,7 +47,7 @@ class MessagingController extends Controller {
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
 
-        $getData = [];
+        $messageList = [];
         $selUserId = "";
         $selUserName = "";
 
@@ -60,17 +60,85 @@ class MessagingController extends Controller {
                 // set all messages as read status 
                 DB::table('messaging')->where([['sender_user_id', '=', $selUserId], ['receiver_user_id', '=', Auth::id()]])->update(['is_read' => 1]);
 
-                $ids = array(Auth::id(), $selUserId);
                 // get message history 
-                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed')
+                $messageList = $this->getMessageLists($selUserId);
+            }
+        }
+        return view('message.index', compact('LoginUserProfilePic', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'messageList'));
+    }
+
+    /*
+     * get message history
+     * 
+     */
+
+    public function messageHistory(Request $request) {
+        $formData = $request->all();
+        $list = "";
+        $toUserId = $formData['toUserId'];
+
+        // set all messages as read status 
+        DB::table('messaging')->where([['sender_user_id', '=', $formData['toUserId']], ['receiver_user_id', '=', Auth::id()]])->update(['is_read' => 1]);
+        if ($toUserId) {
+            // get message history 
+            $messageList = $this->getMessageLists($toUserId);
+            if ($messageList) {
+                $list = view('message.history', compact('messageList'));
+            }
+        }
+        return $list;
+    }
+
+    /*
+     * get message history
+     * 
+     */
+
+    public function getMessageLists($toUserId = '') {
+        $list = "";
+        $result = array();
+        $ids = array(Auth::id(), $toUserId);
+        if ($toUserId) {
+            // check to user is valid or not
+            $selUser = DB::table('users')->where('id', '=', $toUserId)->first();
+            if (!empty($selUser)) {
+                // get message history 
+                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.messaging_parent_id')
                                 ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
                                 ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
                                 ->whereIn('messaging.sender_user_id', $ids)
                                 ->whereIn('messaging.receiver_user_id', $ids)
+                                ->where('messaging.messaging_parent_id', NULL)
                                 ->orderBy('messaging.id', 'DESC')->get();
+
+                if ($getData) {
+                    foreach ($getData as $row) {
+
+                        $res['profile_pic'] = $row->profile_pic;
+                        $res['id'] = $row->id;
+                        $res['name'] = $row->first_name . ' ' . $row->last_name;
+                        $res['message'] = $row->message;
+                        $res['created_at'] = $row->created_at;
+                        $res['sender_user_id'] = $row->sender_user_id;
+                        $res['receiver_user_id'] = $row->receiver_user_id;
+                        $res['is_receiver_dismissed'] = $row->is_receiver_dismissed;
+                        $res['messaging_parent_id'] = $row->messaging_parent_id;
+
+                        // get replays if exists 
+                        $getDataReplay = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.messaging_parent_id')
+                                        ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
+                                        ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
+                                        ->whereIn('messaging.sender_user_id', $ids)
+                                        ->whereIn('messaging.receiver_user_id', $ids)
+                                        ->where('messaging.messaging_parent_id', $row->id)
+                                        ->orderBy('messaging.id', 'DESC')->get();
+                        $res['replays'] = $getDataReplay;
+                        $result[] = $res;
+                    }
+                }
             }
         }
-        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
+        return $result;
     }
 
     /*
@@ -106,7 +174,58 @@ class MessagingController extends Controller {
         if ($saveData) {
             return response()->json(array('status' => 'success', 'message' => 'Message sent successfully'));
         } else {
-            return response()->json(array('status' => 'error', 'message' => 'User message sent not sent, Please try again later'));
+            return response()->json(array('status' => 'error', 'message' => 'User message not sent, Please try again later'));
+        }
+    }
+
+    /*
+     * send messages replay
+     * 
+     */
+
+    public function messageSendReplay(Request $request) {
+
+        $formData = $request->all();
+        $validation = Validator::make($formData, [
+                    'toUserId' => ['required'],
+                    'message' => ['required'],
+                    'parentMessageId' => ['required'],
+                    'replayTypeHidden' => ['required'],
+        ]);
+        if ($validation->fails()) {
+            return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+        }
+        // check to user is valid or not
+        $selUser = DB::table('users')->where('id', '=', $formData['toUserId'])->first();
+        if (empty($selUser)) {
+            return response()->json(array('status' => 'error', 'message' => "Selected user details not getting, Please try again later"));
+        }
+        // check user is active or not
+        if (empty($selUser->is_active)) {
+            return response()->json(array('status' => 'error', 'message' => "Selected user profile is not active"));
+        }
+        // save message
+        if ($formData['replayTypeHidden'] == 'self') {
+            $saveData = Messaging::create([
+                        'sender_user_id' => Auth::id(),
+                        'receiver_user_id' => Auth::id(),
+                        'message' => $formData['message'],
+                        'messaging_parent_id' => $formData['parentMessageId'],
+                        'is_read' => 1,
+            ]);
+        } else {
+            $saveData = Messaging::create([
+                        'sender_user_id' => Auth::id(),
+                        'receiver_user_id' => $formData['toUserId'],
+                        'message' => $formData['message'],
+                        'messaging_parent_id' => $formData['parentMessageId'],
+            ]);
+        }
+
+        if ($saveData) {
+            return response()->json(array('status' => 'success', 'message' => 'Message  replay sent successfully'));
+        } else {
+            return response()->json(array('status' => 'error', 'message' => 'User message replay not sent, Please try again later'));
         }
     }
 
@@ -165,39 +284,6 @@ class MessagingController extends Controller {
                 ->get();
         if ($followers) {
             $list = view('message.my_followers_all', compact('followers'));
-        }
-        return $list;
-    }
-
-    /*
-     * get message history
-     * 
-     */
-
-    public function messageHistory(Request $request) {
-        $formData = $request->all();
-        $list = "";
-        $toUserId = $formData['toUserId'];
-        $ids = array(Auth::id(), $toUserId);
-
-        // set all messages as read status 
-        DB::table('messaging')->where([['sender_user_id', '=', $formData['toUserId']], ['receiver_user_id', '=', Auth::id()]])->update(['is_read' => 1]);
-
-        if ($toUserId) {
-            // check to user is valid or not
-            $selUser = DB::table('users')->where('id', '=', $formData['toUserId'])->first();
-            if (!empty($selUser)) {
-                // get message history 
-                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed')
-                                ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
-                                ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
-                                ->whereIn('messaging.sender_user_id', $ids)
-                                ->whereIn('messaging.receiver_user_id', $ids)
-                                ->orderBy('messaging.id', 'DESC')->get();
-                if ($getData) {
-                    $list = view('message.history', compact('getData'));
-                }
-            }
         }
         return $list;
     }

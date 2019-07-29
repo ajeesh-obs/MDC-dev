@@ -76,6 +76,7 @@ Route::post('/message/history', 'MessagingController@messageHistory')->name('mes
 Route::get('/message/{id}', 'MessagingController@index')->name('connect.message');
 Route::post('/message/dismiss', 'MessagingController@messageDismiss')->name('send.message.dismiss');
 Route::post('/my/followers/all', 'MessagingController@myFollowersAll')->name('my.followers.all');
+Route::post('/message/send/replay', 'MessagingController@messageSendReplay')->name('send.message.replay');
 
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
