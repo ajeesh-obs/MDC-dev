@@ -5,6 +5,7 @@ namespace App\Services;
 use App\UserActivityLog;
 use Illuminate\Support\Facades\Auth;
 use App\Messaging;
+use App\UsersFollowing;
 
 class UserService {
     /*
@@ -36,6 +37,22 @@ class UserService {
                         ->where('messaging.is_read', 0)
                         ->orderBy('messaging.id', 'DESC')->get();
         return $getData;
+    }
+
+    /*
+     * get lastest folllowers
+     * 
+     */
+
+    public function getLatestFollowers() {
+        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name', 'users_following.user_id')
+                ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
+                ->where('users_following.following_user_id', '=', Auth::id())
+                ->orderBy('users_following.id', 'DESC')
+                ->take(5)
+                ->get();
+        return $latestFollowers;
     }
 
 }

@@ -75,6 +75,8 @@ class HomeController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get latest followers list
+        $latestFollowers = $this->userService->getLatestFollowers();
 
 
         $user = Auth::user();
@@ -88,7 +90,7 @@ class HomeController extends Controller {
             $linkedin_link = $userDetails->linkedin_link;
         }
 
-        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount'));
+        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
     }
 
     /*
@@ -685,8 +687,10 @@ class HomeController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get latest followers list
+        $latestFollowers = $this->userService->getLatestFollowers();
 
-        return view('mindset', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount'));
+        return view('mindset', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
     }
 
     /*

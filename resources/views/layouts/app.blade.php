@@ -91,7 +91,7 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown dropdown-chat">
-                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="navbarDropdown3" role="button"
+                            <a class="nav-link dropdown-toggle arrow-none" href="javascript:void()" id="navbarDropdown3" role="button"
                                aria-haspopup="true" aria-expanded="false">
                                 <i class="icon icon-chat filter-light">
                                 </i>
@@ -105,7 +105,7 @@
                                 <div class="collapse show multi-collapse-chat-search p-3" id="multiCollapseChat">
                                     <h6 class="text-uppercase text-white text-center font-weight-bold mb-3">
                                         Messages
-                                        <a class="float-right" data-toggle="collapse" href=".multi-collapse-chat-search"
+                                        <a class="float-right openFollowersMsgDiv" data-toggle="collapse" href=".multi-collapse-chat-search"
                                            role="button" aria-expanded="false"
                                            aria-controls="multiCollapseChat multiCollapseSearch">
                                             <i class="icon icon-dollar filter-white"></i>
@@ -140,82 +140,43 @@
                                 <div class="collapse multi-collapse-chat-search" id="multiCollapseSearch">
                                     <div class="pt-3 border-bottom">
                                         <div class="text-uppercase px-3 d-flex flex-row align-items-center">
-                                            <a class="pr-2 text-white font-weight-bold text-decoration-none" data-toggle="collapse" href=".multi-collapse-chat-search"
+                                            <a class="pr-2 text-white font-weight-bold text-decoration-none closeFollowersMsgDiv" data-toggle="collapse" href=".multi-collapse-chat-search"
                                                role="button" aria-expanded="false"
                                                aria-controls="multiCollapseChat multiCollapseSearch">
                                                 <
                                             </a>
-                                            <input type="search" class="form-control form-control-sm border-0">
+                                            <input type="search" class="form-control form-control-sm border-0 searchFromFollowers">
                                             <a class="pl-2" href="#">
                                                 <i class="icon icon-search filter-white"></i>
                                             </a>
                                         </div>
                                         <div class="px-3 py-2 text-left">
-                                            <a href="#" class="mx-1 text-decoration-none text-white small font-weight-bold">Select All Followers</a>
+                                            <a href="javascript:void()" class="mx-1 text-decoration-none text-white small font-weight-bold SelectAllFollowersBtn">Select All Followers</a>
                                         </div>
                                     </div>
                                     <div class="py-3 search-list-wrapper pre-scrollable">
-                                        <ul class="list-unstyled">
+                                        <ul class="list-unstyled myFollowersUl">
+                                            @if($latestFollowers->count() > 0)  
+                                            @foreach($latestFollowers as $index => $follow)
                                             <li class="py-1">
                                                 <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
-                                                         height="40">
-                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
-                                                    <a href="#" class="ml-auto open-chat">
+                                                    @if($follow->profile_pic)
+                                                    <img class="rounded-circle" src="{{ asset('images/profile/thumbnail_'.$follow->profile_pic) }}" alt="" width="40" height="40">
+                                                    @else
+                                                    <img class="rounded-circle" src="{{ asset('images/profile/no-profile.png') }}" alt="" width="40" height="40">
+                                                    @endif
+                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">
+                                                        {{$follow->first_name}} {{$follow->last_name}}
+                                                    </h6>
+                                                    <a href="{{ route('connect.message', array(base64_encode($follow->user_id))) }}" class="ml-auto open-chat">
                                                         <span class="badge bg-muted color-muted rounded-circle">
                                                             >
                                                         </span>
                                                     </a>
                                                 </div>
                                             </li>
-                                            <li class="py-1">
-                                                <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
-                                                         height="40">
-                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
-                                                    <a href="#" class="ml-auto open-chat">
-                                                        <span class="badge bg-muted color-muted rounded-circle">
-                                                            >
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </li>
-                                            <li class="py-1">
-                                                <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
-                                                         height="40">
-                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
-                                                    <a href="#" class="ml-auto open-chat">
-                                                        <span class="badge bg-muted color-muted rounded-circle">
-                                                            >
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </li>
-                                            <li class="py-1">
-                                                <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
-                                                         height="40">
-                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
-                                                    <a href="#" class="ml-auto open-chat">
-                                                        <span class="badge bg-muted color-muted rounded-circle">
-                                                            >
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </li>
-                                            <li class="py-1">
-                                                <div class="d-flex flex-row align-items-center text-decoration-none px-3 py-1">
-                                                    <img class="rounded-circle" src="{{ asset('img/profile2.jpeg') }}" alt="" width="40"
-                                                         height="40">
-                                                    <h6 class="ml-2 text-white font-weight-bold small mb-1">Username</h6>
-                                                    <a href="#" class="ml-auto open-chat">
-                                                        <span class="badge bg-muted color-muted rounded-circle">
-                                                            >
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </li>
+                                            @endforeach
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
@@ -261,7 +222,7 @@
                             <div class="dropdown-menu text-center dropdown-menu-right profileSettingsDiv" aria-labelledby="navbarDropdown2">
                                 <a class="dropdown-item" href="{{ route('myprofile') }}">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('accountsettings') }}">Account Settings</a>
-                                <a class="dropdown-item" href="{{ route('message') }}">Messaging</a>
+                                <!--<a class="dropdown-item" href="{{ route('message') }}">Messaging</a>-->
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
                             </div>
                         </li>
@@ -369,7 +330,45 @@
             window.location.href = '{{url("/users/search/result")}}?searchData=' + searchData;
             }
             });
+
+            $(document).on('click', '.SelectAllFollowersBtn', function (e) { 
+            e.preventDefault();
+
+            getAllFollowersList();
             });
+            $(document).on('keyup', '.searchFromFollowers', function (e) {
+            e.preventDefault();
+
+            getAllFollowersList($(this).val());
+            });
+
+            $('.searchFromFollowers').on('search', function () {  
+
+            getAllFollowersList();
+            });
+
+            $(document).on('click', '.closeFollowersMsgDiv', function (e) { 
+            $("#multiCollapseSearch").hide();
+            });
+            $(document).on('click', '.openFollowersMsgDiv', function (e) { 
+            $("#multiCollapseSearch").show();
+            });
+
+            });
+
+            function getAllFollowersList(value = ''){
+            $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: '{{ route('my.followers.all') }}',
+            data: {'value':value},
+            success: function (data) {
+            $(".myFollowersUl").html(data);
+            }
+            });
+            }
         </script>
 
         @yield('script')

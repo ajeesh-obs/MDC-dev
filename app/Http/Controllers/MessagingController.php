@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Session;
 use App\Services\UserService;
 use App\Messaging;
+use App\UsersFollowing;
 use Illuminate\Support\Facades\Validator;
 
 class MessagingController extends Controller {
@@ -43,6 +44,8 @@ class MessagingController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get latest followers list
+        $latestFollowers = $this->userService->getLatestFollowers();
 
         $getData = [];
         $selUserId = "";
@@ -67,7 +70,7 @@ class MessagingController extends Controller {
                                 ->orderBy('messaging.id', 'DESC')->get();
             }
         }
-        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount'));
+        return view('message.index', compact('LoginUserProfilePic', 'getData', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
     }
 
     /*
@@ -127,12 +130,43 @@ class MessagingController extends Controller {
             // cross check this msg was send to logged user
             if (Auth::id() == $selData->receiver_user_id) {
                 // dismiss selected msg
-//                $selData->is_receiver_dismissed = 1;
                 DB::table('messaging')->where('id', '=', $formData['id'])->update(array('is_receiver_dismissed' => 1));
                 return response()->json(array('status' => 'success', 'message' => 'Message dismissed successfully'));
             }
         }
         return response()->json(array('status' => 'error', 'message' => 'Message not dismissed, Please try again later'));
+    }
+
+    /*
+     * get all followers  list
+     * 
+     */
+
+    public function myFollowersAll(Request $request) {
+
+        $formData = $request->all();
+        $value = $formData['value'];
+
+        $list = "";
+        $followersCount = UsersFollowing::where('following_user_id', '=', Auth::id())->count();
+        $followers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users_following.id', 'users.first_name', 'users.last_name', 'users_following.user_id')
+                ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
+                ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
+                ->where('users_following.following_user_id', '=', Auth::id());
+        if (!empty($value)) {
+            $followers->where(function($query) use($value) {
+                $query->where('users.first_name', 'LIKE', "%$value%")
+                        ->orWhere('users.last_name', 'LIKE', "%$value%");
+            });
+        }
+        $followers = $followers->orderBy('users_following.id', 'DESC')
+//                ->skip(5)
+                ->take($followersCount)
+                ->get();
+        if ($followers) {
+            $list = view('message.my_followers_all', compact('followers'));
+        }
+        return $list;
     }
 
     /*
