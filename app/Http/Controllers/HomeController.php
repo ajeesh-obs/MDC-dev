@@ -254,6 +254,8 @@ class HomeController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get latest followers list
+        $latestFollowers = $this->userService->getLatestFollowers();
 
         $selUserId = base64_decode($id);
         // check user exists or not
@@ -276,7 +278,7 @@ class HomeController extends Controller {
         if ($followExists) {
             $following = 1;
         }
-        $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
+        $latestFollowersOther = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
                 ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
                 ->leftjoin('users', 'users.id', '=', 'users_following.user_id')
                 ->where('users_following.following_user_id', '=', $selUserId)
@@ -294,7 +296,7 @@ class HomeController extends Controller {
 
         $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
 
-        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount'));
+        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowersOther', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
     }
 
     /*

@@ -115,7 +115,7 @@
                         <div class="col">
                             <p class="mb-2">Followers . {{$followersCount}}</p>
                         </div>
-                        @if($latestFollowers->count() > 0) 
+                        @if($latestFollowersOther->count() > 0) 
                         <div class="col ml-auto">
                             <a data-id="{{ $user->id }}" href=".multi-collapse" class="small text-muted float-right dropdown-toggle viewAllFollowers"
                                role="button" aria-controls="multiCollapseExample1 multiCollapseExample2"
@@ -125,8 +125,8 @@
                     </div>
                     <ul class="list-inline d-flex flex-row justify-content-between mb-2">
 
-                        @if($latestFollowers->count() > 0) 
-                        @foreach($latestFollowers as $latestFollower)
+                        @if($latestFollowersOther->count() > 0) 
+                        @foreach($latestFollowersOther as $latestFollower)
                         <li class="list-inline-item">
                             <img title="{{$latestFollower->first_name}} {{$latestFollower->last_name}}" @if ($latestFollower->profile_pic) src="{{ asset('images/profile/thumbnail_'.$latestFollower->profile_pic) }}" @else src="{{ asset('images/profile/no-profile.png') }}" @endif
                                  alt="Generic placeholder image" width="50" height="50">
