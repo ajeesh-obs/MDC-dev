@@ -13,8 +13,8 @@
         @foreach($travelPlans as $index => $travelPlan)
         <tr>
             <td  style="color:#fff;">{{$travelPlan->travel_location}}</td>
-            <td  style="color:#fff;">{{$travelPlan->travel_depart}}</td>
-            <td  style="color:#fff;">{{$travelPlan->travel_deturn}}</td>
+            <td  style="color:#fff;">{{date('d-m-Y', strtotime($travelPlan->travel_depart))}}</td>
+            <td  style="color:#fff;">{{date('d-m-Y', strtotime($travelPlan->travel_deturn))}}</td>
             <td  style="color:#fff;">{{$travelPlan->travel_status}}</td>
             <td  style="color:#fff;">
                 <a href="javascript:void(0)" class="ml-3 delete-travel-plan" data-id="{{$travelPlan->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
