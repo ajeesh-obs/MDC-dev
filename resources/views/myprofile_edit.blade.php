@@ -8,6 +8,9 @@
     .locationText {
         width: 260px !important;
     }
+    .pac-container {
+        z-index: 10000 !important;
+    }
 </style>
 @section('content')
 <main role="main" class="container">
@@ -48,7 +51,7 @@
                                 <input value="{{ old('location', $location)}}" id="location" name="location" type="text" placeholder="Location" class="form-control form-control-sm text-white-50 bg-transparent locationText" onFocus="initializeAutocomplete()">
                             </p>
                             <p class="text-muted">Eastern Timezone</p>
-                            <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3">
+                            <a data-toggle="modal" data-target="#travelPlansModal" href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3">
                                 Update Travel Plans
                             </a>
                         </div>
@@ -280,34 +283,71 @@
         <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $longitude)}}">
     </form>
 </main>
-<div class="modal fade" id="favoritesModal" 
-     tabindex="-1" role="dialog" 
-     aria-labelledby="favoritesModalLabel">
+<div class="modal fade" id="travelPlansModal" tabindex="-1" role="dialog" aria-labelledby="travelPlansModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" 
-                        data-dismiss="modal" 
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" 
-                    id="favoritesModalLabel">The Sun Also Rises</h4>
-            </div>
+        <div class="modal-content" style="background-color:#333333 !important;color:#fff;">
             <div class="modal-body">
+                <h2>Travel Plans</h2>
                 <p>
-                    Please confirm you would like to add 
-                    <b><span id="fav-title">The Sun Also Rises</span></b> 
-                    to your favorites list.
+                <p class="mb-0">
+                    <i class="icon icon-placeholder"></i>
+                    <input value="" id="travelLocation" name="travelLocation" type="text" placeholder="Travel Location" class="form-control form-control-sm text-white-50 bg-transparent" onFocus="initializeAutocompleteTravelLocation()">
+                </p>
+                <p class="mb-0">
+                    <i class="icon icon-placeholder"></i>
+<!--                    <input type="datetime-local" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">-->
+                    <input type="date" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">
+                </p>
+                <p class="mb-0">
+                    <i class="icon icon-placeholder"></i>
+                    <input type="date" id="travelReturn" name="travelReturn" placeholder="Travel Return" class="form-control form-control-sm text-white-50 bg-transparent">
+                </p> <br>
+                <p class="mb-0 saveTravelPlanDiv">
+                    <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent saveTravelPlan">Save</a>
+                </p>
+                <p class="mb-0 updateTravelPlanDiv" style="display:none;">
+                    <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent updateTravelPlanBtn">Update</a>
+                    <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-40 accent cancelTravelPlanBtn">Cancel</a>
                 </p>
             </div>
+            <div class="modal-body">
+                <div class="table-responsive travelPlansDiv">
+                    <table class="table table-hover mb-2">
+                        <thead>
+                            <tr>
+                                <th  style="color:#ebc243;">Location</th>
+                                <th  style="color:#ebc243;">Depart</th>
+                                <th  style="color:#ebc243;">Return</th>
+                                <th  style="color:#ebc243;">Status</th>
+                                <th  style="color:#ebc243;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if($travelPlans->count() > 0)  
+                            @foreach($travelPlans as $index => $travelPlan)
+                            <tr>
+                                <td  style="color:#fff;">{{$travelPlan->travel_location}}</td>
+                                <td  style="color:#fff;">{{$travelPlan->travel_depart}}</td>
+                                <td  style="color:#fff;">{{$travelPlan->travel_deturn}}</td>
+                                <td  style="color:#fff;">{{$travelPlan->travel_status}}</td>
+                                <td  style="color:#fff;">
+                                    <a href="javascript:void(0)" class="ml-3 delete-travel-plan" data-id="{{$travelPlan->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                    <a href="javascript:void(0)" class="ml-3 edit-travel-plan" data-location="{{$travelPlan->travel_location}}" data-id="{{$travelPlan->id}}" data-return="{{$travelPlan->travel_deturn}}" data-depart="{{$travelPlan->travel_depart}}" >
+                                        <img src="{{ asset('img/grey-pencil.png') }}">
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr><td style="color:#fff;text-align:center;" colspan="5">No details found</td></tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button" 
-                        class="btn btn-default" 
-                        data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 <span class="pull-right">
-                    <button type="button" class="btn btn-primary">
-                        Add to Favorites
-                    </button>
                 </span>
             </div>
         </div>
@@ -393,15 +433,190 @@
     headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-            type: "POST",
-            url: '{{ route('user.followers.all') }}',
-            data: {'id': id},
-            success: function(data){
-            $(".viewAllFollowersDiv").html(data);
-            }
+    type: "POST",
+    url: '{{ route('user.followers.all') }}',
+    data: {'id': id},
+    success: function(data){
+    $(".viewAllFollowersDiv").html(data);
+    }
     });
     }
-    });</script>
+    });
+
+
+    $(document).on('click', '.saveTravelPlan', function (e) {   
+    e.preventDefault();
+
+    var travelLocation = $("#travelLocation").val(); 
+    var travelDepart = $("#travelDepart").val();  
+    var travelReturn = $("#travelReturn").val(); 
+
+    if (travelLocation && travelDepart && travelReturn){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'post',
+    url: '{{ route('travel.plan.save') }}',
+    data: {'travelLocation': travelLocation, 'travelDepart': travelDepart, 'travelReturn': travelReturn},
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: data.status,
+    timer: 2000,
+    showCancelButton: false,
+    showConfirmButton: false
+    })
+    if (data.status == 'success') {
+    clearForm();
+    travelPlans();
+    }
+    }
+    })
+    }
+    });
+
+
+    $(document).on('click', '.updateTravelPlanBtn', function (e) {   
+    e.preventDefault();
+
+    var travelLocation = $("#travelLocation").val(); 
+    var travelDepart = $("#travelDepart").val();  
+    var travelReturn = $("#travelReturn").val(); 
+    var selid = $("#travelLocation").data("selid"); 
+
+    if (travelLocation && travelDepart && travelReturn && selid){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'post',
+    url: '{{ route('travel.plan.update') }}',
+    data: {'travelLocation': travelLocation, 'travelDepart': travelDepart, 'travelReturn': travelReturn, 'selid':selid},
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: data.status,
+    timer: 2000,
+    showCancelButton: false,
+    showConfirmButton: false
+    })
+    if (data.status == 'success') {
+    clearForm();
+    $('#travelLocation').data('selid','');
+    $(".saveTravelPlanDiv").show();
+    $(".updateTravelPlanDiv").hide();  
+    travelPlans();
+    }
+    }
+    })
+    }
+    });
+
+
+    $(document).on('click', '.edit-travel-plan', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    var location = $(this).data('location');
+    var depart = $(this).data('depart');   
+    var returnval = $(this).data('return');
+
+    $("#travelLocation").val(location); 
+    $("#travelDepart").val(getFormattedDate(new Date(depart)));
+    $("#travelReturn").val(getFormattedDate(new Date(returnval)));
+    $('#travelLocation').data('selid',id);
+
+    $(".saveTravelPlanDiv").hide();
+    $(".updateTravelPlanDiv").show();  
+    });
+
+    $(document).on('click', '.cancelTravelPlanBtn', function (e) {
+
+    clearForm();
+    $('#travelLocation').data('selid','');
+
+    $(".saveTravelPlanDiv").show();
+    $(".updateTravelPlanDiv").hide();  
+    });
+
+    $(document).on('click', '.delete-travel-plan', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');  
+    swal({
+    title: "Are you sure?",
+    text: "Do you want to delete the travel plan",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes",
+    cancelButtonText: "No, cancel",
+    closeOnConfirm: false,
+    closeOnCancel: false
+    },
+    function (isConfirm) {
+    if (isConfirm) {
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'delete',
+    url: '/travel/plan/delete/' + id,
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: "success",
+    timer: 2000,
+    showCancelButton: false, 
+    showConfirmButton: false
+    },
+    function () {
+    swal.close();
+    travelPlans();
+    })
+    }
+    });
+    } else {
+    swal({
+    title: 'Cancelled!',
+    type: "info", showConfirmButton: false, timer: 1000
+    });
+    e.preventDefault();
+    }
+    });
+    });
+
+    function travelPlans(){
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "POST",
+    url: '{{ route('travel.plan.history') }}',
+    data: {},
+    success: function (data) {
+    $(".travelPlansDiv").html(data);
+    }
+    });
+    }
+
+    function clearForm(){
+    $("#travelLocation").val(""); 
+    $("#travelDepart").val("");
+    $("#travelReturn").val("");
+    }
+
+    function getFormattedDate(date) {
+    return date.getFullYear()
+    + "-"
+    + ("0" + (date.getMonth() + 1)).slice(-2)
+    + "-"
+    + ("0" + date.getDate()).slice(-2);
+    }
+
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEDVd3ns05bhTmlTSlS_zopAJxkbkp5hw&libraries=geometry,places"></script>
 <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnHdUdzSaSeFuC3IfK-91bv2wpX3gB91E&libraries=geometry,places"></script>-->
 <script type="text/javascript">
@@ -426,10 +641,31 @@
     });
     }
 
+    function initializeAutocompleteTravelLocation() {
+    var input = document.getElementById('travelLocation');
+    // var options = {
+    //   types: ['(regions)'],
+    //   componentRestrictions: {country: "IN"}
+    // };
+    var options = {}
+
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    var place = autocomplete.getPlace();
+    var lat = place.geometry.travelLocation.lat();
+    var lng = place.geometry.travelLocation.lng();
+    var placeId = place.place_id;
+    // assign values
+    //$("#latitude").val(lat);
+    //$("#longitude").val(lng);
+    });
+    }
+
     $(document).on('click', '.imageUploadLink', function (e) {
     e.preventDefault();
     $("#image").trigger("click");
-    });</script>
+    });
+</script>
 
 <!--<script>
     $(document).ready(function () {

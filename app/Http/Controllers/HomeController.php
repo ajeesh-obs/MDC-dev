@@ -501,6 +501,9 @@ class HomeController extends Controller {
 
         $followersCount = UsersFollowing::where('following_user_id', '=', Auth::id())->count();
 
+        // get user travel plans
+        $travelPlans = DB::table('travel_plans')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+
         $allExpertArr = array();
         $userExpertArr = array();
         $userExpertvalues = array();
@@ -547,7 +550,7 @@ class HomeController extends Controller {
                 $profilePic = $userDetails->profile_pic;
             }
         }
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'travelPlans'));
     }
 
     /*

@@ -78,6 +78,11 @@ Route::post('/message/dismiss', 'MessagingController@messageDismiss')->name('sen
 Route::post('/my/followers/all', 'MessagingController@myFollowersAll')->name('my.followers.all');
 Route::post('/message/send/replay', 'MessagingController@messageSendReplay')->name('send.message.replay');
 
+Route::post('/travel/plan/save', 'MessagingController@travelPlanSave')->name('travel.plan.save');
+Route::delete('/travel/plan/delete/{id}', 'MessagingController@deleteTravelPlan')->name('travel.plan.delete');
+Route::post('/travel/plan/history', 'MessagingController@listTravelPlan')->name('travel.plan.history');
+Route::post('/travel/plan/update', 'MessagingController@travelPlanUpdate')->name('travel.plan.update');
+
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 Route::post('/accountsettingssave', 'HomeController@accountSettingsSave')->name('accountsettingssave');

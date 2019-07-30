@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Session;
 use App\Services\UserService;
 use App\Messaging;
+use App\TravelPlans;
 use App\UsersFollowing;
 use Illuminate\Support\Facades\Validator;
 
@@ -294,6 +295,98 @@ class MessagingController extends Controller {
             $list = view('message.my_followers_all', compact('followers'));
         }
         return $list;
+    }
+
+    /*
+     * save travel plans
+     * 
+     */
+
+    public function travelPlanSave(Request $request) {
+        $formData = $request->all();
+        $validation = Validator::make($formData, [
+                    'travelLocation' => ['required'],
+                    'travelDepart' => 'required|date',
+                    'travelReturn' => 'required|date|after_or_equal:travelDepart',
+        ]);
+        if ($validation->fails()) {
+            return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+        }
+        $saveData = TravelPlans::create([
+                    'user_id' => Auth::id(),
+                    'travel_depart' => $formData['travelDepart'],
+                    'travel_deturn' => $formData['travelReturn'],
+                    'travel_location' => $formData['travelLocation'],
+                    'travel_status' => 'ACTIVE',
+        ]);
+        if ($saveData) {
+            return response()->json(array('status' => 'success', 'message' => 'Travel plan saved successfully'));
+        } else {
+            return response()->json(array('status' => 'error', 'message' => 'Travel plan not saved, Please try again later'));
+        }
+    }
+
+    /*
+     * delete travel plans
+     * 
+     */
+
+    public function deleteTravelPlan($id) {
+        $selData = DB::table('travel_plans')->where('id', '=', $id)->first();
+        if ($selData) {
+
+            DB::table('travel_plans')->where('id', '=', $id)->update(array('deleted_at' => date('y-m-d')));
+            return response()->json(array('status' => true, 'message' => 'Travel plan deleted successfully'));
+        }
+        return response()->json(false, 401);
+    }
+
+    /*
+     * get travel plans list
+     * 
+     */
+
+    public function listTravelPlan(Request $request) {
+        $list = "";
+        // get user travel plans
+        $travelPlans = DB::table('travel_plans')->whereNull('deleted_at')->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+        if ($travelPlans) {
+            $list = view('travel_plan_list', compact('travelPlans'));
+        }
+        return $list;
+    }
+
+    /*
+     * update travel plans
+     * 
+     */
+
+    public function travelPlanUpdate(Request $request) {
+        $formData = $request->all();
+        $validation = Validator::make($formData, [
+                    'selid' => ['required'],
+                    'travelLocation' => ['required'],
+                    'travelDepart' => 'required|date',
+                    'travelReturn' => 'required|date|after_or_equal:travelDepart',
+        ]);
+        if ($validation->fails()) {
+            return response()->json(array('status' => 'error', 'message' => "Form validation Failed, Please enter proper details"));
+        }
+        // update details
+        // check entry valid or not
+        $selData = DB::table('travel_plans')->where('id', '=', $formData['selid'])->first();
+        if ($selData) {
+            DB::table('travel_plans')->where('id', '=', $formData['selid'])->update(
+                    array(
+                        'travel_depart' => $formData['travelDepart'],
+                        'travel_deturn' => $formData['travelReturn'],
+                        'travel_location' => $formData['travelLocation'],
+                    )
+            );
+            return response()->json(array('status' => 'success', 'message' => 'Travel plan details modified successfully'));
+        }
+
+        return response()->json(array('status' => 'error', 'message' => 'Travel plan not modified, Please try again later'));
     }
 
     /*
