@@ -125,7 +125,7 @@ class MessagingController extends Controller {
                         $res['messaging_parent_id'] = $row->messaging_parent_id;
 
                         // get replays if exists 
-                        $getDataReplay = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.messaging_parent_id')
+                        $getDataReplay = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.is_sender_dismissed', 'messaging.messaging_parent_id')
                                         ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
                                         ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
                                         ->whereIn('messaging.sender_user_id', $ids)
@@ -246,8 +246,16 @@ class MessagingController extends Controller {
         // check entry valid or not
         $selData = DB::table('messaging')->where('id', '=', $formData['id'])->first();
         if ($selData) {
+
+            // cross check this msg was send from logged user
+            if (Auth::id() == $selData->sender_user_id) {
+                // dismiss selected msg
+                DB::table('messaging')->where('id', '=', $formData['id'])->update(array('is_sender_dismissed' => 1));
+                return response()->json(array('status' => 'success', 'message' => 'Message dismissed successfully'));
+            }
             // cross check this msg was send to logged user
-            if (Auth::id() == $selData->receiver_user_id) {
+//            else if (Auth::id() == $selData->receiver_user_id) {
+            else {
                 // dismiss selected msg
                 DB::table('messaging')->where('id', '=', $formData['id'])->update(array('is_receiver_dismissed' => 1));
                 return response()->json(array('status' => 'success', 'message' => 'Message dismissed successfully'));

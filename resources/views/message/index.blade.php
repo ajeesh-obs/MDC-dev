@@ -86,9 +86,12 @@
                         </tr>
                         @if($list['replays']->count() > 0)  
                         @foreach($list['replays'] as $index => $replay)
+                        @if($replay->sender_user_id == $replay->receiver_user_id && $replay->sender_user_id == Auth::user()->id && !$replay->is_sender_dismissed)
                         <tr>
                             <td class='whitecolor' style="text-align:center;">
-                                &nbsp;{{$replay->message}}
+                                <a  style="float:right;" href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                &nbsp;{{$replay->message}} 
+                                <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 @if($replay->profile_pic)
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
@@ -96,6 +99,20 @@
                                 @endif
                             </td>
                         </tr>
+                        @elseif($replay->sender_user_id != $replay->receiver_user_id && $replay->sender_user_id != Auth::user()->id && !$replay->is_receiver_dismissed)
+                        <tr>
+                            <td class='whitecolor' style="text-align:center;">
+                                <a  style="float:right;" href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                &nbsp;{{$replay->message}} 
+                                <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
+                                @if($replay->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                            </td>
+                        </tr>
+                        @endif
                         @endforeach
                         @endif
                     </table>
@@ -123,9 +140,12 @@
                         </tr>
                         @if($list['replays']->count() > 0)  
                         @foreach($list['replays'] as $index => $replay)
+                        @if($replay->sender_user_id == $replay->receiver_user_id && $replay->sender_user_id != Auth::user()->id && !$replay->is_receiver_dismissed)
                         <tr>
                             <td class='whitecolor' style="text-align:center;">
-                                &nbsp;{{$replay->message}}  222
+                                <a  style="float:right;" href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                &nbsp;{{$replay->message}} 
+                                <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 @if($replay->profile_pic)
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
@@ -133,6 +153,20 @@
                                 @endif
                             </td>
                         </tr>
+                        @elseif($replay->sender_user_id != $replay->receiver_user_id && $replay->sender_user_id == Auth::user()->id && !$replay->is_sender_dismissed)
+                        <tr>
+                            <td class='whitecolor' style="text-align:center;">
+                                <a  style="float:right;" href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                &nbsp;{{$replay->message}} 
+                                <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
+                                @if($replay->profile_pic)
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="Generic placeholder image" width="40" height="40">
+                                @else
+                                <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
+                                @endif
+                            </td>
+                        </tr>
+                        @endif
                         @endforeach
                         @endif
                     </table>
@@ -254,6 +288,7 @@
     }
     });
 
+
     $(document).on('click', '.replayBtn', function (e) { 
     e.preventDefault();
 
@@ -308,7 +343,11 @@
     showConfirmButton: false
     })
     if (data.status == 'success') {
-    $("#message").val("");
+    $("#sendMessageDiv").show();
+    $("#replayMessageDiv").hide();
+    $("#messageIdHidden").val('');
+    $("#replayTypeHidden").val('');
+    $("#message").val('');;
     getHistory(toUserId);
     }
     }
