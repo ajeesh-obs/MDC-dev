@@ -94,8 +94,7 @@
                             Make Appointment</a>
                         <a href="#" class="btn btn-outline-light border-white rounded-pill">
                             B</a>
-                        <a href="#" class="btn btn-outline-light border-white rounded-pill">
-                            B</a>
+                        <a href="{{ route('connect.message', array(base64_encode($user->id))) }}" class="btn btn-outline-light border-white rounded-pill" title="Message">M</a>
                     </li>
                     <li class="bg-transparent border-0 px-0 list-group-item d-flex align-items-center">
                         <img src="{{ asset('img/badge-coach.png') }}" height="48" class="mr-2">
