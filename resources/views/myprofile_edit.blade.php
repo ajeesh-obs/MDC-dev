@@ -296,11 +296,13 @@
                 <p class="mb-0">
                     <i class="icon icon-placeholder"></i>
 <!--                    <input type="datetime-local" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">-->
-                    <input type="date" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">
+                    <!--<input type="date" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">-->
+                     <input id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="textbox-n form-control form-control-sm text-white-50 bg-transparent" type="text" onfocus="(this.type='date')"> 
                 </p>
                 <p class="mb-0">
                     <i class="icon icon-placeholder"></i>
-                    <input type="date" id="travelReturn" name="travelReturn" placeholder="Travel Return" class="form-control form-control-sm text-white-50 bg-transparent">
+                    <!--<input type="date" id="travelReturn" name="travelReturn" placeholder="Travel Return" class="form-control form-control-sm text-white-50 bg-transparent">-->
+                    <input id="travelReturn" name="travelReturn" placeholder="Travel Return" class="textbox-n form-control form-control-sm text-white-50 bg-transparent" type="text" onfocus="(this.type='date')"> 
                 </p> <br>
                 <p class="mb-0 saveTravelPlanDiv">
                     <a href="javascript:void()" class="btn btn-outline-warning rounded-pill w-50 accent saveTravelPlan">Save</a>
