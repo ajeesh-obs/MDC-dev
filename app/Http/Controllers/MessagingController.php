@@ -224,9 +224,9 @@ class MessagingController extends Controller {
         }
 
         if ($saveData) {
-            return response()->json(array('status' => 'success', 'message' => 'Message  replay sent successfully'));
+            return response()->json(array('status' => 'success', 'message' => 'Message  reply sent successfully'));
         } else {
-            return response()->json(array('status' => 'error', 'message' => 'User message replay not sent, Please try again later'));
+            return response()->json(array('status' => 'error', 'message' => 'User message reply not sent, Please try again later'));
         }
     }
 
