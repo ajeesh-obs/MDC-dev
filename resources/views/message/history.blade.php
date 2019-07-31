@@ -16,7 +16,7 @@
                 </td>
 
             <span>
-                <button data-type='self' data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                <button data-type='self' data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Reply</button>
             </span>
             </tr>
             @if($list['replays']->count() > 0)  
@@ -68,7 +68,7 @@
                     @endif
                     &nbsp;{{$list['message']}}
                     <span style="float:right" >
-                        <button data-type='replay'  data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                        <button data-type='replay'  data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Reply</button>
                         <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                     </span>
                 </td>

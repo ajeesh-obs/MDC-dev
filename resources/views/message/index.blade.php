@@ -46,7 +46,7 @@
                                 </p>
                                 <p class="mb-0" style="text-align:left;display:none;" id='replayMessageDiv'>
                                     <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayMessageBtn">
-                                        Replay
+                                        Reply
                                     </a>
                                     <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 cancelMessageBtn">
                                         Cancel
@@ -81,7 +81,7 @@
                             </td>
 
                         <span>
-                            <button data-type='self' data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                            <button data-type='self' data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Reply</button>
                         </span>
                         </tr>
                         @if($list['replays']->count() > 0)  
@@ -133,7 +133,7 @@
                                 @endif
                                 &nbsp;{{$list['message']}}
                                 <span style="float:right" >
-                                    <button data-type='replay'  data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Replay</button>
+                                    <button data-type='replay'  data-id="{{$list['id']}}" class="btn btn-primary replayBtn">Reply</button>
                                     <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                                 </span>
                             </td>
