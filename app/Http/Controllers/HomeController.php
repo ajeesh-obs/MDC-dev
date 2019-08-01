@@ -44,6 +44,11 @@ class HomeController extends Controller {
             Auth::logout();
             return redirect()->route('login')->with('errormessage', 'Your email is not verified');
         }
+        // check super admin tries to login in user side
+        if ($this->superAdminId == auth()->user()->id) {
+            Auth::logout();
+            return redirect()->route('login')->with('errormessage', 'This is user login section');
+        }
 
         $route = 'myprofile';
         // check user is logged in first or not
