@@ -20,7 +20,7 @@ class User extends Authenticatable {
     protected $fillable = [
         'first_name', 'last_name', 'email', 'password', 'facebook_id', 'email_token'
     ];
-    public $sortable = ['first_name', 'email', 'id'];
+    public $sortable = ['first_name', 'email', 'id', 'current_location'];
 
     /**
      * The attributes that should be hidden for arrays.

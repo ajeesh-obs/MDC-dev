@@ -378,7 +378,7 @@
                             </th>
                             <th class="text-uppercase font-weight-light" scope="col">
                                 <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>
-                                Location
+                                @sortablelink('current_location', 'Location')
                             </th>
                         </tr>
                     </thead>
@@ -402,7 +402,7 @@
                                 @endif
                     <!--<span class="badge badge-primary smaller text-white px-2 py-1">{{$serviceProvider->name}}</span>-->
                             </td>
-                            <td></td>
+                            <td>{{$serviceProvider->current_location}}</td>
                         </tr>
                         @endforeach
                         @else

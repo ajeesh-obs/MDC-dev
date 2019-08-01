@@ -546,6 +546,10 @@
             $("#editServiceProvideremail").val(email);
             $("#editServiceProviderid").val(id);
             $("#collapseEditMember").show();
+            $('html, body').animate({
+            scrollTop: $("#collapseEditMember").offset().top
+            }, 1000); 
+            
             }
             });
             $("#editServiceProviderBtn").click(function() {
