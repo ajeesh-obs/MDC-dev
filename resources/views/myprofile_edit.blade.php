@@ -287,6 +287,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="background-color:#333333 !important;color:#fff;">
             <div class="modal-body">
+                <span class="close" style="cursor:pointer;" data-dismiss="modal">&times;</span>
                 <h2>Travel Plans</h2>
                 <p>
                 <p class="mb-0">
@@ -297,7 +298,7 @@
                     <i class="icon icon-placeholder"></i>
 <!--                    <input type="datetime-local" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">-->
                     <!--<input type="date" id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="form-control form-control-sm text-white-50 bg-transparent">-->
-                     <input id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="textbox-n form-control form-control-sm text-white-50 bg-transparent" type="text" onfocus="(this.type='date')"> 
+                    <input id="travelDepart" name="travelDepart" placeholder="Travel Depart" class="textbox-n form-control form-control-sm text-white-50 bg-transparent" type="text" onfocus="(this.type='date')"> 
                 </p>
                 <p class="mb-0">
                     <i class="icon icon-placeholder"></i>
@@ -346,11 +347,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                <span class="pull-right">
-                </span>
             </div>
         </div>
     </div>

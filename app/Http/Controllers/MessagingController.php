@@ -326,12 +326,12 @@ class MessagingController extends Controller {
         if ($saveData) {
 
             // insert notifications if users have same location
-            $usersLists = DB::table('user_details')->where('current_location', $formData['travelLocation'])->orderBy('id', 'desc')->get();
+            $usersLists = DB::table('users')->where('current_location', $formData['travelLocation'])->where('id', '!=', Auth::id())->orderBy('id', 'desc')->get();
             if ($usersLists) {
                 $notificationTxt = auth()->user()->first_name . ' ' . auth()->user()->last_name . ' will be in your area during ' . $formData['travelDepart'] . ' to ' . $formData['travelReturn'];
                 foreach ($usersLists as $key => $usersList) {
                     $saveNotification = Notification::create([
-                                'user_id' => $usersList->user_id,
+                                'user_id' => $usersList->id,
                                 'notification' => $notificationTxt,
                     ]);
                 }

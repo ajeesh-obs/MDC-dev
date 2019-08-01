@@ -137,7 +137,7 @@
                         </div>
                         <div class="d-flex flex-row justify-content-between align-items-center mb-2">
                             <a href="{{ route('other.profile.view', array(base64_encode($user['id']))) }}" style="cursor: pointer;">
-                                <h5 class="card-title font-weight-bold mb-0">{{$user['name']}}</h5>
+                                <h5 class="card-title font-weight-bold mb-0">{{ str_limit($user['name'], $limit = 15, $end = '...') }}</h5>
                             </a>
                             @if($user['isFollowing']) 
                             <a tabindex="0" id="user-following" href="javascript://"

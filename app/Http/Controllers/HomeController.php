@@ -667,8 +667,8 @@ class HomeController extends Controller {
                                     'user_id' => Auth::id(),
                                     'location_date' => date('y-m-d')
                         ]);
-                        // update current location details in user details
-                        DB::table('user_details')->where('user_id', '=', Auth::id())->update(
+                        // update current location details in user table
+                        DB::table('users')->where('id', '=', Auth::id())->update(
                                 array(
                                     'current_location' => $formData['location'],
                                     'current_latitude' => $formData['latitude'],

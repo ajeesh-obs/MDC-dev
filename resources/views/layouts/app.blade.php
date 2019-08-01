@@ -238,7 +238,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                                Welcome, {{ str_limit(Auth::user()->first_name, $limit = 20, $end = '...') }} {{ str_limit(Auth::user()->last_name, $limit = 15, $end = '...') }}
 
                                 @if($LoginUserProfilePic)
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$LoginUserProfilePic) }}"alt="Generic placeholder image" width="40" height="40">

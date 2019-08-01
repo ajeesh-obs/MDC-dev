@@ -120,7 +120,7 @@
                         <tr class="hover-permission">
                             <td> 
                                 <img class="rounded-circle mr-3" src="{{ asset('img/profile6.jpg') }}" alt="" width="25" height="25">
-                                {{ $user->first_name }} {{ $user->last_name }} 
+                                {{ str_limit($user->first_name, $limit = 20, $end = '...') }} {{ str_limit($user->last_name, $limit = 15, $end = '...') }}
                             </td>
                             <td> {{ $user->email }} </td>
                             <td class="text-center"> <img src="{{ asset('img/badge-coach.png') }}" height="30"></td>
@@ -387,7 +387,9 @@
                         @foreach($serviceProviders as $serviceProvider)
                         <tr>
                             <td><img class="rounded-circle mr-3" src="{{ asset('img/profile6.jpg') }}" alt="" width="25" height="25">
-                                <a style="cursor: pointer;" class="editmember" data-email="{{$serviceProvider->email}}" data-id="{{$serviceProvider->id}}" data-lname="{{$serviceProvider->last_name}}" data-fname="{{$serviceProvider->first_name}}">{{ $serviceProvider->first_name }} {{ $serviceProvider->last_name }} </a>
+                                <a style="cursor: pointer;" class="editmember" data-email="{{$serviceProvider->email}}" data-id="{{$serviceProvider->id}}" data-lname="{{$serviceProvider->last_name}}" data-fname="{{$serviceProvider->first_name}}">
+                                    {{ str_limit($serviceProvider->first_name, $limit = 15, $end = '...') }} {{ str_limit($serviceProvider->last_name, $limit = 15, $end = '...') }}
+                                </a>
                             </td>
                             <td>
                                 {{ $serviceProvider->email }}
