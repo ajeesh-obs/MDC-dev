@@ -39,7 +39,7 @@
                                 <div id="suggesstion-box-users" style="background-color:#514c4c;border:1px solid #514c4c;cursor: pointer;"></div>
                                 <br>
                                 <p class="mb-0">
-                                    <textarea style="color: #fff !important;" id="message" name="message" placeholder="Message" class="form-control form-control-sm bg-transparent"></textarea>
+                                    <textarea rows="3" style="color: #fff !important;" id="message" name="message" placeholder="Message" class="form-control form-control-sm bg-transparent"></textarea>
                                 </p>
                                 <br>
                                 <p class="mb-0" style="text-align:left;" id='sendMessageDiv'>
