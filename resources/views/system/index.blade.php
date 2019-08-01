@@ -6,7 +6,7 @@
         width:33%;
         float:left;
         background-color: #2D2929 !important;
-        min-height: 72% !important;
+        min-height: 80% !important;
         border:1px solid #fff;
     }
     .centerAlign {
@@ -265,51 +265,51 @@
 @section('script')
 <script>
     $(document).ready(function () {
-        $(document).on('click', '.lavel-delete', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            swal({
-                title: "Are you sure?",
-                text: "Do you want to delete the level",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                cancelButtonText: "No, cancel",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            $.ajax({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                type: 'delete',
-                                url: '/admin/level/delete/' + id,
-                                success: function (data) {
-                                    swal({
-                                        text: data.message,
-                                        title: 'Success!',
-                                        type: "success",
-                                        timer: 2000,
-                                        showCancelButton: false, //There won't be any cancle button
-                                        showConfirmButton: false
-                                    },
-                                            function () {
-                                                location.reload();
-                                            })
-                                }
-                            });
-                        } else {
-                            swal({
-                                title: 'Cancelled!',
-                                type: "info", showConfirmButton: false, timer: 1000
-                            });
-                            e.preventDefault();
-                        }
-                    });
-        });
+    $(document).on('click', '.lavel-delete', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    swal({
+    title: "Are you sure?",
+    text: "Do you want to delete the level",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes",
+    cancelButtonText: "No, cancel",
+    closeOnConfirm: false,
+    closeOnCancel: false
+    },
+    function (isConfirm) {
+    if (isConfirm) {
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: 'delete',
+    url: '/admin/level/delete/' + id,
+    success: function (data) {
+    swal({
+    text: data.message,
+    title: 'Success!',
+    type: "success",
+    timer: 2000,
+    showCancelButton: false, //There won't be any cancle button
+    showConfirmButton: false
+    },
+    function () {
+    location.reload();
+    })
+    }
+    });
+    } else {
+    swal({
+    title: 'Cancelled!',
+    type: "info", showConfirmButton: false, timer: 1000
+    });
+    e.preventDefault();
+    }
+    });
+    });
     });
 </script>
 @endsection
