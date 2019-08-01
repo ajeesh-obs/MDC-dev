@@ -47,7 +47,8 @@ class ConnectController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
-
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $allExpertArr = array();
         $usersList = [];
@@ -165,7 +166,7 @@ class ConnectController extends Controller {
             }
         }
 
-        return view('connect.index', compact('allExpertArr', 'usersList', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
+        return view('connect.index', compact('allExpertArr', 'usersList', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'unreadNotifications'));
     }
 
     /*
@@ -224,6 +225,8 @@ class ConnectController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         // get session values for map view 
         $all = session('connectAll');
@@ -249,7 +252,7 @@ class ConnectController extends Controller {
             $searchExpertiseArr = explode(",", $userCurrentExpertise);
         }
 
-        return view('connect.map', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'unreadMessages', 'unreadMessagesCount', 'usersList', 'all', 'followers', 'following', 'searchExpertiseArr', 'searchByPersonLocationLevel'));
+        return view('connect.map', compact('LoginUserProfilePic', 'unreadNotifications', 'latestFollowers', 'unreadMessages', 'unreadMessagesCount', 'usersList', 'all', 'followers', 'following', 'searchExpertiseArr', 'searchByPersonLocationLevel'));
     }
 
     /*

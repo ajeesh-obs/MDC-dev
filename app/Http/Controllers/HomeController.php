@@ -77,7 +77,8 @@ class HomeController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
-
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
@@ -90,7 +91,7 @@ class HomeController extends Controller {
             $linkedin_link = $userDetails->linkedin_link;
         }
 
-        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
+        return view('accountsettings', compact('user', 'facebook_link', 'twitter_link', 'instagram_link', 'youtube_link', 'linkedin_link', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'unreadNotifications'));
     }
 
     /*
@@ -256,6 +257,8 @@ class HomeController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $selUserId = base64_decode($id);
         // check user exists or not
@@ -296,7 +299,7 @@ class HomeController extends Controller {
 
         $followersCount = UsersFollowing::where('following_user_id', '=', $selUserId)->count();
 
-        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowersOther', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
+        return view('other_profile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'following', 'latestFollowersOther', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'unreadNotifications'));
     }
 
     /*
@@ -442,6 +445,8 @@ class HomeController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $user = Auth::user();
         $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
@@ -466,7 +471,7 @@ class HomeController extends Controller {
                 ->take(5)
                 ->get();
 
-        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount'));
+        return view('myprofile', compact('user', 'userDetails', 'userExpertise', 'userLocation', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'latestActivityLog', 'unreadMessages', 'unreadMessagesCount', 'unreadNotifications'));
     }
 
     /*
@@ -490,6 +495,8 @@ class HomeController extends Controller {
         // get unread messages 
         $unreadMessages = $this->userService->getUnreadMessages();
         $unreadMessagesCount = count($unreadMessages);
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $latestFollowers = UsersFollowing::select('user_details.profile_pic', 'users_following.id', 'users.first_name', 'users.last_name')
                 ->leftjoin('user_details', 'user_details.user_id', '=', 'users_following.user_id')
@@ -550,7 +557,7 @@ class HomeController extends Controller {
                 $profilePic = $userDetails->profile_pic;
             }
         }
-        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'travelPlans'));
+        return view('myprofile_edit', compact('user', 'userDetails', 'languages_spoken', 'about_username', 'goals_vision', 'education', 'certifications', 'awards_honor', 'conferences_events', 'volunteer_activities', 'hobbies_interests', 'income', 'userExpertise', 'allExpertArr', 'userCurrentExpertise', 'location', 'latitude', 'longitude', 'profilePic', 'latestFollowers', 'followersCount', 'LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'travelPlans', 'unreadNotifications'));
     }
 
     /*
@@ -660,6 +667,14 @@ class HomeController extends Controller {
                                     'user_id' => Auth::id(),
                                     'location_date' => date('y-m-d')
                         ]);
+                        // update current location details in user details
+                        DB::table('user_details')->where('user_id', '=', Auth::id())->update(
+                                array(
+                                    'current_location' => $formData['location'],
+                                    'current_latitude' => $formData['latitude'],
+                                    'current_longitude' => $formData['longitude'],
+                                )
+                        );
                     }
                 }
                 // update useractivity
@@ -694,8 +709,10 @@ class HomeController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
-        return view('mindset', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers'));
+        return view('mindset', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'unreadNotifications'));
     }
 
     /*

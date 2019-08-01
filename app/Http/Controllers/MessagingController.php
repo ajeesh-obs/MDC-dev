@@ -11,6 +11,7 @@ use App\Services\UserService;
 use App\Messaging;
 use App\TravelPlans;
 use App\UsersFollowing;
+use App\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class MessagingController extends Controller {
@@ -47,6 +48,8 @@ class MessagingController extends Controller {
         $unreadMessagesCount = count($unreadMessages);
         // get latest followers list
         $latestFollowers = $this->userService->getLatestFollowers();
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
 
         $messageList = [];
         $selUserId = "";
@@ -65,7 +68,7 @@ class MessagingController extends Controller {
                 $messageList = $this->getMessageLists($selUserId);
             }
         }
-        return view('message.index', compact('LoginUserProfilePic', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'messageList'));
+        return view('message.index', compact('LoginUserProfilePic', 'selUserId', 'selUserName', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'messageList', 'unreadNotifications'));
     }
 
     /*
@@ -320,6 +323,18 @@ class MessagingController extends Controller {
                     'travel_status' => 'ACTIVE',
         ]);
         if ($saveData) {
+
+            // insert notifications if users have same location
+            $usersLists = DB::table('user_details')->where('current_location', $formData['travelLocation'])->orderBy('id', 'desc')->get();
+            if ($usersLists) {
+                $notificationTxt = auth()->user()->first_name . ' ' . auth()->user()->last_name . ' will be in your area during ' . $formData['travelDepart'] . ' to ' . $formData['travelReturn'];
+                foreach ($usersLists as $key => $usersList) {
+                    $saveNotification = Notification::create([
+                                'user_id' => $usersList->user_id,
+                                'notification' => $notificationTxt,
+                    ]);
+                }
+            }
             return response()->json(array('status' => 'success', 'message' => 'Travel plan saved successfully'));
         } else {
             return response()->json(array('status' => 'error', 'message' => 'Travel plan not saved, Please try again later'));
@@ -387,6 +402,39 @@ class MessagingController extends Controller {
         }
 
         return response()->json(array('status' => 'error', 'message' => 'Travel plan not modified, Please try again later'));
+    }
+
+    /*
+     * notification list 
+     * 
+     */
+
+    protected function notificationList() {
+
+        if (!empty($this->loggedUserCheck())) {
+            return $this->errorFunction();
+        }
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+        // get unread messages 
+        $unreadMessages = $this->userService->getUnreadMessages();
+        $unreadMessagesCount = count($unreadMessages);
+        // get latest followers list
+        $latestFollowers = $this->userService->getLatestFollowers();
+        // get unread notifiactions
+        $unreadNotifications = $this->userService->getUnreadNotifications();
+
+        // set all notificatons as read status 
+        DB::table('notification')->where([['is_read', '=', 0], ['user_id', '=', Auth::id()]])->update(['is_read' => 1]);
+
+        $notificationList = Notification::whereNull('deleted_at')->orderBy('id', 'desc')->paginate(10);
+
+        return view('message.notification', compact('LoginUserProfilePic', 'unreadMessages', 'unreadMessagesCount', 'latestFollowers', 'notificationList', 'unreadNotifications'));
     }
 
     /*

@@ -6,6 +6,7 @@ use App\UserActivityLog;
 use Illuminate\Support\Facades\Auth;
 use App\Messaging;
 use App\UsersFollowing;
+use App\Notification;
 
 class UserService {
     /*
@@ -36,6 +37,21 @@ class UserService {
                         ->where('messaging.receiver_user_id', Auth::id())
                         ->where('messaging.is_read', 0)
                         ->orderBy('messaging.id', 'DESC')->get();
+        return $getData;
+    }
+
+    /*
+     * get unread notifications 
+     * 
+     */
+
+    public function getUnreadNotifications() {
+
+        // get message history 
+        $getData = Notification::where('user_id', Auth::id())
+                        ->where('is_read', 0)
+                        ->whereNull('deleted_at')
+                        ->orderBy('id', 'DESC')->get();
         return $getData;
     }
 

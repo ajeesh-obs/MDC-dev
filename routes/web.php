@@ -70,6 +70,7 @@ Route::get('/connect', 'ConnectController@index')->name('connect');
 Route::post('/connect/search', 'ConnectController@search')->name('connect.search');
 Route::get('/connect/map', 'ConnectController@mapView')->name('map.view');
 
+
 Route::get('/message', 'MessagingController@index')->name('message');
 Route::post('/message/send', 'MessagingController@messageSend')->name('send.message');
 Route::post('/message/history', 'MessagingController@messageHistory')->name('message.history');
@@ -83,6 +84,7 @@ Route::delete('/travel/plan/delete/{id}', 'MessagingController@deleteTravelPlan'
 Route::post('/travel/plan/history', 'MessagingController@listTravelPlan')->name('travel.plan.history');
 Route::post('/travel/plan/update', 'MessagingController@travelPlanUpdate')->name('travel.plan.update');
 
+Route::get('/notification/list', 'MessagingController@notificationList')->name('notification.list');
 
 Route::get('/accountsettings', 'HomeController@accountSettings')->name('accountsettings');
 Route::post('/accountsettingssave', 'HomeController@accountSettingsSave')->name('accountsettingssave');

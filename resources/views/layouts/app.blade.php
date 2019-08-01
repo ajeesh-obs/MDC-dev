@@ -182,10 +182,37 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
+                        <li class="nav-item dropdown dropdown-chat">
+                            <a class="nav-link dropdown-toggle arrow-none" href="javascript:void()" id="navbarDropdownNotification" role="button"
+                               aria-haspopup="true" aria-expanded="false">
                                 <i class="icon icon-notification filter-light"></i>
+                                @if(count($unreadNotifications) > 0)
+                                <span class="badge rounded-circle">{{count($unreadNotifications)}}</span>
+                                @endif
                             </a>
+                            <div class="dropdown-menu text-center dropdown-menu-left p-0" aria-labelledby="navbarDropdownNotification" style="min-width: 390px; min-height: 360px;">
+                                <div class="arrow"></div>
+                                <div class="collapse show multi-collapse-chat-search p-3" id="multiCollapseChat">
+                                    <h6 class="text-uppercase text-white text-center font-weight-bold mb-3">
+                                        Notifications
+                                    </h6>
+                                    <div class="chat-list-wrapper pre-scrollable" style="overflow-y:auto;">
+                                        <ul class="list-unstyled">
+                                            @if($unreadNotifications->count() > 0)
+                                            @foreach($unreadNotifications as $index => $notification)
+                                            <li class="d-flex flex-row align-items-center mb-3">
+                                                <a href="{{ route('notification.list') }}">
+                                                    <p class="small mb-0 font-weight-light lh-1">
+                                                        {{ str_limit($notification->notification, $limit = 60, $end = '...') }}  
+                                                    </p>
+                                                </a>
+                                            </li>
+                                            @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
