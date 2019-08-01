@@ -107,7 +107,7 @@ class MessagingController extends Controller {
             $selUser = DB::table('users')->where('id', '=', $toUserId)->first();
             if (!empty($selUser)) {
                 // get message history 
-                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.messaging_parent_id')
+                $getData = Messaging::select('user_details.profile_pic', 'messaging.id', 'users.first_name', 'users.last_name', 'messaging.message', 'messaging.created_at', 'messaging.sender_user_id', 'messaging.receiver_user_id', 'messaging.is_receiver_dismissed', 'messaging.is_sender_dismissed' ,'messaging.messaging_parent_id')
                                 ->leftjoin('user_details', 'user_details.user_id', '=', 'messaging.sender_user_id')
                                 ->leftjoin('users', 'users.id', '=', 'messaging.sender_user_id')
                                 ->whereIn('messaging.sender_user_id', $ids)
@@ -120,12 +120,13 @@ class MessagingController extends Controller {
 
                         $res['profile_pic'] = $row->profile_pic;
                         $res['id'] = $row->id;
-                        $res['name'] = $row->first_name . ' ' . $row->last_name;
+                        $res['name'] = $row->first_name . ' ' . $row->last_name;  
                         $res['message'] = $row->message;
                         $res['created_at'] = $row->created_at;
                         $res['sender_user_id'] = $row->sender_user_id;
                         $res['receiver_user_id'] = $row->receiver_user_id;
                         $res['is_receiver_dismissed'] = $row->is_receiver_dismissed;
+                        $res['is_sender_dismissed'] = $row->is_sender_dismissed;
                         $res['messaging_parent_id'] = $row->messaging_parent_id;
 
                         // get replays if exists 

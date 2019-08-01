@@ -2,6 +2,7 @@
 @foreach($messageList as $index => $list)
 
 @if($list['sender_user_id'] == Auth::user()->id)
+@if(!$list['is_sender_dismissed'])
 <div class="card card-light rounded-0 mb-4">
     <div class="table-responsive">
         <table class="table table-hover mb-2">
@@ -21,6 +22,7 @@
                 <td class='whitecolor' style="border:none !important;">
                     <span style="float:right;">
                         <a href="javascript:void()" data-type='self' data-id="{{$list['id']}}" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayBtn">Reply</a>
+                        <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                     </span>
                 </td>
             </tr>
@@ -74,6 +76,7 @@
         </table>
     </div>
 </div>
+@endif
 @else
 
 @if(!$list['is_receiver_dismissed'])
