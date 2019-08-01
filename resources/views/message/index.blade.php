@@ -82,7 +82,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                                 @endif
-                                <span>{{$list['name']}}</span> 
+                                <span>{{ str_limit($list['name'], $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($list['created_at']))}}</i></span>
                                 <br>
                                 <span class="boldClass">&nbsp;{{$list['message']}}</span>
@@ -106,7 +106,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                                 @endif
-                                <span>{{$replay->first_name}} {{$replay->last_name}}</span> 
+                                <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <!--<br>-->
                                 &nbsp;{{$replay->message}} 
@@ -127,7 +127,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                                 @endif
-                                <span>{{$replay->first_name}} {{$replay->last_name}}</span> 
+                                <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <!--<br>-->
                                 &nbsp;{{$replay->message}} 
@@ -158,7 +158,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="Generic placeholder image" width="40" height="40">
                                 @endif
-                                <span>{{$list['name']}}</span> 
+                                <span>{{ str_limit($list['name'], $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($list['created_at']))}}</i></span>
                                 <br>
                                 <span class="boldClass">&nbsp;{{$list['message']}}</span>
@@ -182,7 +182,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                                 @endif
-                                <span>{{$replay->first_name}} {{$replay->last_name}}</span> 
+                                <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span>
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <!--<br>-->
                                 &nbsp;{{$replay->message}} 
@@ -203,7 +203,7 @@
                                 @else
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                                 @endif
-                                <span>{{$replay->first_name}} {{$replay->last_name}}</span> 
+                                <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span>
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <!--<br>-->
                                 &nbsp;{{$replay->message}} 
