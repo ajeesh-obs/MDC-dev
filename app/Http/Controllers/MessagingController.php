@@ -135,7 +135,7 @@ class MessagingController extends Controller {
                                         ->whereIn('messaging.sender_user_id', $ids)
                                         ->whereIn('messaging.receiver_user_id', $ids)
                                         ->where('messaging.messaging_parent_id', $row->id)
-                                        ->orderBy('messaging.id', 'DESC')->get();
+                                        ->orderBy('messaging.id', 'ASC')->get();
                         $res['replays'] = $getDataReplay;
                         $result[] = $res;
                     }
