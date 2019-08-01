@@ -21,7 +21,7 @@
             </div>
             @endif
             <div class="table-responsive">
-                <table class="table table-hover mb-2">
+                <table class="table table-hover mb-2 userslistTable">
                     <thead class="text-white">
                         <tr>
                             <th class="text-uppercase font-weight-light" scope="col">
