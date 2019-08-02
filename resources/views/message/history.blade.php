@@ -5,9 +5,9 @@
 @if(!$list['is_sender_dismissed'])
 <div class="card card-light rounded-0 mb-4">
     <div class="table-responsive">
-        <table class="table table-hover mb-2">
+        <table class="table table-hover1 mb-2">
             <tr>
-                <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='self' data-id="{{$list['id']}}">
+                <td class='whitecolor' style="border:none !important;text-align: justify;" id="div_{{$list['id']}}" data-type='self' data-id="{{$list['id']}}">
 
                     @if($list['profile_pic'])
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="" width="40" height="40">
@@ -29,9 +29,8 @@
             @if($list['replays']->count() > 0)  
             @foreach($list['replays'] as $index => $replay)
             @if($replay->sender_user_id == $replay->receiver_user_id && $replay->sender_user_id == Auth::user()->id && !$replay->is_sender_dismissed)
-            <tr>
-                <td class='whitecolor' style="border:none !important;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <tr class="replydivcolor">
+                <td class='whitecolor' style="border:none !important;padding-left:30px;text-align: justify;">
 
                     @if($replay->profile_pic)
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="" width="40" height="40">
@@ -40,8 +39,8 @@
                     @endif
                     <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                     <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
-                    <!--<br>-->
-                    &nbsp;{{$replay->message}} 
+                    <br>
+                    <span>&nbsp;{{$replay->message}}</span>
                 </td>
                 <td class='whitecolor' style="border:none !important;">
                     <span style="float:right;">
@@ -50,9 +49,8 @@
                 </td>
             </tr>
             @elseif($replay->sender_user_id != $replay->receiver_user_id && $replay->sender_user_id != Auth::user()->id && !$replay->is_receiver_dismissed)
-            <tr>
-                <td class='whitecolor' style="border:none !important;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <tr class="replydivcolor">
+                <td class='whitecolor' style="border:none !important;padding-left:30px;text-align: justify;">
 
                     @if($replay->profile_pic)
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="" width="40" height="40">
@@ -61,8 +59,8 @@
                     @endif
                     <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                     <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
-                    <!--<br>-->
-                    &nbsp;{{$replay->message}} 
+                    <br>
+                    <span>&nbsp;{{$replay->message}}</span>
                 </td>
                 <td class='whitecolor' style="border:none !important;">
                     <span style="float:right;">
@@ -82,9 +80,9 @@
 @if(!$list['is_receiver_dismissed'])
 <div class="card card-light rounded-0 mb-4">
     <div class="table-responsive">
-        <table class="table table-hover mb-2">
+        <table class="table table-hover1 mb-2">
             <tr>
-                <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='replay' data-id="{{$list['id']}}">
+                <td class='whitecolor' style="border:none !important;text-align: justify;" id="div_{{$list['id']}}" data-type='replay' data-id="{{$list['id']}}">
                     @if($list['profile_pic'])
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="Generic placeholder image" width="40" height="40">
                     @else
@@ -105,20 +103,19 @@
             @if($list['replays']->count() > 0)  
             @foreach($list['replays'] as $index => $replay)
             @if($replay->sender_user_id == $replay->receiver_user_id && $replay->sender_user_id != Auth::user()->id && !$replay->is_receiver_dismissed)
-            <tr>
-                <td class='whitecolor' style="border:none !important;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <tr class="replydivcolor">
+                <td class='whitecolor' style="border:none !important;padding-left:30px;text-align: justify;">
 
                     @if($replay->profile_pic)
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="" width="40" height="40">
                     @else
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                     @endif
-                    <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span>
+                    <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                     <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
-                    <!--<br>-->
-                    &nbsp;{{$replay->message}} 
-                </td> 
+                    <br>
+                    <span>&nbsp;{{$replay->message}}</span>
+                </td>
                 <td class='whitecolor' style="border:none !important;">
                     <span style="float:right;">
                         <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
@@ -126,20 +123,19 @@
                 </td>
             </tr>
             @elseif($replay->sender_user_id != $replay->receiver_user_id && $replay->sender_user_id == Auth::user()->id && !$replay->is_sender_dismissed)
-            <tr>
-                <td class='whitecolor' style="border:none !important;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <tr class="replydivcolor">
+                <td class='whitecolor' style="border:none !important;padding-left:30px;text-align: justify;">
 
                     @if($replay->profile_pic)
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$replay->profile_pic) }}"alt="" width="40" height="40">
                     @else
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/no-profile.png') }}"alt="" width="40" height="40">
                     @endif
-                    <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span>
+                    <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                     <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
-                    <!--<br>-->
-                    &nbsp;{{$replay->message}} 
-                </td> 
+                    <br>
+                    <span>&nbsp;{{$replay->message}}</span>
+                </td>
                 <td class='whitecolor' style="border:none !important;">
                     <span style="float:right;">
                         <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$replay->id}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
