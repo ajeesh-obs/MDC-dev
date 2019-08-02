@@ -91,7 +91,7 @@
                                 <span>{{ str_limit($list['name'], $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($list['created_at']))}}</i></span>
                                 <br>
-                                <span class="boldClass">&nbsp;{{$list['message']}}</span>
+                                <span class="boldClass">{{$list['message']}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;width:12%;">
                                 <span style="float:right;">
@@ -114,7 +114,7 @@
                                 <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <br>
-                                <span>&nbsp;{{$replay->message}}</span>
+                                <span>{{$replay->message}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;">
                                 <span style="float:right;">
@@ -134,7 +134,7 @@
                                 <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <br>
-                                <span>&nbsp;{{$replay->message}}</span>
+                                <span>{{$replay->message}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;">
                                 <span style="float:right;">
@@ -165,7 +165,7 @@
                                 <span>{{ str_limit($list['name'], $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($list['created_at']))}}</i></span>
                                 <br>
-                                <span class="boldClass">&nbsp;{{$list['message']}}</span>
+                                <span class="boldClass">{{$list['message']}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;width:12%;">
                                 <span style="float:right;">
@@ -188,7 +188,7 @@
                                 <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <br>
-                                <span>&nbsp;{{$replay->message}}</span>
+                                <span>{{$replay->message}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;">
                                 <span style="float:right;">
@@ -208,7 +208,7 @@
                                 <span>{{ str_limit($replay->first_name, $limit = 20, $end = '...') }} {{ str_limit($replay->last_name, $limit = 20, $end = '...') }}</span> 
                                 <span style="font-size:12px;"><i>{{date('d-m-Y h:i A', strtotime($replay->created_at))}}</i></span>
                                 <br>
-                                <span>&nbsp;{{$replay->message}}</span>
+                                <span>{{$replay->message}}</span>
                             </td>
                             <td class='whitecolor actionbottom' style="border:none !important;">
                                 <span style="float:right;">
