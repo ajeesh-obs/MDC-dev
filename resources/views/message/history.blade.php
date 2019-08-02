@@ -7,7 +7,7 @@
     <div class="table-responsive">
         <table class="table table-hover mb-2">
             <tr>
-                <td class='whitecolor' style="border:none !important;">
+                <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='self' data-id="{{$list['id']}}">
 
                     @if($list['profile_pic'])
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="" width="40" height="40">
@@ -84,7 +84,7 @@
     <div class="table-responsive">
         <table class="table table-hover mb-2">
             <tr>
-                <td class='whitecolor' style="border:none !important;">
+                <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='replay' data-id="{{$list['id']}}">
                     @if($list['profile_pic'])
                     <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="Generic placeholder image" width="40" height="40">
                     @else

@@ -48,7 +48,7 @@
                                     </a>
                                 </p>
                                 <p class="mb-0" style="text-align:left;display:none;" id='replayMessageDiv'>
-                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayMessageBtn">
+                                    <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayMessageBtn_">
                                         Reply
                                     </a>
                                     <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 cancelMessageBtn">
@@ -75,7 +75,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-2">
                         <tr>
-                            <td class='whitecolor' style="border:none !important;">
+                            <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='self' data-id="{{$list['id']}}">
 
                                 @if($list['profile_pic'])
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="" width="40" height="40">
@@ -152,7 +152,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-2">
                         <tr>
-                            <td class='whitecolor' style="border:none !important;">
+                            <td class='whitecolor' style="border:none !important;" id="div_{{$list['id']}}" data-type='replay' data-id="{{$list['id']}}">
                                 @if($list['profile_pic'])
                                 <img class="rounded-circle ml-2" src="{{ asset('images/profile/thumbnail_'.$list['profile_pic']) }}"alt="Generic placeholder image" width="40" height="40">
                                 @else
@@ -229,6 +229,30 @@
         </div>
     </div>
 </main>
+
+<div id="replySectionDiv" class="replySectionDiv" style="display:none;">
+    <div class="d-flex replySectionDiv">
+        <div class="flex-fill">
+            <div class="d-flex flex-row align-items-center">
+                <div class="text-center mr-4" style="width:100%;">
+                    <p class="mb-0">
+                        <textarea rows="3" style="color: #fff !important;" id="messageReply" name="messageReply" placeholder="Reply Message" class="form-control form-control-sm bg-transparent messageReply"></textarea>
+                    </p>
+                    <br>
+                    <p class="mb-0" style="text-align:left;" id='replayMessageDiv'>
+                        <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayMessageBtn">
+                            Reply
+                        </a>
+                        <a href="javascript:void()" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 cancelMessageBtn">
+                            Cancel
+                        </a>
+                    </p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script>
@@ -337,38 +361,59 @@
     });
 
 
-    $(document).on('click', '.replayBtn', function (e) { 
+    $(document).on('click', '.replayBtn', function (e) {   
     e.preventDefault();
 
+    $(this).prop('disabled', true);
     var id = $(this).data('id');
     var replayType = $(this).data('type');
     if(id){
-    $("#sendMessageDiv").hide();
-    $("#replayMessageDiv").show();
+    //$("#sendMessageDiv").hide();
+    //$("#replayMessageDiv").show();
     $("#messageIdHidden").val(id);
     $("#replayTypeHidden").val(replayType);
-    $("#message").focus();
+    //$("#message").focus();
+
+    var txt = $("#replySectionDiv").html();
+    
+    //$(".replySectionDiv").html('');
+    $(".replySectionDiv").hide();
+    //$("#div_"+id).html('');
+    
+    $("#div_"+id).prepend(txt);
+    //$(".messageReply").focus();
+    
+    
     }
     });  
 
     $(document).on('click', '.cancelMessageBtn', function (e) { 
     e.preventDefault();
-    $("#sendMessageDiv").show();
-    $("#replayMessageDiv").hide();
+    //$("#sendMessageDiv").show();
+    //$("#replayMessageDiv").hide();
     $("#messageIdHidden").val('');
     $("#replayTypeHidden").val('');
     $("#message").val('');
+
+    $(".replySectionDiv").html('');
+    window.location.reload(); 
+    
     });
 
 
-    $(".replayMessageBtn").click(function(e) {
+    $(document).on('click', '.replayMessageBtn', function (e) { 
     e.preventDefault();
-
+    
+    var replayTypeHidden = $(this).parent().parent().parent().parent().parent().parent().data("type");
+    var messageIdHidden = $(this).parent().parent().parent().parent().parent().parent().data("id");    
+    
     var toUser = $("#toUser").val();
     var toUserId = $('#toUser').data('id');
-    var message = $("#message").val();
-    var messageIdHidden = $("#messageIdHidden").val();
-    var replayTypeHidden = $("#replayTypeHidden").val();
+    //var message = $("#message").val();
+    //var message = $(".messageReply").val();   
+    var message = $(this).parent().parent().find('.messageReply').val();  
+    //var messageIdHidden = $("#messageIdHidden").val();
+    //var replayTypeHidden = $("#replayTypeHidden").val();
     if (toUserId == null){
     $("#toUser").focus();
     return false;
@@ -396,7 +441,11 @@
     $("#messageIdHidden").val('');
     $("#replayTypeHidden").val('');
     $("#message").val('');;
-    getHistory(toUserId);
+    //getHistory(toUserId);
+    setTimeout(function(){
+    window.location.reload();
+    },1000);
+    
     }
     }
     })
