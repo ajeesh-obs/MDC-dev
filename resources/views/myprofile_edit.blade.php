@@ -58,7 +58,7 @@
                         <div class="flex-fill mr-3">
                             <div class="row">
                                 <div class="col-5">
-                                    <h1 class="mb-2">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h1>
+                                    <h1 class="mb-2">{{ str_limit(Auth::user()->first_name, $limit = 20, $end = '...') }} {{ str_limit(Auth::user()->last_name, $limit = 15, $end = '...') }}</h1>
                                     <p>Occupation Title</p>
                                 </div>
                                 <div class="col-7">

@@ -87,7 +87,7 @@
                                 <br>
                                 <span class="boldClass">&nbsp;{{$list['message']}}</span>
                             </td>
-                            <td class='whitecolor' style="border:none !important;">
+                            <td class='whitecolor' style="border:none !important;width:12%;">
                                 <span style="float:right;">
                                     <a href="javascript:void()" data-type='self' data-id="{{$list['id']}}" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayBtn">Reply</a>
                                     <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
@@ -163,7 +163,7 @@
                                 <br>
                                 <span class="boldClass">&nbsp;{{$list['message']}}</span>
                             </td>
-                            <td class='whitecolor' style="border:none !important;">
+                            <td class='whitecolor' style="border:none !important;width:12%;">
                                 <span style="float:right;">
                                     <a href="javascript:void()" data-type='replay' data-id="{{$list['id']}}" class="btn btn-sm btn-outline-warning rounded-pill text-white py-2 px-3 replayBtn">Reply</a>
                                     <a href="javascript:void(0)" class="ml-3 message-dismiss" data-id="{{$list['id']}}"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
