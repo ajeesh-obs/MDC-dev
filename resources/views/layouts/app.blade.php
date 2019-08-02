@@ -154,7 +154,7 @@
                                             <a href="javascript:void()" class="mx-1 text-decoration-none text-white small font-weight-bold SelectAllFollowersBtn">Select All Followers</a>
                                         </div>
                                     </div>
-                                    <div class="py-3 search-list-wrapper pre-scrollable">
+                                    <div class="py-3 search-list-wrapper pre-scrollable" style="overflow-y:auto;">
                                         <ul class="list-unstyled myFollowersUl">
                                             @if($latestFollowers->count() > 0)  
                                             @foreach($latestFollowers as $index => $follow)
