@@ -43,6 +43,11 @@ Route::prefix('admin')->group(function() {
     Route::post('/level/save', 'SystemController@newLevel')->name('admin.level.save');
     Route::post('/level/update', 'SystemController@updateDefaultLevel')->name('admin.level.update');
     Route::delete('/level/delete/{id}', 'SystemController@deleteLevel')->name('admin.level.delete');
+    
+    Route::get('/enrollment', 'SystemController@enrollment')->name('admin.enrollment');
+    Route::post('/enrollment/add', 'SystemController@enrollmentAdd')->name('admin.enrollment.add');
+    Route::delete('/enrollment/delete/{id}', 'SystemController@enrollmentDelete')->name('admin.enrollment.delete');
+    
 });
 
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 use App\Level;
 
 class SystemController extends Controller {
@@ -118,11 +119,99 @@ class SystemController extends Controller {
         return redirect()->route('admin.system');
     }
 
+    public function enrollment() {
+
+        $LoginUserProfilePic = "";
+        $userDetails = DB::table('user_details')->where('user_id', Auth::id())->first();
+        if ($userDetails) {
+            if ($userDetails->profile_pic) {
+                $LoginUserProfilePic = $userDetails->profile_pic;
+            }
+        }
+
+        $sort = (Input::get('sort')) ? Input::get('sort') : 'updated_at';
+        $direction = (Input::get('direction')) ? Input::get('direction') : 'desc';
+
+        $classData = DB::table('enrollment')->whereNull('deleted_at')->where('type', '=', 'class')->orderBy($sort, $direction)->get();
+        $classes = array();
+        foreach ($classData as $class) {
+            $c['id'] = $class->id;
+            $c['name'] = $class->name;
+            $assignedId = $class->assigned_id;
+            $assignee = DB::table('users')->where('id', $assignedId)->first();
+            $c['assignee'] = $assignee->first_name . ' ' . $assignee->last_name;
+            $c['price'] = $class->price;
+            $classes[] = $c;
+        }
+
+        $groupData = DB::table('enrollment')->whereNull('deleted_at')->where('type', '=', 'group')->orderBy('updated_at', 'desc')->get();
+        $groups = array();
+        foreach ($groupData as $group) {
+            $g['id'] = $group->id;
+            $g['name'] = $group->name;
+            $assignedId = $group->assigned_id;
+            $assignee = DB::table('users')->where('id', $assignedId)->first();
+            $g['assignee'] = $assignee->first_name . ' ' . $assignee->last_name;
+            $g['price'] = $group->price;
+            $groups[] = $g;
+        }
+
+        $videoGrapherData = DB::table('user_role_relations')->where('role_id', '=', 5)->where('user_id', '<>', Auth::id())->whereNull('deleted_at')->get();
+        $videoGraphers = array();
+        foreach ($videoGrapherData as $videoGrapher) {
+            $v['user_id'] = $videoGrapher->user_id;
+            $assignee = DB::table('users')->where('id', $videoGrapher->user_id)->first();
+            $v['name'] = $assignee->first_name.' '.$assignee->last_name;
+            $videoGraphers[] = $v;
+        }
+        
+        $coachesData = DB::table('user_role_relations')->where('role_id', '=', 3)->where('user_id', '<>', Auth::id())->whereNull('deleted_at')->get();
+        $coaches = array();
+        foreach ($coachesData as $coach) {
+            $co['user_id'] = $coach->user_id;
+            $assignee = DB::table('users')->where('id', $coach->user_id)->first();
+            $co['name'] = $assignee->first_name.' '.$assignee->last_name;
+            $coaches[] = $co;
+        }
+        
+        return view('system.enrollment', compact('LoginUserProfilePic', 'classes', 'groups', 'videoGraphers', 'coaches'));
+    }
+
+    public function enrollmentAdd(Request $request) {
+
+        if ($request->isMethod('post')) {
+            $formData = $request->all();
+            DB::table('enrollment')->insert(array(
+                'user_id' => Auth::id(),
+                'assigned_id' => 3,
+                'type' => $formData['type'],
+                'name' => $formData['name'],
+                'price' => $formData['price'],
+                'publish_date' => $formData['publish_date'],
+                
+                'min_users' => $formData['min_users'],
+                'max_users' => $formData['max_users'],
+                'start_date' => $formData['start_date'],
+                'duration' => $formData['duration'],
+                
+                'created_at' => date('Y-m-d'),
+                'updated_at' => date('Y-m-d')
+            ));
+        }
+        return response()->json(array('status' => 'success', 'message' => 'Successfully added'));
+        
+    }
+
+    public function enrollmentDelete($id) {
+        DB::table('enrollment')->where('id', '=', $id)->update(array('deleted_at' => date('Y-m-d')));
+        return response()->json(array('status' => true, 'message' => 'Deleted successfully'));
+    }
+
+
     /*
      * update deafult level
      * 
      */
-
     public function updateDefaultLevel(Request $request) {
 
         if ($request->isMethod('post')) {

@@ -44,7 +44,7 @@
                                     USERS</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="javascript:void()">
+                                <a class="nav-link" href="{{ route('admin.enrollment') }}">
                                     ENROLLMENT</a>
                             </li>
                             <li class="nav-item">
