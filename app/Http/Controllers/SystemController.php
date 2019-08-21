@@ -144,7 +144,7 @@ class SystemController extends Controller {
             $classes[] = $c;
         }
 
-        $groupData = DB::table('enrollment')->whereNull('deleted_at')->where('type', '=', 'group')->orderBy('updated_at', 'desc')->get();
+        $groupData = DB::table('enrollment')->whereNull('deleted_at')->where('type', '=', 'group')->orderBy($sort, $direction)->get();
         $groups = array();
         foreach ($groupData as $group) {
             $g['id'] = $group->id;
@@ -153,6 +153,7 @@ class SystemController extends Controller {
             $assignee = DB::table('users')->where('id', $assignedId)->first();
             $g['assignee'] = $assignee->first_name . ' ' . $assignee->last_name;
             $g['price'] = $group->price;
+            $g['start_date'] = substr($group->start_date, 0, -9);
             $groups[] = $g;
         }
 

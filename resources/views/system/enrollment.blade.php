@@ -128,6 +128,9 @@
                                     <th class="text-uppercase text-center font-weight-light" scope="col">
                                         <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>@sortablelink('price', 'Price')
                                     </th>
+                                    <th class="text-uppercase text-center font-weight-light" scope="col">
+                                        <a href="#" class="mr-2"><img src="{{ asset('img/gold-arrow-up.jpg') }}"></a>@sortablelink('start_date', 'Start Date')
+                                    </th>
                                     <th class="text-uppercase font-weight-light text-right" width="30%" scope="col"></th>
                                 </tr>
                             </thead>
@@ -138,10 +141,11 @@
                                             <td>{{ $group['name'] }}</td>
                                             <td class="text-center">{{ $group['assignee'] }}</td>
                                             <td class="text-center">${{ $group['price'] }}</td>
+                                            <td class="text-center">${{ $group['start_date'] }}</td>
                                             <td class="text-right">
-                                                <a class="enrollment-edit" data-id="{{ $class['id'] }}" itemref="Group" href="javascript:void(0);"><img src="{{ asset('img/grey-pencil.jpg') }}"></a>
+                                                <a class="enrollment-edit" data-id="{{ $group['id'] }}" itemref="Group" href="javascript:void(0);"><img src="{{ asset('img/grey-pencil.jpg') }}"></a>
                                                 &nbsp;
-                                                <a class="enrollment-delete" data-id="{{ $class['id'] }}" itemref="Group" href="javascript:void(0);" class="ml-3"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
+                                                <a class="enrollment-delete" data-id="{{ $group['id'] }}" itemref="Group" href="javascript:void(0);" class="ml-3"><img src="{{ asset('img/grey-trash.jpg') }}"></a>
                                             </td>
                                         </tr>
                                     @endforeach
